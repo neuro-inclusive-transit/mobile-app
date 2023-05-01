@@ -1,7 +1,23 @@
-<frame>
-    <Home />
-</frame>
+<tabView androidTabsPosition="bottom">
+  <tabViewItem title="Reise planen">
+    <frame>
+        <PlanJourney />
+    </frame>
+  </tabViewItem>
+  <tabViewItem title="Live Ansicht">
+    <frame>
+        <LiveView />
+    </frame>
+  </tabViewItem>
+  <tabViewItem title="Profil">
+    <frame>
+        <Profile />
+    </frame>
+  </tabViewItem>
+</tabView>
 
 <script lang="ts">
-    import Home from './components/Home.svelte'
+    import LiveView from "./views/LiveView.svelte";
+    import Profile from "./views/Profile.svelte";
+    import PlanJourney from "./views/PlanJourney.svelte";
 </script>
