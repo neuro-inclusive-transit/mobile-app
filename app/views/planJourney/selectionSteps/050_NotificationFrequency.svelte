@@ -1,6 +1,6 @@
 <script>
   import { navigate, goBack } from "svelte-native";
-  import NotificationFrequency from "./050_NotificationFrequency.svelte";
+  import ReminderSelection from "./060_ReminderSelection.svelte";
   import { getRootLayout } from "@nativescript/core";
 
   export let arrival;
@@ -16,7 +16,7 @@
   }
   function onNavigateNext() {
     navigate({
-      page: NotificationFrequency,
+      page: ReminderSelection,
       frame: 'planJourneySelection',
       props: {
         arrival,
@@ -38,7 +38,7 @@
   <stackLayout>
     <button text="Close" on:tap="{closeBottomSheet}" />
     <label text="{departure.name} -> {arrival.name} @ {departureTime}" textWrap="true" />
-    <label text="Bei der Reise ist mir besonders wichtig?" />
+    <label text="Wie sehr sollen wir dich bei der Navigation begleiten?" />
     <button text="Zurück" on:tap="{onNavigateBack}" />
     <button text="Weiter" on:tap="{onNavigateNext}" />
   </stackLayout>

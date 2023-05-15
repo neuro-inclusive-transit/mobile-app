@@ -1,12 +1,29 @@
 <script>
   import { navigate } from "svelte-native";
+  import { Template } from 'svelte-native/components'
   import DestinationConfirm from "./011_DestinationConfirm.svelte";
-  import { ActionBar, getRootLayout } from "@nativescript/core";
+  import { getRootLayout } from "@nativescript/core";
 
-  function navToNextStep() {
+  let favorites = [
+    {
+      name: "Zuhause",
+      address: "Musterstraße 1, 12345 Musterstadt"
+    },
+    {
+      name: "Arbeit",
+      address: "Musterstraße 2, 12345 Musterstadt"
+    },
+    {
+      name: "Uni",
+      address: "Musterstraße 3, 12345 Musterstadt"
+    }
+  ];
+
+  function navToNextStep(adresse) {
     navigate({
       page: DestinationConfirm,
-      frame: 'planJourneySelection'
+      frame: 'planJourneySelection',
+			props: { arrival: adresse }
     });
   }
 
@@ -19,12 +36,20 @@
   }
 </script>
 
-<page >
-  <stackLayout backgroundColor="#3c495e">
-    <label text="first" height="70" backgroundColor="#43b883" />
-    <label text="second" height="70" backgroundColor="#289062" />
-    <label text="third" height="70" backgroundColor="#1c6b48" />
+<page>
+  <stackLayout>
     <button text="Close" on:tap="{closeBottomSheet}" />
+    <label text="Deine Favoriten" />
+    <listView items="{favorites}" height=300>
+      <Template let:item>
+        <stackLayout on:tap="{navToNextStep(item)}">
+          <label text="{item.name}" />
+          <label text="{item.address}" />
+        </stackLayout>
+      </Template>
+    </listView>
+
+    <label text="Anderes Ziel" />
   </stackLayout>
 
   <!-- <button text="Weiter" on:tap="{navToNextStep}" /> -->

@@ -1,11 +1,11 @@
 <script lang="ts">
   import { EventData, Frame, Screen, getRootLayout } from "@nativescript/core";
-  import LiveView from "./views/LiveView.svelte";
-  import Profile from "./views/Profile.svelte";
-  import PlanJourney from "./views/planJourney/Main.svelte";
-  import SelectionProcess from "./views/planJourney/SelectionProcess.svelte";
+  import LiveView from "@/views/LiveView.svelte";
+  import Profile from "@/views/Profile.svelte";
+  import PlanJourney from "@/views/planJourney/Main.svelte";
+  import SelectionProcess from "@/views/planJourney/SelectionProcess.svelte";
 
-  import { durations, easings } from "./components/motion";
+  import { durations, easings } from "~/components/motion";
 
   function onTabViewLoaded(args: EventData) {
     const frame = args.object as Frame;
