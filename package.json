@@ -9,6 +9,7 @@
     "svelte-native": "~1.0.0"
   },
   "devDependencies": {
+    "@nativescript/ios": "8.5.1",
     "@nativescript/types": "~8.5.0",
     "@nativescript/webpack": "~5.0.14",
     "svelte": "~3.44.0",

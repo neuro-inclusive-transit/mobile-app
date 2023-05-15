@@ -5,7 +5,8 @@
 </script>
 
 <page>
-  <actionBar title="Selection start" />
-
-  <frame id="planJourneySelection" defaultPage="{Destination}" />
+  <frame id="planJourneySelection" defaultPage="{Destination}" iosIgnoreSafeArea="true" />
 </page>
+
+<style>
+</style>

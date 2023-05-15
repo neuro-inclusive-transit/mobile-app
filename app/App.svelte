@@ -5,23 +5,58 @@
   import PlanJourney from "./views/planJourney/Main.svelte";
   import SelectionProcess from "./views/planJourney/SelectionProcess.svelte";
 
+  import { durations, easings } from "./components/motion";
+
+  function onTabViewLoaded(args: EventData) {
+    const frame = args.object as Frame;
+
+    getRootLayout().on('showBottomSheet', () => {
+      frame.borderRadius = 10;
+
+      frame.animate({
+        duration: durations.moderate[1],
+        scale: { x: .9, y: .9 },
+        opacity: .6,
+        curve: easings.standard.expressive
+      });
+    });
+
+    getRootLayout().on('hideBottomSheet', () => {
+      frame.animate({
+        duration: durations.moderate[1],
+        scale: { x: 1, y: 1 },
+        opacity: 1,
+        curve: easings.standard.expressive
+      }).then(() => {
+        frame.borderRadius = 0;
+      });
+    });
+  }
+
   function onSheetLoaded(args: EventData) {
     const frame = args.object as Frame;
 
     frame.translateY = Screen.mainScreen.heightDIPs;
 
     getRootLayout().on('showBottomSheet', () => {
-      console.log('showBottomSheet');
       frame.animate({
-        translate: { x: 0, y: 200 },
-        duration: 1000,
-        curve: 'easeIn'
+        translate: { x: 0, y: 100 },
+        duration: durations.moderate[1],
+        curve: easings.entrance.expressive
+      });
+    });
+
+    getRootLayout().on('hideBottomSheet', () => {
+      frame.animate({
+        translate: { x: 0, y: Screen.mainScreen.heightDIPs },
+        duration: durations.moderate[1],
+        curve: easings.exit.expressive
       });
     });
   }
 </script>
-<rootLayout>
-  <tabView androidTabsPosition="bottom">
+<rootLayout backgroundColor="black">
+  <tabView androidTabsPosition="bottom" on:loaded={onTabViewLoaded} >
     <tabViewItem title="Reise planen">
       <frame id="tabPlanJourney">
         <PlanJourney />
@@ -39,7 +74,11 @@
     </tabViewItem>
   </tabView>
 
-  <frame id="sheet" on:loaded={onSheetLoaded} height="50%">
+  <frame id="sheet" on:loaded={onSheetLoaded}>
     <SelectionProcess />
   </frame>
 </rootLayout>
+
+
+<style lang="scss">
+</style>
