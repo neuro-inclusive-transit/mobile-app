@@ -1,17 +1,5 @@
 import type { Emoji } from "emoji-type";
-
-export type Coordinate = {
-  lat: number;
-  lng: number;
-};
-
-export type Address = {
-  street: string;
-  postcode: string;
-  city: string;
-  country: string;
-};
-
+import type { Coordinate, Address } from "./globals";
 export interface PlaceModel {
   id: number;
   icon?: Emoji;

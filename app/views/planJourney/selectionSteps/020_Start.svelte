@@ -3,8 +3,7 @@
   import TimeSelection from "./030_TimeSelection.svelte";
   import { getRootLayout } from "@nativescript/core";
 
-  export let arrival;
-  // export let departure;
+  import { planJourney } from "~/stores"
 
   function onNavigateBack() {
     goBack({
@@ -13,10 +12,20 @@
   }
 
   function onNavigateNext() {
+    $planJourney.departure = {
+      id: -1,
+      name: "Aktueller Standort",
+      location: { // Get initial location
+        lat: 52.520008,
+        lng: 13.404954
+      },
+      icon: "📍",
+      currentLocation: true,
+    }
+
     navigate({
       page: TimeSelection,
       frame: 'planJourneySelection',
-      props: { arrival, departure: { name: "Aktueller Standort" } }
     });
   }
 
@@ -33,7 +42,7 @@
   <stackLayout>
     <button text="Close" on:tap="{closeBottomSheet}" />
     <label text="Zielort:" />
-    <label text="{arrival.name}" textWrap="true" />
+    <label text="{$planJourney.arrival?.name}" textWrap="true" />
     <label text="Von wo startest du deine Reise?" />
     <button text="Aktueller Standort" on:tap="{onNavigateNext}" />
     <button text="Zurück" on:tap="{onNavigateBack}" />

@@ -1,12 +1,9 @@
 <script>
   import { goBack } from "svelte-native";
+  import { getRootLayout } from "@nativescript/core";
   import * as Intl from "nativescript-intl";
 
-  export let arrival;
-  export let departure;
-  export let departureTime;
-
-  const diff = Math.floor((departureTime - new Date()) / 1000 / 60 / 60 / 24); // in days
+  import { planJourney } from "~/stores"
 
   const dateFormat = new Intl.DateTimeFormat('de', {'year': 'numeric', 'month': 'short', 'day': 'numeric', timeStyle: 'short'})
 
@@ -32,8 +29,8 @@
     <button text="Close" on:tap="{closeBottomSheet}" />
 
     <label text="Super!" />
-    <label text="Du hast deine Reise von {departure.name} nach {arrival.name} geplant" textWrap="true" />
-    <label text="Du musst {dateFormat.format(departureTime)} los. Wir erinnern dich!" textWrap="true" />
+    <label text="Du hast deine Reise von {$planJourney.departure?.name} nach {$planJourney.departure?.name} geplant" textWrap="true" />
+    <label text="Du musst {$planJourney.time.value} los. Wir erinnern dich!" textWrap="true" />
     <button text="Zurück" on:tap="{onNavigateBack}" />
   </stackLayout>
 </page>

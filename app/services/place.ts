@@ -1,4 +1,4 @@
-import { PlaceModel } from "~/models/place";
+import { PlaceModel } from "~/models";
 
 export class PlaceService {
 

@@ -2,12 +2,14 @@
   import { navigate, goBack } from "svelte-native";
   import ReminderSelection from "./060_ReminderSelection.svelte";
   import { getRootLayout } from "@nativescript/core";
+  import { localize as L } from '@nativescript/localize'
 
-  export let arrival;
-  export let departure;
-  export let departureTime;
+  import { planJourney } from "~/stores"
+  import { CompanionMode } from "~/models"
 
-  // TODO: Preference
+  function select(mode) {
+    $planJourney.companion_mode = mode;
+  }
 
   function onNavigateBack() {
     goBack({
@@ -18,11 +20,6 @@
     navigate({
       page: ReminderSelection,
       frame: 'planJourneySelection',
-      props: {
-        arrival,
-        departure,
-        departureTime
-      }
     });
   }
   function closeBottomSheet(args) {
@@ -37,8 +34,15 @@
 <page actionBarHidden=true>
   <stackLayout>
     <button text="Close" on:tap="{closeBottomSheet}" />
-    <label text="{departure.name} -> {arrival.name} @ {departureTime}" textWrap="true" />
-    <label text="Wie sehr sollen wir dich bei der Navigation begleiten?" />
+    <label text="{$planJourney.departure?.name} -> {$planJourney.departure?.name} @ {$planJourney.time.value}" textWrap="true" />
+    <label text="Bei der Reise ist mir besonders wichtig? " />
+    {#each Object.keys(CompanionMode) as mode} }
+      <stackLayout>
+        <button text="{L('companion_mode.' + CompanionMode[mode])}" on:tap={() => select(CompanionMode[mode])}  />
+      </stackLayout>
+    {/each}
+
+    <label text="{L('companion_mode._')}: { $planJourney.companion_mode }" />
     <button text="Zurück" on:tap="{onNavigateBack}" />
     <button text="Weiter" on:tap="{onNavigateNext}" />
   </stackLayout>

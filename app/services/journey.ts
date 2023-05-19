@@ -1,4 +1,4 @@
-import { JourneyModel  } from '~/models/journey';
+import { JourneyModel } from '~/models';
 
 export class JourneyService {
 

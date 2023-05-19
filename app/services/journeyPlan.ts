@@ -1,4 +1,4 @@
-import { JourneyPlanModel } from "~/models/journeyPlan";
+import { JourneyPlanModel } from "~/models";
 
 export class JourneyPlanService {
 

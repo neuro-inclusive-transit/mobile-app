@@ -4,26 +4,23 @@
   import DestinationConfirm from "./011_DestinationConfirm.svelte";
   import { getRootLayout } from "@nativescript/core";
 
-  let favorites = [
-    {
-      name: "Zuhause",
-      address: "Musterstraße 1, 12345 Musterstadt"
-    },
-    {
-      name: "Arbeit",
-      address: "Musterstraße 2, 12345 Musterstadt"
-    },
-    {
-      name: "Uni",
-      address: "Musterstraße 3, 12345 Musterstadt"
-    }
-  ];
+  import { PlaceService } from "~/services/place";
+  import { planJourney } from "~/stores"
 
-  function navToNextStep(adresse) {
+  const placeService = PlaceService.getInstance();
+
+  let favorites = placeService.getPlaces();
+
+  function formatAddress(address) {
+    return `${address.street}, ${address.postcode} ${address.city}`;
+  }
+
+  function select (placeId) {
+    $planJourney.arrival = placeService.getPlace(placeId);
+
     navigate({
       page: DestinationConfirm,
       frame: 'planJourneySelection',
-			props: { arrival: adresse }
     });
   }
 
@@ -42,12 +39,14 @@
     <label text="Deine Favoriten" />
     <listView items="{favorites}" height=300>
       <Template let:item>
-        <stackLayout on:tap="{navToNextStep(item)}">
-          <label text="{item.name}" />
-          <label text="{item.address}" />
+        <stackLayout on:tap="{select(item.id)}">
+          <label text="{item.icon} {item.name}" />
+          <label text="{item.address ? formatAddress(item.address) : ''}" />
         </stackLayout>
       </Template>
     </listView>
+
+    <label text="Test: {$planJourney.arrival?.name}" />
 
     <label text="Anderes Ziel" />
   </stackLayout>

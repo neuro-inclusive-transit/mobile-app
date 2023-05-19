@@ -3,9 +3,7 @@
   import JourneyPreferences from "./040_JourneyPreferences.svelte";
   import { getRootLayout } from "@nativescript/core";
 
-  export let arrival;
-  export let departure;
-  export let departureTime = new Date();
+  import { planJourney } from "~/stores"
 
   function onNavigateBack() {
     goBack({
@@ -16,11 +14,6 @@
     navigate({
       page: JourneyPreferences,
       frame: 'planJourneySelection',
-      props: {
-        arrival,
-        departure,
-        departureTime
-      }
     });
   }
   function closeBottomSheet(args) {
@@ -35,9 +28,10 @@
 <page actionBarHidden=true>
   <stackLayout>
     <button text="Close" on:tap="{closeBottomSheet}" />
-    <label text="{departure.name} -> {arrival.name}" textWrap="true" />
+    <label text="{$planJourney.departure?.name} -> {$planJourney.departure?.name}" textWrap="true" />
     <label text="Wann startest du deine Reise?" />
-    <timePicker bind:time="{departureTime}" />
+    <!-- TODO: select ob departure or arrival time -->
+    <timePicker bind:time="{$planJourney.time.value}" />
     <button text="Zurück" on:tap="{onNavigateBack}" />
     <button text="Weiter" on:tap="{onNavigateNext}" />
   </stackLayout>
