@@ -1,8 +1,9 @@
-import { writable } from "svelte/store";
+import { localStore } from './misc/localStore';
 import type { Place, Journey } from '~/stores';
 import { JourneyPlanMode, CompanionMode, PreferredTransportation, PreferredJourneyMode } from '~/types';
 
-export const planJourney = writable({
+
+export const planJourney = localStore<JourneyPlan>({
   departure: null,
   arrival: null,
   time: {
@@ -14,7 +15,7 @@ export const planJourney = writable({
   reminderBefore: 0,
   preferredTransport: PreferredTransportation.Car,
   preferredJourneyMode: PreferredJourneyMode.Fastest,
-} as JourneyPlan);
+});
 
 
 export type JourneyPlan = {
