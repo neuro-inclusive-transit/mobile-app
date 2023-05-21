@@ -1,6 +1,6 @@
 import { writable } from "svelte/store";
-import type { PlaceModel, JourneyModel, Minutes } from '~/models';
-import { JourneyPlanMode, CompanionMode, PreferredTransportation, PreferredJourneyMode } from '~/models';
+import type { Place, Journey } from '~/stores';
+import { JourneyPlanMode, CompanionMode, PreferredTransportation, PreferredJourneyMode } from '~/_models';
 
 export const planJourney = writable({
   departure: null,
@@ -17,16 +17,16 @@ export const planJourney = writable({
 } as JourneyPlanStore);
 
 
-type JourneyPlanStore = {
-  departure: PlaceModel | null;
-  arrival: PlaceModel | null;
+export type JourneyPlanStore = {
+  departure: Place | null;
+  arrival: Place | null;
   time: {
     type: JourneyPlanMode;
     value: Date;
   }
-  options: JourneyModel[];
+  options: Journey[];
   companionMode: CompanionMode;
-  reminderBefore: Minutes;
+  reminderBefore: number;
   preferredTransport: PreferredTransportation;
   preferredJourneyMode: PreferredJourneyMode;
 }

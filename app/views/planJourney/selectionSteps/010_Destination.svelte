@@ -4,12 +4,7 @@
   import DestinationConfirm from "./011_DestinationConfirm.svelte";
   import { getRootLayout } from "@nativescript/core";
 
-  import { PlaceService } from "~/services/place";
-  import { planJourney } from "~/stores"
-
-  const placeService = PlaceService.getInstance();
-
-  let favorites = placeService.getPlaces();
+  import { planJourney, places } from "~/stores"
 
   function formatAddress(address) {
     return `${address.street}, ${address.postcode} ${address.city}`;
@@ -37,11 +32,12 @@
   <stackLayout>
     <button text="Close" on:tap="{closeBottomSheet}" />
     <label text="Deine Favoriten" />
-    <listView items="{favorites}" height=300>
+    <listView items="{$places}" height=300>
       <Template let:item>
         <stackLayout on:tap="{select(item.id)}">
           <label text="{item.icon} {item.name}" />
           <label text="{item.address ? formatAddress(item.address) : ''}" />
+          <label text="{JSON.stringify(item)}" textWrap=true />
         </stackLayout>
       </Template>
     </listView>

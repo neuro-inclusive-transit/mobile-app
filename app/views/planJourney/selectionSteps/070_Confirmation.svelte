@@ -3,7 +3,7 @@
   import { getRootLayout } from "@nativescript/core";
   import * as Intl from "nativescript-intl";
 
-  import { planJourney } from "~/stores"
+  import { journeys, planJourney } from "~/stores"
 
   const dateFormat = new Intl.DateTimeFormat('de', {'year': 'numeric', 'month': 'short', 'day': 'numeric', timeStyle: 'short'})
 
