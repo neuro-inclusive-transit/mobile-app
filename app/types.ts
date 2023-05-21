@@ -1,12 +1,3 @@
-import { Place } from "~/stores";
-
-export type TimeAndPlace = {
-  time: Date;
-  place: Place;
-};
-
-export type Minutes = number;
-
 export enum CompanionMode {
   Rarely = "rarely",
   Sometimes = "sometimes",
@@ -30,15 +21,3 @@ export enum PreferredJourneyMode {
   LeastChanges = 'least-changes',
   LeastWalking = 'least-walking',
 }
-
-export type Coordinate = {
-  lat: number;
-  lng: number;
-};
-
-export type Address = {
-  street: string;
-  postcode: string;
-  city: string;
-  country: string;
-};

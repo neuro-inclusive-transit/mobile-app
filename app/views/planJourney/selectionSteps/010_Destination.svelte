@@ -10,8 +10,8 @@
     return `${address.street}, ${address.postcode} ${address.city}`;
   }
 
-  function select (placeId) {
-    $planJourney.arrival = placeService.getPlace(placeId);
+  function select (place) {
+    $planJourney.arrival = place;
 
     navigate({
       page: DestinationConfirm,
@@ -34,7 +34,7 @@
     <label text="Deine Favoriten" />
     <listView items="{$places}" height=300>
       <Template let:item>
-        <stackLayout on:tap="{select(item.id)}">
+        <stackLayout on:tap="{select(item)}">
           <label text="{item.icon} {item.name}" />
           <label text="{item.address ? formatAddress(item.address) : ''}" />
           <label text="{JSON.stringify(item)}" textWrap=true />

@@ -1,7 +1,8 @@
 <script type="ts">
   import { navigate } from "svelte-native";
   import { Frame, EventData, getRootLayout } from "@nativescript/core";
-  import SelectionProcess from "./SelectionProcess.svelte";
+
+  import { journeys } from "~/stores";
 
   function addJourney(args: EventData) {
     getRootLayout().notify({
@@ -14,7 +15,15 @@
 </script>
 
 <page>
-  <actionBar title="Deine Reisen" />
+  <actionBar title="Meine Reisen" />
+
+  <stackLayout>
+    {#each $journeys as journey}
+      <stackLayout>
+        <label text="{journey.departure.place.name} -> {journey.arrival.place.name} @ {journey.departure.time}" />
+      </stackLayout>
+    {/each}
+  </stackLayout>
 
   <button text="Reise hinzufügen" on:tap="{addJourney}" />
 </page>

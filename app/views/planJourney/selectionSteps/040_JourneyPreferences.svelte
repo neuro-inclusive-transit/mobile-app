@@ -5,7 +5,7 @@
   import { localize as L } from '@nativescript/localize'
 
   import { planJourney } from "~/stores"
-  import { PreferredJourneyMode } from "~/_models"
+  import { PreferredJourneyMode } from "~/types"
 
   function select(mode) {
     $planJourney.preferredJourneyMode = mode;

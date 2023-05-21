@@ -1,9 +1,9 @@
 import { dbStore } from '~/stores/misc/dbStore';
-
-import { TimeAndPlace, CompanionMode, Minutes } from '~/_models';
+import { Minutes } from '~/stores/misc/types';
+import { TimeAndPlace } from '~/stores/places';
+import { CompanionMode } from '~/types';
 
 export interface Journey {
-  _id: string;
   departure: TimeAndPlace,
   arrival: TimeAndPlace,
   reminderBefore: Minutes;
