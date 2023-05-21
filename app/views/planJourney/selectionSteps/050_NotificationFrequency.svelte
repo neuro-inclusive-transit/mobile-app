@@ -5,7 +5,7 @@
   import { localize as L } from '@nativescript/localize'
 
   import { planJourney } from "~/stores"
-  import { CompanionMode } from "~/models"
+  import { CompanionMode } from "~/_models"
 
   function select(mode) {
     $planJourney.companion_mode = mode;
