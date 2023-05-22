@@ -16,8 +16,8 @@
       id: -1,
       name: "Aktueller Standort",
       location: { // Get initial location
-        lat: 52.520008,
-        lng: 13.404954
+        lat: 50.880382,
+        lng: 7.119409
       },
       icon: "📍",
       currentLocation: true,

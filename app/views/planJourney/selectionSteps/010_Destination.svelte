@@ -36,8 +36,7 @@
       <Template let:item>
         <stackLayout on:tap="{select(item)}">
           <label text="{item.icon} {item.name}" />
-          <label text="{item.address ? formatAddress(item.address) : ''}" />
-          <label text="{JSON.stringify(item)}" textWrap=true />
+          <label text="{item.address ? formatAddress(item.address) : ''}" textWrap="true" />
         </stackLayout>
       </Template>
     </listView>
