@@ -9,6 +9,7 @@
 .fas {
   font-family: 'Font Awesome 5 Free', 'fa-solid-900';
   font-weight: 900;
+  color: black;
 }
 
 .far {
@@ -16,3 +17,16 @@
   font-weight: 400;
 }
 
+actionBar{
+  background: #3B5BDB;
+  color: white;
+  font-family: 'Atkinson Hyperlegible', 'Atkinson-Hyperlegible-Bold-102';
+  font-size: 30;
+
+}
+
+page{
+  background: #F2F4F8;
+  font-family: 'Atkinson Hyperlegible', 'Atkinson-Hyperlegible-Bold-102';
+
+}

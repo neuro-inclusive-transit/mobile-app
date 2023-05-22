@@ -23,9 +23,17 @@
     color: #3a53ff;
   }
 
-  .info {
-    font-size: 20;
-    horizontal-align: center;
-    vertical-align: center;
-  }
-</style>
+    .info {
+      font-size: 20;
+      font-family: 'Atkinson Hyperlegible', 'Atkinson-Hyperlegible-Bold-102';
+      horizontal-align: center;
+      vertical-align: center;
+    }
+    actionBar{
+        background: #3B5BDB;
+        color: white;
+        font-family: 'Atkinson Hyperlegible', 'Atkinson-Hyperlegible-Bold-102';
+        font-size: 30;
+
+    }
+  </style>
