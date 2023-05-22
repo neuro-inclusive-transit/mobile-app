@@ -42,7 +42,7 @@
   <stackLayout>
     <button text="Close" on:tap="{closeBottomSheet}" />
     <label text="Zielort:" />
-    <label text="{$planJourney.arrival?.name}" textWrap="true" />
+    <label text="{$planJourney.arrival?.icon} {$planJourney.arrival?.name}" textWrap="true" />
     <label text="Von wo startest du deine Reise?" />
     <button text="Aktueller Standort" on:tap="{onNavigateNext}" />
     <button text="Zurück" on:tap="{onNavigateBack}" />

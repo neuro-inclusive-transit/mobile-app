@@ -23,7 +23,8 @@
         <label text="{journey.departure.place.name} -> {journey.arrival.place.name} @ {journey.departure.time}" />
       </stackLayout>
     {/each}
+    <label text="BACKEND_SERVICE_ROUTE_URL {process.env.BACKEND_SERVICE_ROUTE_URL}" />
+    <button text="Reise hinzufügen" on:tap="{addJourney}" />
   </stackLayout>
 
-  <button text="Reise hinzufügen" on:tap="{addJourney}" />
 </page>

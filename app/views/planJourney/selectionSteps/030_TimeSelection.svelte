@@ -28,7 +28,7 @@
 <page actionBarHidden=true>
   <stackLayout>
     <button text="Close" on:tap="{closeBottomSheet}" />
-    <label text="{$planJourney.departure?.name} -> {$planJourney.departure?.name}" textWrap="true" />
+    <label text="{$planJourney.departure?.icon} {$planJourney.departure?.name} -> {$planJourney.arrival?.icon} {$planJourney.arrival?.name}" textWrap="true" />
     <label text="Wann startest du deine Reise?" />
     <!-- TODO: select ob departure or arrival time -->
     <timePicker bind:time="{$planJourney.time.value}" />

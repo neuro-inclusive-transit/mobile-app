@@ -33,7 +33,7 @@
 <page actionBarHidden=true>
   <stackLayout>
     <button text="Close" on:tap="{closeBottomSheet}" />
-   <label text="{$planJourney.departure?.name} -> {$planJourney.departure?.name} @ {$planJourney.time.value}" textWrap="true" />
+    <label text="{$planJourney.departure?.icon} {$planJourney.departure?.name} -> {$planJourney.arrival?.icon} {$planJourney.arrival?.name} @ {$planJourney.time.value}" textWrap="true" />
     <label text="Wie viel früher möchtest du vor Reiseantritt erinnert werden?" />
     {#each timeOptions as option} }
       <stackLayout>

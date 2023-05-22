@@ -1,6 +1,6 @@
 <script>
   import { navigate, goBack } from "svelte-native";
-  import NotificationFrequency from "./050_NotificationFrequency.svelte";
+  import RouteSelection from "./041_RouteSelection.svelte";
   import { getRootLayout } from "@nativescript/core";
   import { localize as L } from '@nativescript/localize'
 
@@ -18,7 +18,7 @@
   }
   function onNavigateNext() {
     navigate({
-      page: NotificationFrequency,
+      page: RouteSelection,
       frame: 'planJourneySelection',
     });
   }
@@ -34,7 +34,7 @@
 <page actionBarHidden=true>
   <stackLayout>
     <button text="Close" on:tap="{closeBottomSheet}" />
-    <label text="{$planJourney.departure?.name} -> {$planJourney.departure?.name} @ {$planJourney.time.value}" textWrap="true" />
+    <label text="{$planJourney.departure?.icon} {$planJourney.departure?.name} -> {$planJourney.arrival?.icon} {$planJourney.arrival?.name}" textWrap="true" />
     <label text="Bei der Reise ist mir besonders wichtig? " />
     {#each Object.keys(PreferredJourneyMode) as mode} }
       <stackLayout>
