@@ -15,9 +15,13 @@
         border: 0;
         cursor: pointer;
         border-radius: 100%;
-        padding: 16px 12px;
+        padding: 20px;
+        font-family: 'Atkinson Hyperlegible', 'Atkinson-Hyperlegible-Bold-102';
         font-weight: bold;
+        font-size: 20;
         box-shadow: 1px 2px 3px rgba(0,0,0,0.2);
+        height: 40px;
+
     }
 
     .primary{
