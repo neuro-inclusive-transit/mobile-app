@@ -2,6 +2,7 @@
   import Button from "@/components/shared/Button.svelte";
   import Search from "@/components/shared/input.svelte";
   import Place from "@/components/shared/places.svelte";
+  import Route from "./shared/Route.svelte";
   import BottmNavigation from "./shared/BottmNavigation.svelte";
 
     import { StackLayout } from "@nativescript/core";
@@ -36,6 +37,7 @@
 
     <Button type='line' inhalt='Abbrechen' />
 
+    <Route start='Köln Zoo' destination='Gummersbach Bahnhof'/>
 
   </stackLayout>
 </page>

@@ -4,6 +4,7 @@
 .fab {
   font-family: 'Font Awesome 5 Brands', 'fa-brands-400';
   font-weight: 400;
+  color: #3B5BDB;
 }
 
 .fas {
@@ -16,6 +17,7 @@
 .far {
   font-family: 'Font Awesome 5 Free', 'fa-regular-400';
   font-weight: 400;
+  color: #3B5BDB;
 }
 
 actionBar{
