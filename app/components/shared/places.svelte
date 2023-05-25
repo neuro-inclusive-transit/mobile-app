@@ -1,22 +1,21 @@
 <script>
-    let places = [
-        {icon:'🏠', name:'Zu Hause', address:'Musterstraße 23, 50733 Köln', id: 0},
-        {icon:'🏫', name:'Schule', address:'Musterstraße 25, 50733 Köln', id: 1},
-        {icon:'🏋🏽‍♂️', name:'Fitti', address:'Musterstraße 28, 50733 Köln', id: 2},
-        {icon:'🧙🏽‍♂️', name:'Freund', address:'Musterstraße 28, 50733 Köln', id: 3}
-    ];
+
+    export let icon = '🏠';
+    export let name = 'default Ort'
+    export let address = 'Main Street 66, 12345 Cloud City';
+
 </script>
 
 
-    <gridLayout columns="400" rows="auto, auto, auto, auto, auto, auto" horizontalAlignment="center">
-        {#each places as place (place.id)}
-            <gridLayout class="places" columns="*, 5*, *" rows="40,40" row={place.id} marginTop="32">
-                <label class="fas" text={place.icon} row="0" col="0" rowSpan="2" horizontalAlignment="center"/>
-                <label text={place.name} fontWeight="bold" row="0" col="1"  verticalAlignment="bottom"/>
-                <label text={place.address} row="1" col="1" verticalAlignment="top" />
+    <gridLayout columns="400" rows="auto" horizontalAlignment="center">
+
+            <gridLayout class="places" columns="*, 5*, *" rows="40,40" marginTop="32">
+                <label class="fas" text={icon} row="0" col="0" rowSpan="2" horizontalAlignment="center"/>
+                <label text={name} fontWeight="bold" row="0" col="1"  verticalAlignment="bottom"/>
+                <label text={address} row="1" col="1" verticalAlignment="top" />
                 <label class="fas" text="&#xf054;" row="0" col="2" rowSpan="2" horizontalAlignment="center" />
             </gridLayout>
-        {/each}
+
     </gridLayout>
 
 
@@ -29,8 +28,8 @@
         font-family: 'Atkinson Hyperlegible', 'Atkinson-Hyperlegible-Regular-102';
         font-size: 16px;
         border-color: #3B5BDB;
-        border: 50px solid #3B5BDB;
-        background: #f1f1f1;
+        border-width: 2;
+        background: white;
     }
 
     .places .fas{
