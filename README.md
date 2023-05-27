@@ -4,6 +4,12 @@
 
 Follow the instructions on [NativeScript](https://docs.nativescript.org/environment-setup.html) depending
 
+Update .env file with the correct values
+
+```bash
+cp .env.example .env
+```
+
 Run the project on multiple devices:
 
 ```bash

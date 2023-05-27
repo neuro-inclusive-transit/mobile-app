@@ -11,7 +11,7 @@
     "baseUrl": ".",
     "paths": {
       "~/*": ["app/*"],
-      "@/*": ["app/*"]
+      "@/*": ["app/*"],
     },
     "typeRoots": ["types"],
     "types": ["node"],

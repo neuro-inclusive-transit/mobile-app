@@ -1,0 +1,22 @@
+{
+  "app.name": "Neuro Inclusive Transit",
+  "preffered_transportation": {
+    "_": "Bevorzugtes Transportmittel",
+    "car": "Auto",
+    "bus": "Bus",
+    "long-distance-train": "Fernzug",
+    "sub-urban-train": "Nahverkehrszug"
+  },
+  "preffered_journey_mode": {
+    "_": "Bevorzugte Reiseart",
+    "fastest": "Schnellste",
+    "least-changes": "Wenigste Umstiege",
+    "least-walking": "Kürzeste Laufwege"
+  },
+  "companion_mode": {
+    "_": "Begleitmodus",
+    "rarely": "Selten",
+    "sometimes": "Gelegentlich",
+    "often": "Oft"
+  }
+}
