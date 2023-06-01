@@ -5,6 +5,7 @@ purpose of the file is to pass control to the app’s first page.
 */
 
 import { svelteNativeNoFrame } from 'svelte-native'
+
 import App from './App.svelte'
 
 svelteNativeNoFrame(App, {})
