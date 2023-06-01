@@ -7,7 +7,7 @@
 
 <button class={type} class:flat>
   <formattedString>
-    <span class="fas" text={icon} />
+    <span class="icon" text={icon} />
     <span text="  " />
     <span text={inhalt} />
   </formattedString>
@@ -18,8 +18,6 @@
     border-radius: 100%;
     margin-top: 32;
     padding: 40px;
-    font-family: "Atkinson Hyperlegible", "Atkinson-Hyperlegible-Bold-102";
-    font-weight: bold;
     font-size: 20;
     box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.7);
     height: 40;

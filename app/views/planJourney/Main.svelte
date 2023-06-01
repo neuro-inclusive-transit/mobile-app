@@ -34,7 +34,7 @@
 
     <Button type='secondary' icon='&#xf806' inhalt='rock on' />
 
-    <Place icon='🤟🏽' name='Rock Hall' address='Boulevard of broken dreams' />
+    <Place customIcon='🤟🏽' name='Rock Hall' address='Boulevard of broken dreams' />
 
     <!-- <Search hinweis='Gib ein Ziel ein...' icon='&#xf55f'/> -->
 

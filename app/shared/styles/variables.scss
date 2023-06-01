@@ -1,0 +1,33 @@
+/**
+ * Color
+ */
+$color-background: #dbe4ff;
+$color-primary: #3B5BDB;
+$color-black: #161616;
+$color-white: #f2f4f8;
+
+/**
+ * Font
+ */
+@mixin font-normal {
+  font-family: 'Atkinson Hyperlegible', 'Atkinson-Hyperlegible-Regular-102';
+  font-weight: normal;
+}
+@mixin font-bold {
+  font-family: 'Atkinson Hyperlegible', 'Atkinson-Hyperlegible-Bold-102';
+  font-weight: bold;
+}
+@mixin font-italic {
+  font-family: 'Atkinson Hyperlegible', 'Atkinson-Hyperlegible-Italic-102';
+  font-weight: normal;
+  font-style: italic;
+}
+@mixin font-bold-italic {
+  font-family: 'Atkinson Hyperlegible', 'Atkinson-Hyperlegible-BoldItalic-102';
+  font-weight: bold;
+  font-style: italic;
+}
+@mixin font-icon {
+  font-family: 'Material Icons Round', 'MaterialIconsRound-Regular';
+  font-size: 24;
+}

@@ -22,8 +22,8 @@
         fontWeight="bold"
       />
       <label
-        class="fas"
-        text="&#xf061;"
+        class="icon"
+        text="arrow_forward"
         color="#161616"
         horizontalAlignment="center"
         paddingRight="12"
@@ -42,9 +42,9 @@
       row={0}
       horizontalAlignment="right"
     >
-      <label class="fas" text="&#xf007;" horizontalAlignment="center" />
-      <label class="fas" text="&#xf007;" horizontalAlignment="center" />
-      <label class="far" text="&#xf007;" horizontalAlignment="center" />
+      <label class="icon" text="person" horizontalAlignment="center" />
+      <label class="icon" text="person" horizontalAlignment="center" />
+      <label class="icon" text="person_outline" horizontalAlignment="center" />
     </stackLayout>
 
     <stackLayout orientation="horizontal" row="1" colSpan="2">
@@ -71,8 +71,8 @@
         marginBottom="12"
       >
         <label
-          class="fas"
-          text="&#xf554;"
+          class="icon"
+          text="directions_walk"
           horizontalAlignment="center"
           paddingRight="8"
           paddingLeft="8"
@@ -81,8 +81,8 @@
       </stackLayout>
 
       <label
-        class="fas"
-        text="&#xf054;"
+        class="icon"
+        text="chevron_right"
         horizontalAlignment="center"
         col={2}
         padding="8"
@@ -96,8 +96,8 @@
         marginBottom="12"
       >
         <label
-          class="fas"
-          text="&#xf239;"
+          class="icon"
+          text="directions_subway"
           horizontalAlignment="center"
           paddingRight="8"
           paddingLeft="8"
@@ -106,8 +106,8 @@
       </stackLayout>
 
       <label
-        class="fas"
-        text="&#xf054;"
+        class="icon"
+        text="chevron_right"
         horizontalAlignment="center"
         col={4}
         padding="8"
@@ -121,8 +121,8 @@
         marginBottom="12"
       >
         <label
-          class="fas"
-          text="&#xf238;"
+          class="icon"
+          text="train"
           horizontalAlignment="center"
           paddingRight="8"
           paddingLeft="8"
@@ -131,8 +131,8 @@
       </stackLayout>
 
       <label
-        class="fas"
-        text="&#xf054;"
+        class="icon"
+        text="chevron_right"
         horizontalAlignment="center"
         col={4}
         padding="8"
@@ -146,8 +146,8 @@
         marginBottom="12"
       >
         <label
-          class="fas"
-          text="&#xf238;"
+          class="icon"
+          text="train"
           horizontalAlignment="center"
           paddingRight="8"
           paddingLeft="8"
@@ -155,8 +155,8 @@
         <label text="RB 25" horizontalAlignment="center" paddingRight="8" />
       </stackLayout>
       <label
-        class="fas"
-        text="&#xf054;"
+        class="icon"
+        text="chevron_right"
         horizontalAlignment="center"
         col={4}
         padding="8"
@@ -170,8 +170,8 @@
         marginBottom="12"
       >
         <label
-          class="fas"
-          text="&#xf238;"
+          class="icon"
+          text="train"
           horizontalAlignment="center"
           paddingRight="8"
           paddingLeft="8"
@@ -186,7 +186,6 @@
   .route {
     margin: auto;
     padding: 20;
-    font-family: "Atkinson Hyperlegible", "Atkinson-Hyperlegible-Regular-102";
     font-size: 16px;
     border-color: #3b5bdb;
     border-width: 2;

@@ -1,0 +1,20 @@
+﻿@import '@nativescript/theme/css/core.css';
+/* @import '@nativescript/theme/css/default.css'; */
+@import 'shared/styles/variables.scss';
+
+
+.ns-root {
+  @include font-normal;
+}
+
+.icon {
+  @include font-icon;
+}
+
+actionBar{
+  background: #3B5BDB;
+  color: white;
+  @include font-bold;
+  font-size: 30;
+
+}
