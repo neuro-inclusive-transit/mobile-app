@@ -5,7 +5,7 @@
   import PlanJourney from "@/views/planJourney/Main.svelte";
   import SelectionProcess from "@/views/planJourney/SelectionProcess.svelte";
 
-  import { durations, easings } from "~/components/motion";
+  import { durations, easings } from "~/shared/motion";
 
   function onTabViewLoaded(args: EventData) {
     const frame = args.object as Frame;
