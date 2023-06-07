@@ -5,7 +5,7 @@
   import Button from "~/shared/components/Button.svelte";
   import Place from "~/shared/components/Place.svelte";
   // import Search from "~/shared/components/Search.svelte";
-  import Route from "~/shared/components/Route.svelte";
+  import DepartureDestinationSwitcher from "~/shared/components/DepartureDestinationSwitcher.svelte";
 
   import { journeys } from "~/stores";
 
@@ -32,6 +32,9 @@
     <button text="Reise hinzufügen" on:tap="{addJourney}" />
 
 
+    <DepartureDestinationSwitcher departure='Köln Zoo' destination='Gummersbach Bahnhof'/>
+
+
     <Button type='secondary' icon='&#xf806' inhalt='rock on' />
 
     <Place customIcon='🤟🏽' name='Rock Hall' address='Boulevard of broken dreams' />
@@ -42,7 +45,6 @@
 
     <Button icon='' type='line' inhalt='Abbrechen' />
 
-    <Route start='Köln Zoo' destination='Gummersbach Bahnhof'/>
 
   </stackLayout>
 

@@ -1,9 +1,17 @@
 <script type="ts">
-  export let start = "hier";
-  export let destination = "da";
-  export let departure = "Aufbruch 11:02";
-  export let arrival = "Ankunft 14:15";
+  export let departureTime = new Date();
+  export let arrivalTime = new Date();
   export let reminder = "Erinnerung: 15 min";
+  export let crowdPercentage = 0.5;
+
+  export let route: RouteSection[] = [];
+
+  type RouteSection = {
+    type: "walk" | "subway" | "train" | string;
+    begin: Date;
+    end: Date;
+    transport_name: string;
+  };
 </script>
 
 <gridLayout columns="400" rows="auto" horizontalAlignment="center">
@@ -14,27 +22,7 @@
     marginTop="32"
     row="0"
   >
-    <stackLayout orientation="horizontal" row="0">
-      <label
-        text={start}
-        horizontalAlignment="center"
-        paddingRight="12"
-        fontWeight="bold"
-      />
-      <label
-        class="icon"
-        text="arrow_forward"
-        color="#161616"
-        horizontalAlignment="center"
-        paddingRight="12"
-      />
-      <label
-        text={destination}
-        horizontalAlignment="center"
-        paddingRight="12"
-        fontWeight="bold"
-      />
-    </stackLayout>
+
 
     <stackLayout
       orientation="horizontal"
@@ -48,8 +36,8 @@
     </stackLayout>
 
     <stackLayout orientation="horizontal" row="1" colSpan="2">
-      <label text={departure} horizontalAlignment="center" paddingRight="12" />
-      <label text={arrival} horizontalAlignment="center" paddingRight="12" />
+      <label text={departureTime.toDateString()} horizontalAlignment="center" paddingRight="12" />
+      <label text={arrivalTime.toDateString()} horizontalAlignment="center" paddingRight="12" />
     </stackLayout>
 
     <stackLayout orientation="horizontal" row="2" colSpan="2">

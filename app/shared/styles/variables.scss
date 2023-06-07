@@ -1,10 +1,42 @@
 /**
  * Color
  */
-$color-background: #dbe4ff;
+$color-primary-light: #dbe4ff;
 $color-primary: #3B5BDB;
 $color-black: #161616;
 $color-white: #f2f4f8;
+
+.ns-root {
+
+  /**
+   * Color
+   */
+  --color-primary: #3B5BDB;
+  --color-primary-light: #dbe4ff;
+  --color-foreground: #161616;
+  --color-background: #f2f4f8;
+  --color-background-light: #ffffff;
+
+  /**
+   * Sizes
+   */
+  --base: 16pt;
+  --base-xxs: 0.625;
+  --base-xs: 0.78125;
+  --base-s: 1;
+  --base-m: 1.25;
+  --base-l: 1.5625;
+  --base-xl: 1.96875;
+  --base-xxl: 2.5;
+  --xxs: calc(var(--base) * var(--base-xxs));
+  --xs: calc(var(--base) * var(--base-xs));
+  --s: calc(var(--base) * var(--base-s));
+  --m: calc(var(--base) * var(--base-m));
+  --l: calc(var(--base) * var(--base-l));
+  --xl: calc(var(--base) * var(--base-xl));
+  --xxl: calc(var(--base) * var(--base-xxl));
+}
+
 
 /**
  * Font

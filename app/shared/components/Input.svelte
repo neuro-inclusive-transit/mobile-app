@@ -1,21 +1,36 @@
 <script type="ts">
-  export let hinweis = " Tipp was ein...";
+  interface $$Props extends Partial<svelteNative.JSX.IntrinsicElements['textField']> {
+    pre?: string;
+    elevated?: boolean;
+  }
+
+  export let pre = 'search';
+  export let elevated = false;
+
 </script>
 
-<textField hint={hinweis} />
+<gridLayout columns="auto,*" rows="auto" id="wrapper" class:elevated>
+  <label text={pre} class="icon" row={0} col={0} />
+  <textField row={0} col={1} {...$$props} />
+</gridLayout>
 
-<style>
+
+<style type="scss">
+  #wrapper {
+    border-width: 1pt;
+    border-color: var(--color-primary);
+    font-size: var(--s);
+    color: var(--color-foreground);
+    background-color: var(--color-background-light);
+    padding: 0 var(--xs);
+  }
+
   textField {
-    background-color: white;
-    margin-top: 32;
-    padding-left: 20;
-    height: 56;
-    width: 400;
-    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.7);
-    border-color: #3b5bdb;
-    border-width: 2;
-    border-radius: 5;
-    font-size: 16;
-    color: #161616;
+    background-color: transparent;
+    border-color: transparent;
+    font-size: var(--s);
+    padding: var(--xxs) 0;
+    margin: 0;
+    width: 100%;
   }
 </style>
