@@ -4,14 +4,31 @@
     elevated?: boolean;
   }
 
-  export let pre = 'search';
+  export let pre = '';
   export let elevated = false;
+
+  $: gridProps = {
+    row: $$props['row'],
+    col: $$props['col'],
+    rowSpan: $$props['rowSpan'],
+    colSpan: $$props['colSpan'],
+    marginTop: $$props['marginTop'],
+    marginBottom: $$props['marginBottom'],
+    marginLeft: $$props['marginLeft'],
+    marginRight: $$props['marginRight'],
+    margin: $$props['margin'],
+    padding: $$props['padding'],
+    paddingTop: $$props['paddingTop'],
+    paddingBottom: $$props['paddingBottom'],
+    paddingLeft: $$props['paddingLeft'],
+    paddingRight: $$props['paddingRight'],
+  };
 
 </script>
 
-<gridLayout columns="auto,*" rows="auto" id="wrapper" class:elevated>
-  <label text={pre} class="icon" row={0} col={0} />
-  <textField row={0} col={1} {...$$props} />
+<gridLayout columns="auto,*" rows="auto" id="wrapper" class:elevated {...gridProps}>
+  <label text={pre} class="icon" row={0} col={0}/>
+  <textField {...$$restProps} row={0} col={1} />
 </gridLayout>
 
 
@@ -31,6 +48,14 @@
     font-size: var(--s);
     padding: var(--xxs) 0;
     margin: 0;
-    width: 100%;
+  }
+
+  label {
+    margin-right: var(--xxs);
+  }
+
+  .elevated {
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
   }
 </style>

@@ -11,18 +11,19 @@
   }
 </script>
 
-<gridLayout columns="*, 40" rows="auto, auto">
-  <Input pre="text" text={departure} hint="Abfahrt" row={0} col={0} />
+<gridLayout columns="*, auto" rows="auto, auto">
+  <Input text={departure} hint="Abfahrt" row={0} col={0} />
   <button text="swap_vert" class="icon" row={0} col={1} rowSpan={2} on:tap={switchValues} />
-  <Input pre="text" text={destination} hint="Ziel" row={1} col={0} />
+  <Input text={destination} hint="Ziel" row={1} col={0} />
 </gridLayout>
 
-<style lang="scss">
+<style lang="css">
   button {
     color: var(--color-primary);
+    margin-left: var(--xxs);
   }
 
   Input {
-    margin-bottom: var(--base-xxs);
+    margin-bottom: var(--xxs);
   }
 </style>
