@@ -2,6 +2,7 @@
   import { navigate, goBack } from "svelte-native";
   import JourneyPreferences from "./040_JourneyPreferences.svelte";
   import { getRootLayout } from "@nativescript/core";
+  import DepartureDestinationSwitcher from "~/shared/components/DepartureDestinationSwitcher.svelte";
 
   import { planJourney } from "~/stores"
 
@@ -23,12 +24,18 @@
       eventData: {}
     })
   }
+  function onSwitchValues() {
+    let tmp = $planJourney.departure
+    $planJourney.departure = $planJourney.arrival
+    $planJourney.arrival = tmp
+  }
+
 </script>
 
 <page actionBarHidden=true>
   <stackLayout>
     <button text="Close" on:tap="{closeBottomSheet}" />
-    <label text="{$planJourney.departure?.icon} {$planJourney.departure?.name} -> {$planJourney.arrival?.icon} {$planJourney.arrival?.name}" textWrap="true" />
+    <DepartureDestinationSwitcher departure="{$planJourney.departure?.name}" destination="{$planJourney.arrival?.name}" on:switchValues={onSwitchValues()} />
     <label text="Wann startest du deine Reise?" />
     <!-- TODO: select ob departure or arrival time -->
     <timePicker bind:time="{$planJourney.time.value}" />

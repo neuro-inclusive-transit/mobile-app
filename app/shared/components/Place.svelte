@@ -21,8 +21,4 @@
     border-width: 2;
     background: white;
   }
-
-  .places .fas {
-    color: blue;
-  }
 </style>

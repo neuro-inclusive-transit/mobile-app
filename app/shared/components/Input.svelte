@@ -28,7 +28,7 @@
 
 <gridLayout columns="auto,*" rows="auto" id="wrapper" class:elevated {...gridProps}>
   <label text={pre} class="icon" row={0} col={0}/>
-  <textField {...$$restProps} row={0} col={1} />
+  <textField {...$$restProps} row={0} col={1} margin={0} />
 </gridLayout>
 
 
