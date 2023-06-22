@@ -28,13 +28,13 @@ $color-white: #f2f4f8;
   --base-l: 1.5625;
   --base-xl: 1.96875;
   --base-xxl: 2.5;
-  --xxs: calc(var(--base) * var(--base-xxs));
-  --xs: calc(var(--base) * var(--base-xs));
-  --s: calc(var(--base) * var(--base-s));
-  --m: calc(var(--base) * var(--base-m));
-  --l: calc(var(--base) * var(--base-l));
-  --xl: calc(var(--base) * var(--base-xl));
-  --xxl: calc(var(--base) * var(--base-xxl));
+  --xxs: calc(var(--base) * var(--base-xxs)); /* 10px */
+  --xs: calc(var(--base) * var(--base-xs)); /* 12.5px */
+  --s: calc(var(--base) * var(--base-s)); /* 16px */
+  --m: calc(var(--base) * var(--base-m)); /* 20px */
+  --l: calc(var(--base) * var(--base-l)); /* 25px */
+  --xl: calc(var(--base) * var(--base-xl)); /* 31.25px */
+  --xxl: calc(var(--base) * var(--base-xxl)); /* 40px */
 
 
   --border-radius: 5;
@@ -66,4 +66,47 @@ $color-white: #f2f4f8;
 @mixin font-icon {
   font-family: 'Material Icons Round', 'MaterialIconsRound-Regular';
   font-size: 24;
+}
+
+/**
+ * Utility
+ */
+.fw-bold {
+  @include font-bold;
+}
+.fw-normal {
+  @include font-normal;
+}
+.fw-italic {
+  @include font-italic;
+}
+.fw-bold-italic {
+  @include font-bold-italic;
+}
+.fs-xxs {
+  font-size: var(--xxs);
+}
+.fs-xs {
+  font-size: var(--xs);
+}
+.fs-s {
+  font-size: var(--s);
+}
+.fs-m {
+  font-size: var(--m);
+}
+.fs-l {
+  font-size: var(--l);
+}
+.fs-xl {
+  font-size: var(--xl);
+}
+.fs-xxl {
+  font-size: var(--xxl);
+}
+.color-primary {
+  color: var(--color-primary);
+}
+.color-primary-light {
+  color: var(--color-primary-light);
 }

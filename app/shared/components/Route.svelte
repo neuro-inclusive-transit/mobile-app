@@ -1,189 +1,103 @@
 <script type="ts">
+  import { sizes } from "../sizes";
+
   export let departureTime = new Date();
   export let arrivalTime = new Date();
-  export let reminder = "Erinnerung: 15 min";
   export let crowdPercentage = 0.5;
-
   export let route: RouteSection[] = [];
+
+  $: msInBetween = arrivalTime.getTime() - departureTime.getTime();
+  $: duration = {
+    hours: Math.floor(msInBetween / 1000 / 60 / 60),
+    minutes: Math.floor((msInBetween / 1000 / 60) % 60)
+  };
+
+  function getDuration(duration: { hours: number; minutes: number }) {
+    if (duration.hours === 0) {
+      return duration.minutes + " Min.";
+    }
+    return duration.hours + " Std. " + duration.minutes + " Min.";
+  }
+  function getTime(date: Date) {
+    return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+  }
 
   type RouteSection = {
     type: "walk" | "subway" | "train" | string;
     begin: Date;
     end: Date;
-    transport_name: string;
+    transport_name?: string;
   };
+
+  function getRouteSectionIcon(type: RouteSection['type']) {
+    switch (type) {
+      case "walk":
+        return "directions_walk";
+      case "bus":
+        return "directions_bus";
+      case "subway":
+        return "directions_subway";
+      case "train":
+        return "directions_railway";
+      default:
+        return "directions_walk";
+    }
+  }
 </script>
 
-<gridLayout columns="400" rows="auto" horizontalAlignment="center">
-  <gridLayout
-    class="route"
-    columns="*, 80"
-    rows="28, 28, 28, auto"
-    marginTop="32"
-    row="0"
-  >
+<gridLayout columns="*,auto,auto" rows="auto,auto" horizontalAlignment="center" class="route">
+  <stackLayout col={0} row={0}>
+    <label class="fw-bold" text={getDuration(duration)} />
+    <label text="Aufbruch {getTime(departureTime)} Uhr" />
+  </stackLayout>
 
+  <label col={1} row={0} class="icon color-primary" text={
+    (crowdPercentage > 0.3 ? "person" : "person_outline")
+    + (crowdPercentage > 0.6 ? "person" : "person_outline")
+    + (crowdPercentage > 0.9 ? "person" : "person_outline")
+  } />
 
-    <stackLayout
-      orientation="horizontal"
-      col={2}
-      row={0}
-      horizontalAlignment="right"
-    >
-      <label class="icon" text="person" horizontalAlignment="center" />
-      <label class="icon" text="person" horizontalAlignment="center" />
-      <label class="icon" text="person_outline" horizontalAlignment="center" />
-    </stackLayout>
+  <label col={2} row={0} class="icon fs-l" text="arrow_forward_ios" />
 
-    <stackLayout orientation="horizontal" row="1" colSpan="2">
-      <label text={departureTime.toDateString()} horizontalAlignment="center" paddingRight="12" />
-      <label text={arrivalTime.toDateString()} horizontalAlignment="center" paddingRight="12" />
-    </stackLayout>
-
-    <stackLayout orientation="horizontal" row="2" colSpan="2">
-      <label text={reminder} horizontalAlignment="center" paddingRight="12" />
-    </stackLayout>
-
-    <wrapLayout
-      class="trains"
-      row="3"
-      colSpan="2"
-      rowSpan="2"
-      marginTop="8"
-      marginBottom="-8"
-    >
-      <stackLayout
-        class="routeStep"
-        orientation="horizontal"
-        col={0}
-        marginBottom="12"
-      >
-        <label
-          class="icon"
-          text="directions_walk"
-          horizontalAlignment="center"
-          paddingRight="8"
-          paddingLeft="8"
-        />
-        <label text="5 min" horizontalAlignment="center" paddingRight="8" />
+  <wrapLayout col={0} row={1} colSpan={3} horizontalAlignment="center" marginTop={sizes.s} class="steps">
+    {#each route as section, i}
+      <stackLayout class="steps__item" orientation="horizontal">
+        <label class="icon color-primary" text={getRouteSectionIcon(section.type)} horizontalAlignment="center" />
+        <label text={section.transport_name
+        ? section.transport_name
+        : getDuration({
+          hours: Math.floor((section.end.getTime() - section.begin.getTime()) / 1000 / 60 / 60),
+          minutes: Math.floor(((section.end.getTime() - section.begin.getTime()) / 1000 / 60) % 60)
+        })} horizontalAlignment="center" paddingRight="8" />
       </stackLayout>
 
-      <label
-        class="icon"
-        text="chevron_right"
-        horizontalAlignment="center"
-        col={2}
-        padding="8"
-        marginBottom="12"
-      />
+      {#if i < route.length - 1}
+        <label class="icon steps__next" text="chevron_right" horizontalAlignment="center" />
+      {/if}
+    {/each}
+  </wrapLayout>
 
-      <stackLayout
-        class="routeStep"
-        orientation="horizontal"
-        col={3}
-        marginBottom="12"
-      >
-        <label
-          class="icon"
-          text="directions_subway"
-          horizontalAlignment="center"
-          paddingRight="8"
-          paddingLeft="8"
-        />
-        <label text="U 18" horizontalAlignment="center" paddingRight="8" />
-      </stackLayout>
-
-      <label
-        class="icon"
-        text="chevron_right"
-        horizontalAlignment="center"
-        col={4}
-        padding="8"
-        marginBottom="12"
-      />
-
-      <stackLayout
-        class="routeStep"
-        orientation="horizontal"
-        col={5}
-        marginBottom="12"
-      >
-        <label
-          class="icon"
-          text="train"
-          horizontalAlignment="center"
-          paddingRight="8"
-          paddingLeft="8"
-        />
-        <label text="RB 25" horizontalAlignment="center" paddingRight="8" />
-      </stackLayout>
-
-      <label
-        class="icon"
-        text="chevron_right"
-        horizontalAlignment="center"
-        col={4}
-        padding="8"
-        marginBottom="12"
-      />
-
-      <stackLayout
-        class="routeStep"
-        orientation="horizontal"
-        col={5}
-        marginBottom="12"
-      >
-        <label
-          class="icon"
-          text="train"
-          horizontalAlignment="center"
-          paddingRight="8"
-          paddingLeft="8"
-        />
-        <label text="RB 25" horizontalAlignment="center" paddingRight="8" />
-      </stackLayout>
-      <label
-        class="icon"
-        text="chevron_right"
-        horizontalAlignment="center"
-        col={4}
-        padding="8"
-        marginBottom="12"
-      />
-
-      <stackLayout
-        class="routeStep"
-        orientation="horizontal"
-        col={5}
-        marginBottom="12"
-      >
-        <label
-          class="icon"
-          text="train"
-          horizontalAlignment="center"
-          paddingRight="8"
-          paddingLeft="8"
-        />
-        <label text="RB 25" horizontalAlignment="center" paddingRight="8" />
-      </stackLayout>
-    </wrapLayout>
-  </gridLayout>
 </gridLayout>
 
 <style>
   .route {
     margin: auto;
-    padding: 20;
-    font-size: 16px;
-    border-color: #3b5bdb;
+    padding: var(--xxs) var(--s);
+    font-size: var(--s);
+    border-color: var(--color-primary);
     border-width: 2;
-    background: white;
+    background: var(--color-background-light)
   }
 
-  .routeStep {
-    background: #dbe4ff;
-    border-radius: 20;
-    padding: 12;
-    height: 40;
+  .steps__item {
+    background: var(--color-primary-light);
+    font-size: var(--xs);
+    padding: calc(var(--xxs) / 2);
+    border-radius: calc((var(--xxs) + var(--xs)));
+  }
+
+  .steps__item,
+  .steps__next {
+    margin-bottom: var(--xxs);
   }
 </style>

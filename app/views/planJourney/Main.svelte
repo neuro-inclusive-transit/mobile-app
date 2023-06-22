@@ -2,7 +2,7 @@
   import { navigate } from "svelte-native";
   import { Frame, EventData, getRootLayout } from "@nativescript/core";
 
-  import Button from "~/shared/components/Button.svelte";
+  import Route from "~/shared/components/Route.svelte";
   import Place from "~/shared/components/Place.svelte";
   // import Search from "~/shared/components/Search.svelte";
   import DepartureDestinationSwitcher from "~/shared/components/DepartureDestinationSwitcher.svelte";
@@ -35,15 +35,18 @@
     <DepartureDestinationSwitcher departure='Köln Zoo' destination='Gummersbach Bahnhof'/>
 
 
-    <Button type='secondary' icon='&#xf806' inhalt='rock on' />
-
     <Place customIcon='🤟🏽' name='Rock Hall' address='Boulevard of broken dreams' />
 
-    <!-- <Search hinweis='Gib ein Ziel ein...' icon='&#xf55f'/> -->
-
-    <Button icon='&#xf124' inhalt='Jetzt Reise starten' />
-
-    <Button icon='' type='line' inhalt='Abbrechen' />
+    <Route
+      departureTime={new Date(Date.now()+40*60000)}
+      arrivalTime={new Date(Date.now()+83*60000)}
+      crowdPercentage={0.1}
+      route={[
+        {type: 'walk', begin: new Date(Date.now()+40*60000), end: new Date(Date.now()+43*60000)},
+        {type: 'bus', begin: new Date(Date.now()+43*60000), end: new Date(Date.now()+50*60000), transport_name: '335'},
+        {type: 'walk', begin: new Date(Date.now()+50*60000), end: new Date(Date.now()+53*60000)},
+        {type: 'train', begin: new Date(Date.now()+53*60000), end: new Date(Date.now()+83*60000), transport_name: 'RB25'}
+      ]}/>
 
 
   </stackLayout>
