@@ -46,7 +46,7 @@ type RouteApiGetParams = {
   return?: string;
 };
 
-type HereApiRoute = {
+export type HereApiRoute = {
   id: string;
   sections: Array<{
     id: string;
@@ -88,7 +88,7 @@ type HereApiRoute = {
   };
 }
 
-type RouteApiGetResponse = {
+export type RouteApiGetResponse = {
   routes: Array<HereApiRoute>;
 };
 

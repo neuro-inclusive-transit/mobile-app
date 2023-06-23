@@ -1,0 +1,51 @@
+.fw-bold {
+  @include font-bold;
+}
+
+.fw-normal {
+  @include font-normal;
+}
+
+.fw-italic {
+  @include font-italic;
+}
+
+.fw-bold-italic {
+  @include font-bold-italic;
+}
+
+.fs-xxs {
+  font-size: var(--xxs);
+}
+
+.fs-xs {
+  font-size: var(--xs);
+}
+
+.fs-s {
+  font-size: var(--s);
+}
+
+.fs-m {
+  font-size: var(--m);
+}
+
+.fs-l {
+  font-size: var(--l);
+}
+
+.fs-xl {
+  font-size: var(--xl);
+}
+
+.fs-xxl {
+  font-size: var(--xxl);
+}
+
+.color-primary {
+  color: var(--color-primary);
+}
+
+.color-primary-light {
+  color: var(--color-primary-light);
+}

@@ -22,3 +22,7 @@ export const sizes = {
   'xl': `${base._ * base.xl}pt`, // 31.25pt
   'xxl': `${base._ * base.xxl}pt`, // 40pt
 };
+
+export const globals = {
+  'outerPadding': sizes.xl,
+}

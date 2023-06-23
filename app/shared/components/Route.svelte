@@ -81,12 +81,12 @@
 
 <style>
   .route {
-    margin: auto;
     padding: var(--xxs) var(--s);
     font-size: var(--s);
     border-color: var(--color-primary);
     border-width: 2;
-    background: var(--color-background-light)
+    background: var(--color-background-light);
+    width: 100%;
   }
 
   .steps__item {
@@ -99,5 +99,9 @@
   .steps__item,
   .steps__next {
     margin-bottom: var(--xxs);
+  }
+
+  .steps__item .icon {
+    font-size: var(--xxs);
   }
 </style>

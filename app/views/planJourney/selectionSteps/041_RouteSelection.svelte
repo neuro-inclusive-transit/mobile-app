@@ -1,86 +1,102 @@
-<script>
+<script type="ts">
   import { navigate, goBack } from "svelte-native";
   import { Template } from 'svelte-native/components'
   import NotificationFrequency from "./050_NotificationFrequency.svelte";
-  import { getRootLayout } from "@nativescript/core";
+  import { getRootLayout, EventData, StackLayout } from "@nativescript/core";
   import { localize as L } from '@nativescript/localize'
 
   import { planJourney } from "~/stores"
   import { CompanionMode } from "~/types"
 
-  import { routeApi } from "~/api"
+  import { routeApi, HereApiRoute } from "~/api";
+  import Route from "~/shared/components/Route.svelte";
+  import { time } from "@nativescript/core/profiling";
+    import { globals } from "~/shared/sizes";
+    import DepartureDestinationSwitcher from "~/shared/components/DepartureDestinationSwitcher.svelte";
 
-  function select(route) {
-    //$planJourney.companion_mode = mode;
+  function select(route: HereApiRoute) {
+    console.log('select', route);
+
+    $planJourney.preferredRoute = route;
+
+    navigate({
+      page: NotificationFrequency as any, // Type not compatible
+      frame: 'planJourneySelection',
+    });
   }
 
-  let numOfalternatives = 3;
+  let numOfAlternatives = 3;
 
   $: $planJourney.options = routeApi.get({
     origin: {
-      lat: $planJourney.departure.location.lat,
-      lng: $planJourney.departure.location.lng,
+      lat: $planJourney.departure?.location.lat ?? 0,
+      lng: $planJourney.departure?.location.lng ?? 0,
     },
     destination: {
-      lat: $planJourney.arrival.location.lat,
-      lng: $planJourney.arrival.location.lng,
+      lat: $planJourney.arrival?.location.lat ?? 0,
+      lng: $planJourney.arrival?.location.lng ?? 0,
     },
     departureTime: $planJourney.time.value, // TODO: switch departureTime / arrivalTime depending on the direction
-    alternatives: numOfalternatives,
+    alternatives: numOfAlternatives,
   });
 
 
+  function onRouteSelect(args: EventData) {
+    console.log('onRouteSelect', args);
+  }
 
   function onNavigateBack() {
     goBack({
       frame: 'planJourneySelection',
     });
   }
-  function onNavigateNext() {
-    navigate({
-      page: NotificationFrequency,
-      frame: 'planJourneySelection',
-    });
-  }
-  function closeBottomSheet(args) {
+  function closeBottomSheet(args: EventData) {
     getRootLayout().notify({
       eventName: "hideBottomSheet",
       object: args.object,
       eventData: {}
     })
   }
+
+  function hereRouteSectionToGenericSection(sections: HereApiRoute['sections']) {
+    return sections.map((section) => ({
+      type: section.type,
+      begin: new Date(section.departure.time),
+      end: new Date(section.arrival.time),
+      transport_name: section.transport.name,
+    }));
+  }
 </script>
 
-<page actionBarHidden=true>
-  <stackLayout>
-    <button text="Close" on:tap="{closeBottomSheet}" />
-    <label text="{$planJourney.departure?.icon} {$planJourney.departure?.name} -> {$planJourney.arrival?.icon} {$planJourney.arrival?.name} @ {$planJourney.time.value}" textWrap="true" />
-    <label text="Routenauswahl " />
+<page actionBarHidden={true}>
+  <gridLayout marginLeft={globals.outerPadding} marginRight={globals.outerPadding} columns="*" rows="auto, auto, auto, auto, auto, *, auto, auto">
+    <button text="Abbrechen" on:tap="{closeBottomSheet}" row={0} col={0} />
+
+    <DepartureDestinationSwitcher row={1} col={0}
+      departure="{$planJourney.departure?.name}"
+      destination="{$planJourney.arrival?.name}"
+      on:switchValues />
+
+    <label text="Aufbruchszeit: {$planJourney.time.value}" row={2} col={0} />
+
+    <label text="Schnellste Routenoptionen" class="fs-l" row={3} col={0} />
 
     {#await $planJourney.options}
-      <label>...waiting</label>
+      <label row={4} col={0}>...waiting</label>
     {:then routes}
-      <listView height="450" items="{routes}">
+      <listView items={routes} on:itemTap={onRouteSelect} row={4} col={0}>
         <Template let:item={route}>
-          <stackLayout on:tap="{select(route)}">
-            <label text="{route.sections[0].departure.time} -> {route.sections[route.sections.length - 1].arrival.time}" />
-            <label text="{route.sections.map((section) => {
-              return section.transport.mode + ' '
-                + section.transport.name ?? '' + ' '
-                + section.transport.shortName ?? '' + ' '
-                + section.transport.headsign ?? '';
-            }).join(' -> ')}" textWrap="true" />
-            })}" textWrap="true" />
-          </stackLayout>
+          <Route
+            departureTime={new Date(route.sections[0].departure.time)}
+            arrivalTime={new Date(route.sections[route.sections.length - 1].arrival.time)}
+            route={hereRouteSectionToGenericSection(route.sections)} />
         </Template>
       </listView>
     {:catch error}
-      <label style="color: red">{error}</label>
+      <label style="color: red" row={4} col={0}>{error}</label>
     {/await}
+    <button text="More Routes" on:tap="{() => numOfAlternatives += 3}" row={5} col={0} />
 
-    <button text="More Routes" on:tap="{() => numOfalternatives += 3}" />
-
-    <button text="Zurück" on:tap="{onNavigateBack}" />
-    <button text="Weiter" on:tap="{onNavigateNext}" />
-  </stackLayout>
+    <button text="Zurück" on:tap="{onNavigateBack}" row={6} col={0} />
+  </gridLayout>
 </page>

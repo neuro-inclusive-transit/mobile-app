@@ -1,12 +1,13 @@
 ﻿@import '@nativescript/theme/css/core.css';
 /* @import '@nativescript/theme/css/default.css'; */
 @import 'shared/styles/variables.scss';
+@import 'shared/styles/font.scss';
+@import 'shared/styles/utility.scss';
 
 
 .ns-root {
   @include font-normal;
   font-size: var(--s);
-
   background-color: var(--color-background);
 }
 
@@ -15,9 +16,8 @@
 }
 
 actionBar{
-  background: #3B5BDB;
-  color: white;
+  background: var(--color-primary);
+  color: var(--color-background);
   @include font-bold;
-  font-size: 30;
-
+  font-size: var(--m);
 }
