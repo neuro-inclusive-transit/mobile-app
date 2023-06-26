@@ -68,7 +68,7 @@
   }
 </script>
 
-<page actionBarHidden={true}>
+<page actionBarHidden={true}  class="bg-default">
   <gridLayout marginLeft={globals.outerPadding} marginRight={globals.outerPadding} columns="*" rows="auto, auto, auto, auto, auto, *, auto, auto">
     <button text="Abbrechen" on:tap="{closeBottomSheet}" row={0} col={0} />
 

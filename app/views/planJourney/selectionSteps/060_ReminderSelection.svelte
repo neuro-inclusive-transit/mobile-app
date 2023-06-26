@@ -1,5 +1,6 @@
-<script>
+<script type="ts">
   import { navigate, goBack } from "svelte-native";
+  import { getRootLayout, EventData } from "@nativescript/core";
   import Confirmation from "./070_Confirmation.svelte";
 
   import { planJourney } from "~/stores"
@@ -11,11 +12,11 @@
   }
   function onNavigateNext() {
     navigate({
-      page: Confirmation,
+      page: Confirmation as any,
       frame: 'planJourneySelection',
     });
   }
-  function closeBottomSheet(args) {
+  function closeBottomSheet(args: EventData) {
     getRootLayout().notify({
       eventName: "hideBottomSheet",
       object: args.object,
@@ -30,7 +31,7 @@
   ]
 </script>
 
-<page actionBarHidden=true>
+<page actionBarHidden={true}  class="bg-default">
   <stackLayout>
     <button text="Close" on:tap="{closeBottomSheet}" />
     <label text="{$planJourney.departure?.icon} {$planJourney.departure?.name} -> {$planJourney.arrival?.icon} {$planJourney.arrival?.name} @ {$planJourney.time.value}" textWrap="true" />

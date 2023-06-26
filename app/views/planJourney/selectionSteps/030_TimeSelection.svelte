@@ -1,7 +1,7 @@
-<script>
+<script type="ts">
   import { navigate, goBack } from "svelte-native";
   import JourneyPreferences from "./040_JourneyPreferences.svelte";
-  import { getRootLayout } from "@nativescript/core";
+  import { getRootLayout, EventData } from "@nativescript/core";
   import DepartureDestinationSwitcher from "~/shared/components/DepartureDestinationSwitcher.svelte";
 
   import { planJourney } from "~/stores"
@@ -13,11 +13,11 @@
   }
   function onNavigateNext() {
     navigate({
-      page: JourneyPreferences,
+      page: JourneyPreferences as any, // Type not compatible
       frame: 'planJourneySelection',
     });
   }
-  function closeBottomSheet(args) {
+  function closeBottomSheet(args: EventData) {
     getRootLayout().notify({
       eventName: "hideBottomSheet",
       object: args.object,
@@ -32,10 +32,10 @@
 
 </script>
 
-<page actionBarHidden=true>
+<page actionBarHidden={true}  class="bg-default">
   <stackLayout>
     <button text="Close" on:tap="{closeBottomSheet}" />
-    <DepartureDestinationSwitcher departure="{$planJourney.departure?.name}" destination="{$planJourney.arrival?.name}" on:switchValues={onSwitchValues()} />
+    <DepartureDestinationSwitcher departure="{$planJourney.departure?.name}" destination="{$planJourney.arrival?.name}" on:switchValues={onSwitchValues} />
     <label text="Wann startest du deine Reise?" />
     <!-- TODO: select ob departure or arrival time -->
     <timePicker bind:time="{$planJourney.time.value}" />

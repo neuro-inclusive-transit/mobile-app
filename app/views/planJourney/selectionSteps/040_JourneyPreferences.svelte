@@ -1,13 +1,14 @@
-<script>
+<script type="ts">
   import { navigate, goBack } from "svelte-native";
   import RouteSelection from "./041_RouteSelection.svelte";
-  import { getRootLayout } from "@nativescript/core";
+  import { EventData, getRootLayout } from "@nativescript/core";
   import { localize as L } from '@nativescript/localize'
+  import { enumKeys } from "~/shared/utils";
 
   import { planJourney } from "~/stores"
   import { PreferredJourneyMode } from "~/types"
 
-  function select(mode) {
+  function select(mode: PreferredJourneyMode) {
     $planJourney.preferredJourneyMode = mode;
   }
 
@@ -18,11 +19,11 @@
   }
   function onNavigateNext() {
     navigate({
-      page: RouteSelection,
+      page: RouteSelection as any,
       frame: 'planJourneySelection',
     });
   }
-  function closeBottomSheet(args) {
+  function closeBottomSheet(args: EventData) {
     getRootLayout().notify({
       eventName: "hideBottomSheet",
       object: args.object,
@@ -31,12 +32,12 @@
   }
 </script>
 
-<page actionBarHidden=true>
+<page actionBarHidden={true}  class="bg-default">
   <stackLayout>
     <button text="Close" on:tap="{closeBottomSheet}" />
     <label text="{$planJourney.departure?.icon} {$planJourney.departure?.name} -> {$planJourney.arrival?.icon} {$planJourney.arrival?.name}" textWrap="true" />
     <label text="Bei der Reise ist mir besonders wichtig? " />
-    {#each Object.keys(PreferredJourneyMode) as mode} }
+    {#each enumKeys(PreferredJourneyMode) as mode} }
       <stackLayout>
         <button text="{L('preffered_journey_mode.' + PreferredJourneyMode[mode])}" on:tap={() => select(PreferredJourneyMode[mode])}  />
       </stackLayout>

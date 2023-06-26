@@ -1,26 +1,26 @@
-<script>
+<script type="ts">
   import { navigate } from "svelte-native";
   import Confirmation from "./070_Confirmation.svelte";
   import Start from "./020_Start.svelte";
-  import { getRootLayout } from "@nativescript/core";
+  import { getRootLayout, EventData } from "@nativescript/core";
 
   import { planJourney } from "~/stores"
 
   function onStartNow() {
     navigate({
-      page: Confirmation,
+      page: Confirmation as any, // Type not compatible
       frame: 'planJourneySelection',
     });
   }
 
   function onStartLater() {
     navigate({
-      page: Start,
+      page: Start as any, // Type not compatible
       frame: 'planJourneySelection'
     });
   }
 
-  function closeBottomSheet(args) {
+  function closeBottomSheet(args: EventData) {
     getRootLayout().notify({
       eventName: "hideBottomSheet",
       object: args.object,
@@ -29,7 +29,7 @@
   }
 </script>
 
-<page actionBarHidden=true>
+<page actionBarHidden={true} class="bg-default">
   <stackLayout>
     <button text="Close" on:tap="{closeBottomSheet}" />
     <label text="Zielort:" />

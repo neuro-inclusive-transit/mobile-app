@@ -1,7 +1,6 @@
-<script>
+<script type="ts">
   import { goBack } from "svelte-native";
-  import { getRootLayout } from "@nativescript/core";
-  import * as Intl from "nativescript-intl";
+  import { EventData, getRootLayout } from "@nativescript/core";
 
   import { journeys, planJourney } from "~/stores"
   import { CompanionMode, JourneyPlanMode, PreferredJourneyMode, PreferredTransportation } from "~/types"
@@ -20,7 +19,7 @@
     });
   }
 
-  function closeBottomSheet(args) {
+  function closeBottomSheet(args: EventData) {
     getRootLayout().notify({
       eventName: "hideBottomSheet",
       object: args.object,
@@ -29,7 +28,7 @@
   }
 </script>
 
-<page actionBarHidden=true>
+<page actionBarHidden={true}  class="bg-default">
   <stackLayout>
     <button text="Close" on:tap="{closeBottomSheet}" />
 

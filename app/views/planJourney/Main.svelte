@@ -34,9 +34,6 @@
 
     <DepartureDestinationSwitcher departure='Köln Zoo' destination='Gummersbach Bahnhof'/>
 
-
-    <Place customIcon='🤟🏽' name='Rock Hall' address='Boulevard of broken dreams' />
-
     <Route
       departureTime={new Date(Date.now()+40*60000)}
       arrivalTime={new Date(Date.now()+83*60000)}

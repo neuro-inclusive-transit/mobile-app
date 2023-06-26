@@ -1,7 +1,7 @@
-<script>
+<script type="ts">
   import { goBack, navigate } from "svelte-native";
   import TimeSelection from "./030_TimeSelection.svelte";
-  import { getRootLayout } from "@nativescript/core";
+  import { getRootLayout, EventData } from "@nativescript/core";
 
   import { planJourney } from "~/stores"
 
@@ -13,7 +13,6 @@
 
   function onNavigateNext() {
     $planJourney.departure = {
-      id: -1,
       name: "Aktueller Standort",
       location: { // Get initial location
         lat: 50.880382,
@@ -24,12 +23,12 @@
     }
 
     navigate({
-      page: TimeSelection,
+      page: TimeSelection as any, // Type not compatible
       frame: 'planJourneySelection',
     });
   }
 
-  function closeBottomSheet(args) {
+  function closeBottomSheet(args : EventData) {
     getRootLayout().notify({
       eventName: "hideBottomSheet",
       object: args.object,
@@ -38,7 +37,7 @@
   }
 </script>
 
-<page actionBarHidden=true>
+<page actionBarHidden={true}  class="bg-default">
   <stackLayout>
     <button text="Close" on:tap="{closeBottomSheet}" />
     <label text="Zielort:" />
