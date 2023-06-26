@@ -14,34 +14,6 @@
   @include font-bold-italic;
 }
 
-.fs-xxs {
-  font-size: var(--xxs);
-}
-
-.fs-xs {
-  font-size: var(--xs);
-}
-
-.fs-s {
-  font-size: var(--s);
-}
-
-.fs-m {
-  font-size: var(--m);
-}
-
-.fs-l {
-  font-size: var(--l);
-}
-
-.fs-xl {
-  font-size: var(--xl);
-}
-
-.fs-xxl {
-  font-size: var(--xxl);
-}
-
 .color-primary {
   color: var(--color-primary);
 }
@@ -56,3 +28,28 @@
 .bg-light {
   background-color: var(--color-background-light);
 }
+
+$sizes: 'xxs', 'xs', 's', 'm', 'l', 'xl', 'xxl';
+$directions: (
+  't': 'top',
+  'r': 'right',
+  'b': 'bottom',
+  'l': 'left',
+);
+
+@each $size in $sizes {
+  @each $selector, $property in $directions {
+    .m-#{$selector}-#{$size} { // eg. m-t-xs
+      margin-#{$property}: var(--#{$size});
+    }
+    .p-#{$selector}-#{$size} { // eg. p-t-xs
+      padding-#{$property}: var(--#{$size});
+    }
+  }
+
+  .fs-#{$size} { // eg. fs-xs
+    font-size: var(--#{$size});
+  }
+}
+
+

@@ -1,5 +1,6 @@
 <script type="ts">
   import { navigate, goBack } from "svelte-native";
+  import { localize as L } from '@nativescript/localize'
   import JourneyPreferences from "./040_JourneyPreferences.svelte";
   import { getRootLayout, EventData } from "@nativescript/core";
   import DepartureDestinationSwitcher from "~/shared/components/DepartureDestinationSwitcher.svelte";
@@ -34,7 +35,7 @@
 
 <page actionBarHidden={true}  class="bg-default">
   <stackLayout>
-    <button text="Close" on:tap="{closeBottomSheet}" />
+    <button text={L('close')} on:tap="{closeBottomSheet}" class="link" />
     <DepartureDestinationSwitcher departure="{$planJourney.departure?.name}" destination="{$planJourney.arrival?.name}" on:switchValues={onSwitchValues} />
     <label text="Wann startest du deine Reise?" />
     <!-- TODO: select ob departure or arrival time -->

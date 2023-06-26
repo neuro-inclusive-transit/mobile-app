@@ -1,13 +1,13 @@
 <script type="ts">
   import { navigate, goBack } from "svelte-native";
+  import { localize as L } from '@nativescript/localize'
   import ReminderSelection from "./060_ReminderSelection.svelte";
   import { getRootLayout, EventData } from "@nativescript/core";
-  import { localize as L } from '@nativescript/localize'
 
   import { planJourney } from "~/stores"
   import { CompanionMode } from "~/types"
 
-  import { enumKeys } from "~/shared/utils";
+  import { enumKeys } from "~/shared/utilites";
 
   function select(mode: CompanionMode) {
     $planJourney.companionMode = mode;
@@ -35,7 +35,7 @@
 
 <page actionBarHidden={true} class="bg-default">
   <stackLayout>
-    <button text="Close" on:tap="{closeBottomSheet}" />
+    <button text={L('close')} on:tap="{closeBottomSheet}" class="link" />
     <label text="{$planJourney.departure?.icon} {$planJourney.departure?.name} -> {$planJourney.arrival?.icon} {$planJourney.arrival?.name} @ {$planJourney.time.value}" textWrap="true" />
     <label text="Bei der Reise ist mir besonders wichtig? " />
     {#each enumKeys(CompanionMode) as mode} }

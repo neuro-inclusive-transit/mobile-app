@@ -27,7 +27,7 @@ export type JourneyPlan = {
     type: JourneyPlanMode;
     value: Date;
   }
-  options: HereApiRoute[] | Promise<HereApiRoute[]>;
+  options: Promise<HereApiRoute[]>;
   companionMode: CompanionMode;
   reminderBefore: number;
   preferredTransport: PreferredTransportation;

@@ -1,5 +1,6 @@
 <script type="ts">
   import { goBack } from "svelte-native";
+  import { localize as L } from '@nativescript/localize'
   import { EventData, getRootLayout } from "@nativescript/core";
 
   import { journeys, planJourney } from "~/stores"
@@ -30,7 +31,7 @@
 
 <page actionBarHidden={true}  class="bg-default">
   <stackLayout>
-    <button text="Close" on:tap="{closeBottomSheet}" />
+    <button text={L('close')} on:tap="{closeBottomSheet}" class="link" />
 
     <label text="Super!" />
     <label text="Du hast deine Reise von {plannedJourney.departure?.name} nach {plannedJourney.departure?.name} geplant" textWrap="true" />

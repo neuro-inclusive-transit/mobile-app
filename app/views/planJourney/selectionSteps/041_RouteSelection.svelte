@@ -1,9 +1,9 @@
 <script type="ts">
   import { navigate, goBack } from "svelte-native";
+  import { localize as L } from '@nativescript/localize'
   import { Template } from 'svelte-native/components'
   import NotificationFrequency from "./050_NotificationFrequency.svelte";
-  import { getRootLayout, EventData, StackLayout } from "@nativescript/core";
-  import { localize as L } from '@nativescript/localize'
+  import { getRootLayout, EventData, ItemEventData } from "@nativescript/core";
 
   import { planJourney } from "~/stores"
   import { CompanionMode } from "~/types"
@@ -41,8 +41,10 @@
   });
 
 
-  function onRouteSelect(args: EventData) {
-    console.log('onRouteSelect', args);
+  function onRouteSelect(args: ItemEventData) {
+    // $planJourney.options.finally((options) => {
+    //   select(options[args.index]);
+    // });
   }
 
   function onNavigateBack() {
@@ -70,7 +72,7 @@
 
 <page actionBarHidden={true}  class="bg-default">
   <gridLayout marginLeft={globals.outerPadding} marginRight={globals.outerPadding} columns="*" rows="auto, auto, auto, auto, auto, *, auto, auto">
-    <button text="Abbrechen" on:tap="{closeBottomSheet}" row={0} col={0} />
+    <button text={L('close')} on:tap="{closeBottomSheet}" row={0} col={0} class="link" />
 
     <DepartureDestinationSwitcher row={1} col={0}
       departure="{$planJourney.departure?.name}"

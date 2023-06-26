@@ -3,9 +3,6 @@
   import { Frame, EventData, getRootLayout } from "@nativescript/core";
 
   import Route from "~/shared/components/Route.svelte";
-  import Place from "~/shared/components/Place.svelte";
-  // import Search from "~/shared/components/Search.svelte";
-  import DepartureDestinationSwitcher from "~/shared/components/DepartureDestinationSwitcher.svelte";
 
   import { journeys } from "~/stores";
 
@@ -30,9 +27,6 @@
     {/each}
     <label text="BACKEND_SERVICE_ROUTE_URL {process.env.BACKEND_SERVICE_ROUTE_URL}" />
     <button text="Reise hinzufügen" on:tap="{addJourney}" />
-
-
-    <DepartureDestinationSwitcher departure='Köln Zoo' destination='Gummersbach Bahnhof'/>
 
     <Route
       departureTime={new Date(Date.now()+40*60000)}

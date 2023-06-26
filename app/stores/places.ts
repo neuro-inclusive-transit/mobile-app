@@ -19,7 +19,7 @@ export type TimeAndPlace = {
 export const places = dbStore<Place>('place', [
   {
     icon: '🏠',
-    name: 'Home',
+    name: 'Zuhause',
     location: {
       lat: 50.971558,
       lng: 7.056926,

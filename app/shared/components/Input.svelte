@@ -34,7 +34,7 @@
 
 <style type="scss">
   #wrapper {
-    border-width: 1pt;
+    border-width: 2pt;
     border-color: var(--color-primary);
     font-size: var(--s);
     color: var(--color-foreground);
