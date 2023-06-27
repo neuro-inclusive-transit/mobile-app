@@ -16,29 +16,23 @@
 
 </script>
 
-<page>
+<page class="bg-default">
   <actionBar title="Meine Reisen" />
 
-  <stackLayout>
+  <stackLayout class="main-layout">
     {#each $journeys as journey}
-      <stackLayout>
-        <label text="{journey.departure.place.name} -> {journey.arrival.place.name} @ {journey.departure.time}" />
-      </stackLayout>
+      <Route
+        departureTime={new Date(journey.sections[0].departure.time)}
+        arrivalTime={new Date(journey.sections[journey.sections.length - 1].arrival.time)}
+        route={journey.sections.map((section) => ({
+          type: section.type,
+          begin: new Date(section.departure.time),
+          end: new Date(section.arrival.time),
+          transport_name: section.transport.name,
+        }))}/>
     {/each}
-    <label text="BACKEND_SERVICE_ROUTE_URL {process.env.BACKEND_SERVICE_ROUTE_URL}" />
+
     <button text="Reise hinzufügen" on:tap="{addJourney}" />
-
-    <Route
-      departureTime={new Date(Date.now()+40*60000)}
-      arrivalTime={new Date(Date.now()+83*60000)}
-      crowdPercentage={0.1}
-      route={[
-        {type: 'walk', begin: new Date(Date.now()+40*60000), end: new Date(Date.now()+43*60000)},
-        {type: 'bus', begin: new Date(Date.now()+43*60000), end: new Date(Date.now()+50*60000), transport_name: '335'},
-        {type: 'walk', begin: new Date(Date.now()+50*60000), end: new Date(Date.now()+53*60000)},
-        {type: 'train', begin: new Date(Date.now()+53*60000), end: new Date(Date.now()+83*60000), transport_name: 'RB25'}
-      ]}/>
-
 
   </stackLayout>
 

@@ -28,6 +28,7 @@ $color-white: #f2f4f8;
   --base-l: 1.5625;
   --base-xl: 1.96875;
   --base-xxl: 2.5;
+  --base-3xl: 3.125;
   --xxs: calc(var(--base) * var(--base-xxs)); /* 10px */
   --xs: calc(var(--base) * var(--base-xs)); /* 12.5px */
   --s: calc(var(--base) * var(--base-s)); /* 16px */
@@ -35,6 +36,7 @@ $color-white: #f2f4f8;
   --l: calc(var(--base) * var(--base-l)); /* 25px */
   --xl: calc(var(--base) * var(--base-xl)); /* 31.25px */
   --xxl: calc(var(--base) * var(--base-xxl)); /* 40px */
+  --3xl: calc(var(--base) * var(--base-3xl)); /* 50px */
 
 
   --outer-margin: var(--xxl);
