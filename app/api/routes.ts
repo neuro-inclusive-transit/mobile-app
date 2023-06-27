@@ -30,6 +30,7 @@ type Place = {
 type TimeAndPlace = {
   time: string;
   place: Place;
+  delay?: number;
 };
 
 type RouteApiGetParams = {
@@ -80,6 +81,11 @@ export type HereApiRoute = {
       headsign?: string;
       shortName?: string;
     }
+    agency?: {
+      id: string;
+      name: string;
+      website: string;
+    };
   }>;
   agency?: {
     id: string;
