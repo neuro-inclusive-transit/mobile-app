@@ -11,7 +11,7 @@ export const planJourney = localStore<JourneyPlan>({
     type: JourneyPlanMode.Departure,
     value: new Date(),
   },
-  options: [],
+  options: new Promise((resolve, reject) => { resolve([]) }),
   companionMode: CompanionMode.Rarely,
   reminderBefore: 0,
   preferredTransport: PreferredTransportation.Car,

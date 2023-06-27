@@ -28,10 +28,12 @@
     });
   }
 
-  function onItemTap (args: ItemEventData) {
-    const place = $places[args.index];
+  function onItemTap(places: StorePlace[]){
+    return function (args: ItemEventData) {
+      const place = places[args.index];
 
-    select(place);
+      select(place);
+    }
   }
 
   function onTapBack () {
@@ -57,7 +59,17 @@
 
     // TODO: convert to address
 
-    return currentLocation;
+    return [
+        {
+          name: 'Aktueller Standort',
+          location: {
+            lat: currentLocation.latitude,
+            lng: currentLocation.longitude,
+          },
+          icon: '📍',
+          currentLocation: true,
+        },
+      ];
   }
 
 </script>
@@ -73,15 +85,11 @@
     {#await getCurrentLocation()}
       ...Lade Standort
     {:then location}
-      <Place customIcon="📍" name="Aktueller Standort" address="{location.longitude} / {location.latitude}" on:tap="{() => select({
-        name: 'Aktueller Standort',
-        location: {
-          lat: location.latitude,
-          lng: location.longitude,
-        },
-        icon: '📍',
-        currentLocation: true,
-      })}" />
+      <listView items="{location}" height=100 separatorColor="transparent" on:itemTap={onItemTap(location)}>
+        <Template let:item>
+          <Place customIcon={item.icon} name={item.name} address="{item.location.lat} / {item.location.lng}" />
+        </Template>
+      </listView>
     {:catch}
       <Place customIcon="📍" name="Aktueller Standort" address="Standort konnte nicht ermittelt werden" />
     {/await}
@@ -90,7 +98,7 @@
 
     <Input hint="Dein Startpunkt" pre="search" elevated />
 
-    <listView items="{$places}" height=300 separatorColor="transparent" on:itemTap={onItemTap}>
+    <listView items="{$places}" height=300 separatorColor="transparent" on:itemTap={onItemTap($places)}>
       <Template let:item>
         <Place customIcon={item.icon} name={item.name} address={item.address ? formatAddress(item.address) : ''} />
       </Template>
@@ -98,6 +106,4 @@
 
     <button text="Zurück" on:tap={onTapBack} class="m-t-l" />
   </stackLayout>
-
-
 </page>

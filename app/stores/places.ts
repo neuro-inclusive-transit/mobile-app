@@ -4,7 +4,7 @@ import type { Emoji } from "emoji-type";
 import type { Coordinate, Address } from "~/stores/misc/types";
 
 export interface Place {
-  icon?: Emoji;
+  icon?: Emoji | string;
   name?: string;
   location: Coordinate;
   address?: Address;
