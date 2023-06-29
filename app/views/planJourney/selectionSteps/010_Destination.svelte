@@ -7,6 +7,8 @@
 
   import Place from "~/shared/components/Place.svelte";
   import Input from "~/shared/components/Input.svelte";
+  import XButton from "~/shared/components/XButton.svelte";
+  import ButtonX from "~/shared/components/ButtonX.svelte";
   import type { Place as StorePlace } from "~/stores/places";
 
   import { planJourney, places } from "~/stores"
@@ -56,5 +58,5 @@
     <Input hint="Dein Ziel" pre="search" elevated />
   </stackLayout>
 
-  <!-- <button text="Weiter" on:tap="{navToNextStep}" /> -->
+  <!-- <ButtonX content="Weiter" icon="chevron_right" on:tap="{navToNextStep}" /> -->
 </page>
