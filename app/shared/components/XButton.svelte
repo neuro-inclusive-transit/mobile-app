@@ -2,14 +2,14 @@
   export let type = "primary";
   export let flat = false;
   export let icon: string | undefined = undefined;
-  export let inhalt = "Neuer Knopf";
+  export let contet = "Neuer Knopf";
 </script>
 
 <button class={type} class:flat>
   <formattedString>
     <span class="icon" text={icon} />
     <span text="  " />
-    <span text={inhalt} />
+    <span text={content} />
   </formattedString>
 </button>
 
@@ -29,7 +29,7 @@
     color: white;
   }
 
-  .primary .fas {
+  .primary .icon {
     color: white;
   }
 
@@ -40,7 +40,7 @@
     border-color: #3b5bdb;
   }
 
-  .secondary .fas {
+  .secondary .icon {
     color: #3b5bdb;
   }
   .flat {
