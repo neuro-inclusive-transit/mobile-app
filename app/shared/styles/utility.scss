@@ -28,8 +28,14 @@
 .bg-light {
   background-color: var(--color-background-light);
 }
+.bg-primary {
+  background-color: var(--color-primary);
+}
+.bg-primary-light {
+  background-color: var(--color-primary-light);
+}
 
-$sizes: 'xxs', 'xs', 's', 'm', 'l', 'xl', 'xxl';
+$sizes: 'xxs', 'xs', 's', 'm', 'l', 'xl', 'xxl', '3xl';
 $directions: (
   't': 'top',
   'r': 'right',
@@ -51,5 +57,3 @@ $directions: (
     font-size: var(--#{$size});
   }
 }
-
-
