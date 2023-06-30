@@ -1,6 +1,6 @@
 <script lang="ts">
   import { EventData, Frame, Screen, getRootLayout } from "@nativescript/core";
-  import LiveView from "@/views/LiveView.svelte";
+  import LiveView from "~/views/liveView/Main.svelte";
   import Profile from "@/views/Profile.svelte";
   import PlanJourney from "@/views/planJourney/Main.svelte";
   import SelectionProcess from "@/views/planJourney/SelectionProcess.svelte";
