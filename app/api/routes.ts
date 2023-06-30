@@ -1,5 +1,4 @@
 import { Http } from '@nativescript/core';
-import { off } from '@nativescript/core/application';
 
 type GetRouteOptions = {
   origin: string;
