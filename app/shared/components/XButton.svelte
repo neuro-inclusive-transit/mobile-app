@@ -2,7 +2,7 @@
   export let type = "primary";
   export let flat = false;
   export let icon: string | undefined = undefined;
-  export let contet = "Neuer Knopf";
+  export let content = "Neuer Knopf";
 </script>
 
 <button class={type} class:flat>

@@ -20,11 +20,6 @@
   <actionBar title="Meine Reisen" />
 
   <stackLayout>
-    {#each $journeys as journey}
-      <stackLayout>
-        <label text="{journey.departure.place.name} -> {journey.arrival.place.name} @ {journey.departure.time}" />
-      </stackLayout>
-    {/each}
     <label text="BACKEND_SERVICE_ROUTE_URL {process.env.BACKEND_SERVICE_ROUTE_URL}" />
     <button text="Reise hinzufügen" on:tap="{addJourney}" />
 
