@@ -41,7 +41,7 @@ import { journeys } from "~/stores";
 
   <gridLayout columns="*" rows="auto, auto, *, auto, auto" class="main-layout">
 
-    <label text="Zwischenziel: {currentSection.arrival.place.name ?? currentSection.arrival.place.location.lat + '/' + currentSection.arrival.place.location.lng} // Fortbewegung: {currentSection.transport.mode} // Ankunft: {new Date(currentSection.arrival.time).toLocaleTimeString()} " textWrap={true} row={0} class="bg-primary-light" />
+    <label text="Zwischenziel: {currentSection.arrival.place.name ?? currentSection.arrival.place.location.lat + '/' + currentSection.arrival.place.location.lng} // Fortbewegung: {currentSection.transport.mode} // Actions: {currentSection.actions} // Ankunft: {new Date(currentSection.arrival.time).toLocaleTimeString()} " textWrap={true} row={0} class="bg-primary-light" />
 
     <label text="turn_left" class="icon fs-3xl" on:tap={simulateNext} row={1}  />
 
