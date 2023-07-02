@@ -126,6 +126,7 @@ export const routeApi = {
       headers: {
         'Content-Type': 'application/json',
         'return': 'actions,intermediate',
+        'lang': 'de-de',
         ...routeOptions
       },
     });
