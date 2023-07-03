@@ -141,7 +141,14 @@
 
       {#if $liveJourney.isPaused}
 
-      <label text="Pause" textWrap={true} row={0} rowSpan={3} class="bg-primary-light" />
+      <label text="Die Routenführung wurde gestoppt. Steige an der nächsten Haltestelle aus und mache eine Pause" textWrap={true} row={0} rowSpan={3} class="bg-primary-light" />
+
+      <button text="Gesamtübersicht anzeigen" row={3} on:tap={openRouteOverview} />
+      <flexboxLayout class="bg-primary-light color-primary" row={4} >
+        <button text="Pause beenden" on:tap={togglePause} />
+        <button text="call" class="icon" />
+        <button text="warning" class="icon" />
+      </flexboxLayout>
 
       {:else}
 
@@ -151,8 +158,6 @@
 
       <label text="Karte tbd." row={2}  />
 
-      {/if}
-
       <button text="Gesamtübersicht anzeigen" row={3} on:tap={openRouteOverview} />
       <flexboxLayout class="bg-primary-light color-primary" row={4} >
         <button text="local_cafe" class="icon" on:tap={togglePause}/>
@@ -160,6 +165,10 @@
         <button text="warning" class="icon" />
         <button text="volume_off" class="icon" />
       </flexboxLayout>
+
+      {/if}
+
+
     </gridLayout>
 
     {/await}

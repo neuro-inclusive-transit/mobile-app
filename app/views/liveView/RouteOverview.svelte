@@ -19,7 +19,14 @@
       <stackLayout>
         {#each $liveJourney?.sections ?? [] as section}
           {#if section === false}
-            <label text="Pause" />
+
+            <label textWrap={true}>
+              <formattedString>
+                <span class="icon" text="local_cafe" />
+                <span text=" " />
+                <span class="fw-italic" text="Du hast deine Reise pausiert." />
+              </formattedString>
+            </label>
           {:else}
             <label text="{section.transport.mode}" />
           {/if}
