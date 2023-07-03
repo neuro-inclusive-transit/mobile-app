@@ -154,9 +154,21 @@
 
       <label text="Zwischenziel: {currentSection.arrival.place.name ?? currentSection.arrival.place.location.lat + '/' + currentSection.arrival.place.location.lng} // Fortbewegung: {currentSection.transport.mode} // Ankunft: {new Date(currentSection.arrival.time).toLocaleTimeString()} " textWrap={true} row={0} class="bg-primary-light" />
 
-      <label text="turn_left" class="icon fs-3xl" on:tap={simulateNextStep} row={1}  />
 
-      <label text="Karte tbd." row={2}  />
+      {#if currentSection.transport.mode === 'pedestrian'}
+        <label text="turn_left" class="icon fs-3xl text-center" on:tap={simulateNextStep} row={1}  />
+        <label text="Karte tbd." row={2}  />
+      {:else}
+        <label class="icon text-center" on:tap={simulateNextStep} row={1} >
+          <formattedString>
+            <span text="directions_walk" class="fs-3xl" />
+            <span text="arrow_forward" />
+            <span text="door_sliding" class="fs-3xl" />
+          </formattedString>
+        </label>
+        <label text="train" row={2}  />
+      {/if}
+
 
       <button text="Gesamtübersicht anzeigen" row={3} on:tap={openRouteOverview} />
       <flexboxLayout class="bg-primary-light color-primary" row={4} >
@@ -172,14 +184,5 @@
     </gridLayout>
 
     {/await}
-
-
-
-
-
-
   {/if}
 </page>
-
-<style>
-</style>
