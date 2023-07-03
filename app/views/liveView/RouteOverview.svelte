@@ -3,6 +3,7 @@
   import { journeys } from "~/stores";
   import { liveJourney } from "~/stores/liveJourney";
 
+  import Accordion from "~/shared/components/Accordion.svelte";
   import Contacts from "./Contacts.svelte";
   import RouteOverview from "./RouteOverview.svelte";
 
@@ -13,13 +14,15 @@
 
   <gridLayout rows="auto,*" columns="*" class="main-layout">
 
-    <label class="fs-l" text="Routenübersicht" row={0} col={0} />
+    <label class="fs-l m-b-l" text="Routenübersicht" row={0} col={0} />
+
+    {#if $liveJourney !== null}
 
     <scrollView row={1} col={0}>
       <stackLayout>
-        {#each $liveJourney?.sections ?? [] as section}
+        {#each $liveJourney.sections as section, i}
           {#if section === false}
-
+      
             <label textWrap={true}>
               <formattedString>
                 <span class="icon" text="local_cafe" />
@@ -27,13 +30,28 @@
                 <span class="fw-italic" text="Du hast deine Reise pausiert." />
               </formattedString>
             </label>
+      
           {:else}
-            <label text="{section.transport.mode}" />
+      
+            <Accordion customClass="m-b-s" open={$liveJourney.currentStep === i}>
+              <label text="{section.transport.mode}" slot="header" />
+              <label text="Test Content" slot="content" />
+            </Accordion>
+      
           {/if}
-
         {/each}
       </stackLayout>
     </scrollView>
+
+    {:else}
+
+    <stackLayout row={1} col={0}>
+      <label text="Du hast aktuell keine Navigation aktiviert. In dem Menu 'Route planen' kannst du eine Route erstellen und die Navigation starten." textWrap={true} />
+      <button text="Reise planen" />
+    </stackLayout>
+
+    {/if}
+
   </gridLayout>
 
 
