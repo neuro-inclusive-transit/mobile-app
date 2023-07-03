@@ -14,7 +14,7 @@
   </gridLayout>
 
   {#if open}
-  <stackLayout>
+  <stackLayout class="content">
     <slot name="content">
       <label text="No content" />
     </slot>
@@ -26,8 +26,17 @@
 <style>
   .wrapper {
     background-color: var(--color-background-dark);
-    border-radius: 5px;
+    border-radius: var(--border-radius);
+    padding: var(--xs);
+  }
+
+  .content {
+    margin-top: var(--xs)
+  }
+
+  button {
     padding: var(--s);
+    margin: calc(var(--s) * -1);
   }
 </style>
 
