@@ -1,8 +1,11 @@
 import { localStore } from "~/stores/misc/localStore";
 import { Journey } from "./journeys";
 
-
-export const liveJourney = localStore<Journey & {
+interface LiveJourney extends Omit<Journey, 'sections'> {
+  sections: Array<Journey["sections"][0] | false>;
   isPaused: boolean;
   currentStep: number;
-} | null>(null);
+};
+
+
+export const liveJourney = localStore<LiveJourney | null>(null);

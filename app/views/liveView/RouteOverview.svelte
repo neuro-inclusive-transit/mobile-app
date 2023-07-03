@@ -21,10 +21,24 @@
     <scrollView row={1} col={0}>
       <stackLayout>
         {#each $liveJourney.sections as section, i}
-        <Accordion customClass="m-b-s" open={$liveJourney.currentStep === i}>
-          <label text="{section.transport.mode}" slot="header" />
-          <label text="Test Content" slot="content" />
-        </Accordion>
+          {#if section === false}
+      
+            <label textWrap={true}>
+              <formattedString>
+                <span class="icon" text="local_cafe" />
+                <span text=" " />
+                <span class="fw-italic" text="Du hast deine Reise pausiert." />
+              </formattedString>
+            </label>
+      
+          {:else}
+      
+            <Accordion customClass="m-b-s" open={$liveJourney.currentStep === i}>
+              <label text="{section.transport.mode}" slot="header" />
+              <label text="Test Content" slot="content" />
+            </Accordion>
+      
+          {/if}
         {/each}
       </stackLayout>
     </scrollView>
