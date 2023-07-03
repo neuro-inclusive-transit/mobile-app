@@ -1,11 +1,10 @@
 <script type="ts">
   import { navigate } from "svelte-native";
-  import { journeys } from "~/stores";
-  import { liveJourney } from "~/stores/liveJourney";
+  import { journeys, liveJourney } from "~/stores";
+  import { dateToTime, transportTypeToIcon } from "~/shared/utilites";
 
   import Accordion from "~/shared/components/Accordion.svelte";
-  import Contacts from "./Contacts.svelte";
-  import RouteOverview from "./RouteOverview.svelte";
+
 
 </script>
 
@@ -22,22 +21,30 @@
       <stackLayout>
         {#each $liveJourney.sections as section, i}
           {#if section === false}
-      
-            <label textWrap={true}>
-              <formattedString>
-                <span class="icon" text="local_cafe" />
-                <span text=" " />
-                <span class="fw-italic" text="Du hast deine Reise pausiert." />
-              </formattedString>
-            </label>
-      
+
+            <gridLayout rows="auto" columns="auto, *" class="m-b-s">
+              <label text="local_cafe" class="icon m-r-xxs fs-m" row={0} col={0} />
+              <label text="Du hast deine Reise pausiert." class="fw-italic fs-s" row={0} col={1} />
+            </gridLayout>
+
           {:else}
-      
+
             <Accordion customClass="m-b-s" open={$liveJourney.currentStep === i}>
-              <label text="{section.transport.mode}" slot="header" />
+              <gridLayout rows="auto, auto" columns="auto, *, auto, *, auto" slot="header">
+                <label text="{transportTypeToIcon(section.transport.mode)}" class="icon m-r-xxs fs-m" row={0} col={0} />
+
+                <label text="{section.departure.place.name ?? 'Startpunkt'}" row={0} col={1} class="fs-s" textWrap={true} />
+                <label text="{dateToTime(new Date(section.departure.time))} Uhr" row={1} col={1} class="fs-xs"/>
+
+                <label text="chevron_right" class="icon m-l-xxs m-r-xxs fs-m" row={0} col={2} />
+
+                <label text="{section.arrival.place.name ?? 'Zielpunkt'}" row={0} col={3} class="fs-s" textWrap={true} />
+                <label text="{dateToTime(new Date(section.arrival.time))} Uhr" row={1} col={3} class="fs-xs" />
+              </gridLayout>
+
               <label text="Test Content" slot="content" />
             </Accordion>
-      
+
           {/if}
         {/each}
       </stackLayout>

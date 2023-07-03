@@ -46,6 +46,9 @@ type RouteApiGetParams = {
   return?: string;
 };
 
+// @see https://developer.here.com/documentation/intermodal-routing/dev_guide/concepts/modes.html
+export type HereApiTransportMode = 'highSpeedTrain' | 'intercityTrain' | 'interRegionalTrain' | 'regionalTrain' | 'cityTrain' | 'bus' | 'ferry' | 'subway' | 'lightRail' | 'privateBus' | 'inclined' | 'aerial' | 'busRapid' | 'monorail' | 'flight' | 'walk' | 'car' | 'bicycle' | 'pedestrian' | string;
+
 export type HereApiRoute = {
   id: string;
   sections: Array<{
@@ -72,7 +75,7 @@ export type HereApiRoute = {
       }>;
     }>;
     transport: {
-      mode: string;
+      mode: HereApiTransportMode;
       name?: string;
       category?: string;
       color?: string;
