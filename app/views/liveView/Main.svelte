@@ -1,7 +1,9 @@
 <script type="ts">
   import { navigate } from "svelte-native";
+  import { confirm } from '@nativescript/core/ui/dialogs'
   import { journeys } from "~/stores";
   import { liveJourney } from "~/stores/liveJourney";
+  import { routeApi,  } from "~/api";
 
   import Contacts from "./Contacts.svelte";
   import RouteOverview from "./RouteOverview.svelte";
@@ -12,6 +14,21 @@
     currentStep: 0
   };
 
+  $: currentLocation = $liveJourney === null ? null : ((section) => {
+    if (section === false) return null;
+    return {
+      lat: section.departure.place.location.lat,
+      lng: section.departure.place.location.lng,
+    };
+  })($liveJourney.sections[$liveJourney.currentStep]);
+
+
+  // resolved when route calculation is finished
+  // TODO: use a store instead
+  let calculateNewJourney = new Promise((resolve) => {
+    resolve(null);
+  });
+
   function simulateNextStep() {
     if ($liveJourney === null) return;
 
@@ -20,12 +37,71 @@
       return;
     }
 
-    $liveJourney.currentStep++;
+    do {
+      $liveJourney.currentStep++;
+    } while ($liveJourney.sections[$liveJourney.currentStep] === false);
+
   }
 
   function openRouteOverview() {
     navigate({
       page: RouteOverview as any
+    });
+  }
+
+  async function togglePause() {
+    if ($liveJourney === null) return;
+
+    if (!$liveJourney.isPaused) {
+      const confirmPause = await confirm({
+        title: 'Navigation pausieren',
+        message: 'Brauchst du eine Pause?',
+        okButtonText: 'Ja',
+        cancelButtonText: 'Route fortsetzen',
+      });
+
+      if (confirmPause) {
+        // TODO: stop notification
+        $liveJourney.isPaused = true;
+        return;
+      }
+    }
+
+    $liveJourney.isPaused = false;
+
+    // TODO: Check if next step is reachable
+
+    calculateNewJourney = new Promise(async (resolve) => {
+
+      if ($liveJourney == null) {
+        resolve(null);
+        return;
+      }
+
+      console.log('calculate new journey');
+
+      const nextOptions = await routeApi.get({
+        origin: currentLocation ? currentLocation : { lat: 0, lng: 0 },
+        destination: $liveJourney.arrival.location,
+        departureTime: new Date(),
+        alternatives: 1,
+      });
+
+      console.log('nextOptions', nextOptions);
+
+      $liveJourney = {
+        ...$liveJourney,
+        sections: [
+          ...$liveJourney.sections.slice(0, $liveJourney.currentStep + 1),
+          false,
+          ...nextOptions[0].sections,
+        ],
+        currentStep: 0,
+      };
+
+      console.log('new live journey', $liveJourney);
+
+      resolve(null);
     });
   }
 
@@ -44,7 +120,7 @@
 <page class="bg-default">
   <actionBar title="Live-Ansicht" />
 
-  {#if $liveJourney === null || currentSection === undefined}
+  {#if $liveJourney === null || currentSection === undefined || currentSection === false}
 
   <stackLayout class="main-layout">
     <label text="route" class="icon fs-xxl" />
@@ -54,22 +130,44 @@
 
   {:else}
 
-  <gridLayout columns="*" rows="auto, auto, *, auto, auto" class="main-layout">
+    {#await calculateNewJourney}
+      <stackLayout class="main-layout">
+        <label text="route" class="icon fs-xxl" />
+        <label text='Deine Route wird berechnet...' textWrap={true} />
+      </stackLayout>
+    {:then _}
 
-    <label text="Zwischenziel: {currentSection.arrival.place.name ?? currentSection.arrival.place.location.lat + '/' + currentSection.arrival.place.location.lng} // Fortbewegung: {currentSection.transport.mode} // Ankunft: {new Date(currentSection.arrival.time).toLocaleTimeString()} " textWrap={true} row={0} class="bg-primary-light" />
+      <gridLayout columns="*" rows="auto, auto, *, auto, auto" class="main-layout">
 
-    <label text="turn_left" class="icon fs-3xl" on:tap={simulateNextStep} row={1}  />
+      {#if $liveJourney.isPaused}
 
-    <label text="Karte tbd." row={2}  />
+      <label text="Pause" textWrap={true} row={0} rowSpan={3} class="bg-primary-light" />
 
-    <button text="Gesamtübersicht anzeigen" row={3} on:tap={openRouteOverview} />
-    <flexboxLayout class="bg-primary-light color-primary" row={4} >
-      <button text="local_cafe" class="icon" />
-      <button text="contacts" class="icon" />
-      <button text="warning" class="icon" />
-      <button text="volume_off" class="icon" />
-    </flexboxLayout>
-  </gridLayout>
+      {:else}
+
+      <label text="Zwischenziel: {currentSection.arrival.place.name ?? currentSection.arrival.place.location.lat + '/' + currentSection.arrival.place.location.lng} // Fortbewegung: {currentSection.transport.mode} // Ankunft: {new Date(currentSection.arrival.time).toLocaleTimeString()} " textWrap={true} row={0} class="bg-primary-light" />
+
+      <label text="turn_left" class="icon fs-3xl" on:tap={simulateNextStep} row={1}  />
+
+      <label text="Karte tbd." row={2}  />
+
+      {/if}
+
+      <button text="Gesamtübersicht anzeigen" row={3} on:tap={openRouteOverview} />
+      <flexboxLayout class="bg-primary-light color-primary" row={4} >
+        <button text="local_cafe" class="icon" on:tap={togglePause}/>
+        <button text="contacts" class="icon" />
+        <button text="warning" class="icon" />
+        <button text="volume_off" class="icon" />
+      </flexboxLayout>
+    </gridLayout>
+
+    {/await}
+
+
+
+
+
 
   {/if}
 </page>

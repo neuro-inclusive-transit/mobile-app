@@ -108,6 +108,8 @@ export const routeApi = {
       departureTime: params.departureTime?.toISOString() ?? undefined,
     };
 
+    console.log('routeOptions', routeOptions);
+
     Object.keys(routeOptions).forEach(key => {
       if (routeOptions[key as keyof typeof routeOptions] === undefined) {
         delete routeOptions[key as keyof typeof routeOptions];
@@ -122,6 +124,8 @@ export const routeApi = {
         ...routeOptions
       },
     });
+
+    console.log('response', response);
 
     if (response.statusCode !== 200 || !response.content) {
       throw new Error(response.content?.toString())

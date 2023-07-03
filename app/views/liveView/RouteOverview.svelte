@@ -18,7 +18,12 @@
     <scrollView row={1} col={0}>
       <stackLayout>
         {#each $liveJourney?.sections ?? [] as section}
-          <label text="{section.transport.mode}" />
+          {#if section === false}
+            <label text="Pause" />
+          {:else}
+            <label text="{section.transport.mode}" />
+          {/if}
+
         {/each}
       </stackLayout>
     </scrollView>
