@@ -1,8 +1,7 @@
 <script type="ts">
   import { navigate } from "svelte-native";
   import { confirm } from '@nativescript/core/ui/dialogs'
-  import { journeys } from "~/stores";
-  import { liveJourney } from "~/stores/liveJourney";
+  import { journeys, liveJourney } from "~/stores";
   import { routeApi,  } from "~/api";
 
   import Contacts from "./Contacts.svelte";
@@ -96,7 +95,7 @@
           false,
           ...nextOptions[0].sections,
         ],
-        currentStep: 0,
+        currentStep: $liveJourney.currentStep + 2,
       };
 
       console.log('new live journey', $liveJourney);
