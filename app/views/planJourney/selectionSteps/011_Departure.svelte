@@ -9,8 +9,7 @@
 
   import Place from "~/shared/components/Place.svelte";
   import Input from "~/shared/components/Input.svelte";
-  import XButton from "~/shared/components/XButton.svelte";
-  import ButtonX from "~/shared/components/ButtonX.svelte";
+  import Button from "~/shared/components/Button.svelte";
 
   import Confirmation from "./070_Confirmation.svelte";
   import Start from "./020_Start.svelte";
@@ -106,6 +105,6 @@
       </Template>
     </listView>
 
-    <XButton content="Zurück" icon="chevron_left" on:tap={onTapBack} class="m-t-l" />
+    <Button content="Zurück" icon="chevron_left" ButtonOrder="XButton" on:tap={onTapBack} />
   </stackLayout>
 </page>

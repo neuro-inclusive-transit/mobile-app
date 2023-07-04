@@ -3,6 +3,7 @@
   import { Frame, EventData, getRootLayout } from "@nativescript/core";
 
   import Route from "~/shared/components/Route.svelte";
+  import Button from "~/shared/components/Button.svelte";
 
   import { journeys } from "~/stores";
 
@@ -19,9 +20,16 @@
 <page>
   <actionBar title="Meine Reisen" />
 
-  <stackLayout>
+  <stackLayout class="main-layout">
+    {#each $journeys as journey}
+      <stackLayout>
+        <label text="{journey.departure.place.name} -> {journey.arrival.place.name} @ {journey.departure.time}" />
+      </stackLayout>
+    {/each}
     <label text="BACKEND_SERVICE_ROUTE_URL {process.env.BACKEND_SERVICE_ROUTE_URL}" />
-    <button text="Reise hinzufügen" on:tap="{addJourney}" />
+
+    <Button content="neue Reise" icon="add" ButtonOrder="XButton" on:tap="{addJourney}" />
+
 
     <Route
       departureTime={new Date(Date.now()+40*60000)}

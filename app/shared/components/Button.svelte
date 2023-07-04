@@ -1,17 +1,46 @@
 <script type="ts">
   export let type = "primary";
-  export let flat = false;
+  export let ButtonOrder = "Button";
   export let icon: string | undefined = undefined;
   export let content = "Neuer Knopf";
+
+
 </script>
 
-<button class={type} class:flat>
+{#if ButtonOrder === 'XButton'}
+    <button class={type} on:tap>
+      <formattedString>
+        <span class="icon" text={icon} />
+        <span text="  " />
+        <span text={content} />
+      </formattedString>
+    </button>
+
+{:else if ButtonOrder === "ButtonX"}
+    <button class={type} on:tap>
+      <formattedString>
+        <span text={content} />
+        <span text="  " />
+        <span class="icon" text={icon} />
+      </formattedString>
+    </button>
+
+{:else}
+    <button class={type} on:tap>
+      <formattedString>
+        <span text={content} />
+      </formattedString>
+    </button>
+
+{/if}
+
+<!-- <button class={type} class:flat on:tap>
   <formattedString>
     <span class="icon" text={icon} />
     <span text="  " />
-    <span text={content} />
+    <span text={inhalt} />
   </formattedString>
-</button>
+</button> -->
 
 <style>
   button {
@@ -29,7 +58,7 @@
     color: white;
   }
 
-  .primary .icon {
+  .primary .fas {
     color: white;
   }
 
@@ -40,11 +69,8 @@
     border-color: #3b5bdb;
   }
 
-  .secondary .icon {
+  .secondary .fas {
     color: #3b5bdb;
-  }
-  .flat {
-    box-shadow: none;
   }
 
   .line {
