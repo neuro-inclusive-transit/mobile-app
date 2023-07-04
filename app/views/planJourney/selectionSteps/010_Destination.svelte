@@ -7,8 +7,7 @@
 
   import Place from "~/shared/components/Place.svelte";
   import Input from "~/shared/components/Input.svelte";
-  import XButton from "~/shared/components/XButton.svelte";
-  import ButtonX from "~/shared/components/ButtonX.svelte";
+
   import type { Place as StorePlace } from "~/stores/places";
 
   import { planJourney, places } from "~/stores"
