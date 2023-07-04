@@ -21,3 +21,10 @@ actionBar{
   @include font-bold;
   font-size: var(--m);
 }
+
+.main-layout {
+  padding-left: var(--xl);
+  padding-right: var(--xl);
+  padding-top: var(--l);
+  padding-bottom: var(--l);
+}

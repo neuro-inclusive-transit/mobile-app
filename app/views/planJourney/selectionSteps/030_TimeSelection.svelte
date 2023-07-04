@@ -4,7 +4,7 @@
   import JourneyPreferences from "./040_JourneyPreferences.svelte";
   import { getRootLayout, EventData } from "@nativescript/core";
   import DepartureDestinationSwitcher from "~/shared/components/DepartureDestinationSwitcher.svelte";
-
+  import Button from "~/shared/components/Button.svelte";
   import { planJourney } from "~/stores"
 
   function onNavigateBack() {
@@ -40,8 +40,9 @@
     <label text="Wann startest du deine Reise?" />
     <!-- TODO: select ob departure or arrival time -->
     <timePicker bind:time="{$planJourney.time.value}" />
-    <button text="Zurück" on:tap="{onNavigateBack}" />
-    <button text="Weiter" on:tap="{onNavigateNext}" />
+
+    <Button content="Zurück" icon="chevron_left" ButtonOrder="XButton" type="secondary" on:tap="{onNavigateBack}" />
+    <Button content="Weiter" icon="chevron_right" ButtonOrder="ButtonX" on:tap="{onNavigateNext}" />
   </stackLayout>
 
 

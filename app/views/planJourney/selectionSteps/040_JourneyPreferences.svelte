@@ -7,6 +7,7 @@
 
   import { planJourney } from "~/stores"
   import { PreferredJourneyMode } from "~/types"
+  import Button from "~/shared/components/Button.svelte";
 
   function select(mode: PreferredJourneyMode) {
     $planJourney.preferredJourneyMode = mode;
@@ -45,7 +46,8 @@
 
     <label text="{L('preffered_journey_mode._')}: { $planJourney.preferredJourneyMode }" />
 
-    <button text="Zurück" on:tap="{onNavigateBack}" />
-    <button text="Weiter" on:tap="{onNavigateNext}" />
+    <Button content="Zurück" icon="chevron_left" ButtonOrder="XButton" type="secondary" on:tap="{onNavigateBack}" />
+    <Button content="Weiter" icon="chevron_right" ButtonOrder="ButtonX" on:tap="{onNavigateNext}" />
+
   </stackLayout>
 </page>
