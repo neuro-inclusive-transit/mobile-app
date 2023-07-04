@@ -7,6 +7,7 @@
 
   import { planJourney } from "~/stores"
   import { PreferredJourneyMode } from "~/types"
+  import BigInput from "~/shared/components/BigInput.svelte"
 
   function select(mode: PreferredJourneyMode) {
     $planJourney.preferredJourneyMode = mode;
@@ -37,9 +38,10 @@
     <button text={L('close')} on:tap="{closeBottomSheet}" class="link" />
     <label text="{$planJourney.departure?.icon} {$planJourney.departure?.name} -> {$planJourney.arrival?.icon} {$planJourney.arrival?.name}" textWrap="true" />
     <label text="Bei der Reise ist mir besonders wichtig? " />
-    {#each enumKeys(PreferredJourneyMode) as mode} }
+    {#each enumKeys(PreferredJourneyMode) as mode} 
       <stackLayout>
-        <button text="{L('preffered_journey_mode.' + PreferredJourneyMode[mode])}" on:tap={() => select(PreferredJourneyMode[mode])}  />
+        <button text="{L('preffered_journey_mode.' + PreferredJourneyMode[mode])}" on:tap={() => select(PreferredJourneyMode[mode])} />
+        <BigInput icon={"⬆️"} label="{L('preffered_journey_mode.' + PreferredJourneyMode[mode])}"/>
       </stackLayout>
     {/each}
 
