@@ -1,7 +1,7 @@
 import { localStore } from "~/stores/misc/localStore";
 import { Journey } from "./journeys";
 
-interface LiveJourney extends Omit<Journey, 'sections'> {
+export interface LiveJourney extends Omit<Journey, 'sections'> {
   sections: Array<Journey["sections"][0] | false>;
   isPaused: boolean;
   currentStep: number;

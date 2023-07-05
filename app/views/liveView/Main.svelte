@@ -48,6 +48,12 @@
     });
   }
 
+  function openContacts() {
+    navigate({
+      page: Contacts as any
+    });
+  }
+
   async function togglePause() {
     if ($liveJourney === null) return;
 
@@ -145,7 +151,7 @@
       <button text="Gesamtübersicht anzeigen" row={3} on:tap={openRouteOverview} />
       <flexboxLayout class="bg-primary-light color-primary" row={4} >
         <button text="Pause beenden" on:tap={togglePause} />
-        <button text="call" class="icon" />
+        <button text="call" class="icon" on:tap={openContacts} />
         <button text="warning" class="icon" />
       </flexboxLayout>
 
@@ -170,9 +176,9 @@
 
 
       <button text="Gesamtübersicht anzeigen" row={3} on:tap={openRouteOverview} />
-      <flexboxLayout class="bg-primary-light color-primary" row={4} >
-        <button text="local_cafe" class="icon" on:tap={togglePause}/>
-        <button text="contacts" class="icon" />
+      <flexboxLayout class="bg-primary-light color-primary" row={4}>
+        <button text="local_cafe" class="icon" on:tap={togglePause} />
+        <button text="contacts" class="icon" on:tap={openContacts} />
         <button text="warning" class="icon" />
         <button text="volume_off" class="icon" />
       </flexboxLayout>

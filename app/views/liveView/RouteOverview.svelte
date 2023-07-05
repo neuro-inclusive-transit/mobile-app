@@ -9,7 +9,6 @@
 </script>
 
 <page class="bg-light">
-  <actionBar title="Gesamtübersicht" />
 
   <gridLayout rows="auto,*" columns="*" class="main-layout">
 
