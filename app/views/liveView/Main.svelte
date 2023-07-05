@@ -10,7 +10,8 @@
   $liveJourney = {
     ...$journeys[0], // TODO: only on user interaction
     isPaused: false,
-    currentStep: 0
+    currentSection: 0,
+    currentAction: 0,
   };
 
   $: currentLocation = $liveJourney === null ? null : ((section) => {
@@ -19,7 +20,7 @@
       lat: section.departure.place.location.lat,
       lng: section.departure.place.location.lng,
     };
-  })($liveJourney.sections[$liveJourney.currentStep]);
+  })($liveJourney.sections[$liveJourney.currentSection]);
 
 
   // resolved when route calculation is finished
@@ -31,15 +32,34 @@
   function simulateNextStep() {
     if ($liveJourney === null) return;
 
-    if ($liveJourney.currentStep >= $liveJourney.sections.length - 1) {
-      $liveJourney.currentStep = 0;
+
+    if (currentSection && currentSection.actions && currentSection.actions.length > $liveJourney.currentAction + 1) {
+      $liveJourney.currentAction++;
+      return;
+    }
+
+    if ($liveJourney.currentSection >= $liveJourney.sections.length - 1) {
+      $liveJourney.currentSection = 0;
+      $liveJourney.currentAction = 0;
       return;
     }
 
     do {
-      $liveJourney.currentStep++;
-    } while ($liveJourney.sections[$liveJourney.currentStep] === false);
+      $liveJourney.currentSection++;
+      $liveJourney.currentAction = 0;
+    } while ($liveJourney.sections[$liveJourney.currentSection] === false);
 
+  }
+
+  function getActionIcon(action: string, direction?: string) {
+    if (action === 'depart') return 'start';
+    if (action === 'arrive') return 'flag';
+    if (action === 'continue') return 'straight';
+    if (action === 'roundaboutExit' && direction === 'left') return 'roundabout_right';
+    if (action === 'roundaboutExit' && direction === 'right') return 'roundabout_left';
+    if (action === 'turn' && direction === 'left') return 'turn_left';
+    if (action === 'turn' && direction === 'right') return 'turn_right';
+    return 'next_plan';
   }
 
   function openRouteOverview() {
@@ -97,11 +117,11 @@
       $liveJourney = {
         ...$liveJourney,
         sections: [
-          ...$liveJourney.sections.slice(0, $liveJourney.currentStep + 1),
+          ...$liveJourney.sections.slice(0, $liveJourney.currentSection + 1),
           false,
           ...nextOptions[0].sections,
         ],
-        currentStep: $liveJourney.currentStep + 2,
+        currentSection: $liveJourney.currentSection + 2,
       };
 
       console.log('new live journey', $liveJourney);
@@ -119,7 +139,7 @@
   });
   */
   /* debug: */
-  $: currentSection = $liveJourney?.sections[$liveJourney.currentStep];
+  $: currentSection = $liveJourney?.sections[$liveJourney.currentSection];
 </script>
 
 <page class="bg-default">
@@ -157,11 +177,14 @@
 
       {:else}
 
-      <label text="Zwischenziel: {currentSection.arrival.place.name ?? currentSection.arrival.place.location.lat + '/' + currentSection.arrival.place.location.lng} // Fortbewegung: {currentSection.transport.mode} // Actions: {currentSection.actions} // Ankunft: {new Date(currentSection.arrival.time).toLocaleTimeString()} " textWrap={true} row={0} class="bg-primary-light" />
+      <label text="Zwischenziel: {currentSection.arrival.place.name ?? currentSection.arrival.place.location.lat + '/' + currentSection.arrival.place.location.lng} {currentSection.actions ? currentSection.actions[$liveJourney.currentAction].instruction : 'Keine Aktion'}" textWrap={true} row={0} class="bg-primary-light" />
 
 
       {#if currentSection.transport.mode === 'pedestrian'}
-        <label text="turn_left" class="icon fs-3xl text-center" on:tap={simulateNextStep} row={1}  />
+        <label text="{currentSection.actions ? getActionIcon(
+          currentSection.actions[$liveJourney.currentAction].action,
+          currentSection.actions[$liveJourney.currentAction].direction
+        ): 'warning'}" class="icon fs-3xl text-center" on:tap={simulateNextStep} row={1}  />
         <label text="Karte tbd." row={2}  />
       {:else}
         <label class="icon text-center" on:tap={simulateNextStep} row={1} >

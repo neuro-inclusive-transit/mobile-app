@@ -67,6 +67,7 @@ export type HereApiRoute = {
       direction?: string;
       severity?: string;
       offset?: number;
+      exit?: number;
     }>;
     polyline?: string;
     spans?: Array<{
@@ -87,7 +88,7 @@ export type HereApiRoute = {
     },
     intermediateStops?: Array<{
       departure: TimeAndPlace;
-      duration: number;
+      duration?: number;
     }>,
     agency?: {
       id: string;
