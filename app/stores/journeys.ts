@@ -87,6 +87,27 @@ export const journeys = dbStore<Journey>("journey", [
       {
         id: "R0-S1",
         type: "transit",
+        actions: [
+          {
+              "action": "depart",
+              "duration": 61,
+              "instruction": "Gehen Sie nach Süden. Gehen Sie 51 m."
+          },
+          {
+              "action": "turn",
+              "duration": 71,
+              "instruction": "Biegen Sie rechts ab auf Professor Dokter Dorgelolaan. Gehen Sie 71 m.",
+              "direction": "right",
+              "severity": "quite"
+          },
+          {
+              "action": "turn",
+              "duration": 31,
+              "instruction": "Biegen Sie links ab. Gehen Sie 31 m.",
+              "direction": "left",
+              "severity": "quite"
+          }
+      ],
         departure: {
           time: "2023-06-27T11:49:00+02:00",
           place: {

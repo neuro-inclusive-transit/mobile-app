@@ -64,7 +64,9 @@ export type HereApiRoute = {
       action: string;
       duration: number;
       instruction: string;
-      offset: number;
+      direction?: string;
+      severity?: string;
+      offset?: number;
     }>;
     polyline?: string;
     spans?: Array<{
@@ -82,7 +84,11 @@ export type HereApiRoute = {
       textColor?: string;
       headsign?: string;
       shortName?: string;
-    }
+    },
+    intermediateStops?: Array<{
+      departure: TimeAndPlace;
+      duration: number;
+    }>,
     agency?: {
       id: string;
       name: string;
@@ -124,6 +130,8 @@ export const routeApi = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'return': 'actions,intermediate',
+        'lang': 'de-de',
         ...routeOptions
       },
     });
@@ -139,3 +147,4 @@ export const routeApi = {
     return responseJson.routes;
   }
 }
+
