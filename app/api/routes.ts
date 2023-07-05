@@ -46,6 +46,9 @@ type RouteApiGetParams = {
   return?: string;
 };
 
+// @see https://developer.here.com/documentation/intermodal-routing/dev_guide/concepts/modes.html
+export type HereApiTransportMode = 'highSpeedTrain' | 'intercityTrain' | 'interRegionalTrain' | 'regionalTrain' | 'cityTrain' | 'bus' | 'ferry' | 'subway' | 'lightRail' | 'privateBus' | 'inclined' | 'aerial' | 'busRapid' | 'monorail' | 'flight' | 'walk' | 'car' | 'bicycle' | 'pedestrian' | string;
+
 export type HereApiRoute = {
   id: string;
   sections: Array<{
@@ -74,7 +77,7 @@ export type HereApiRoute = {
       }>;
     }>;
     transport: {
-      mode: string;
+      mode: HereApiTransportMode;
       name?: string;
       category?: string;
       color?: string;
@@ -114,6 +117,8 @@ export const routeApi = {
       departureTime: params.departureTime?.toISOString() ?? undefined,
     };
 
+    console.log('routeOptions', routeOptions);
+
     Object.keys(routeOptions).forEach(key => {
       if (routeOptions[key as keyof typeof routeOptions] === undefined) {
         delete routeOptions[key as keyof typeof routeOptions];
@@ -130,6 +135,8 @@ export const routeApi = {
         ...routeOptions
       },
     });
+
+    console.log('response', response);
 
     if (response.statusCode !== 200 || !response.content) {
       throw new Error(response.content?.toString())
