@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="_companion_mode_often_Z2siVQt">"Oft"</string>
+  <string name="_companion_mode_sometimes_Z2qrLk0">"Gelegentlich"</string>
+  <string name="_companion_mode_rarely_ZLrvU">"Selten"</string>
+  <string name="_companion_mode___wTRUv">"Begleitmodus"</string>
+  <string name="_preffered_journey_mode_least_walking_Z2ayUeb">"Kürzeste Laufwege"</string>
+  <string name="_preffered_journey_mode_least_changes_2sbCU8">"Wenigste Umstiege"</string>
+  <string name="_preffered_journey_mode_fastest_Z10fLTU">"Schnellste"</string>
+  <string name="_preffered_journey_mode___1ImoG2">"Bevorzugte Reiseart"</string>
+  <string name="_preffered_transportation_sub_urban_train_ZMhnGY">"Nahverkehrszug"</string>
+  <string name="_preffered_transportation_long_distance_train_1TrRIX">"Fernzug"</string>
+  <string name="_preffered_transportation_bus_Z2dcCP2">"Bus"</string>
+  <string name="_preffered_transportation_car_Z2dcCJs">"Auto"</string>
+  <string name="_preffered_transportation___Z4kxJ9">"Bevorzugtes Transportmittel"</string>
+  <string name="_app_name_1k3Sbz">"Neuro Inclusive Transit"</string>
+  <string name="app_name">"Neuro Inclusive Transit"</string>
+  <string name="title_activity_kimera">"Neuro Inclusive Transit"</string>
+</resources>
