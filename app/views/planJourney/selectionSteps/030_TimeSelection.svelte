@@ -31,6 +31,19 @@
     $planJourney.arrival = tmp
   }
 
+  let timePickerValue = $planJourney.time.value;
+  let datePickerValue = $planJourney.time.value;
+
+  $: $planJourney.time.value = new Date(
+    datePickerValue.getFullYear(),
+    datePickerValue.getMonth(),
+    datePickerValue.getDate(),
+    timePickerValue.getHours(),
+    timePickerValue.getMinutes(),
+    timePickerValue.getSeconds(),
+    timePickerValue.getMilliseconds()
+  );
+
 </script>
 
 <page actionBarHidden={true}  class="bg-default">
@@ -39,7 +52,8 @@
     <DepartureDestinationSwitcher departure="{$planJourney.departure?.name}" destination="{$planJourney.arrival?.name}" on:switchValues={onSwitchValues} />
     <label text="Wann startest du deine Reise?" />
     <!-- TODO: select ob departure or arrival time -->
-    <timePicker bind:time="{$planJourney.time.value}" />
+    <datePicker bind:date={datePickerValue} minDate={new Date()} />
+    <timePicker bind:time={timePickerValue} />
     <button text="Zurück" on:tap="{onNavigateBack}" />
     <button text="Weiter" on:tap="{onNavigateNext}" />
   </stackLayout>
