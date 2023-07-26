@@ -10,7 +10,6 @@
 
   import { routeApi, HereApiRoute } from "~/api";
   import Route from "~/shared/components/Route.svelte";
-  import { time } from "@nativescript/core/profiling";
     import { globals } from "~/shared/sizes";
     import DepartureDestinationSwitcher from "~/shared/components/DepartureDestinationSwitcher.svelte";
 
@@ -41,10 +40,10 @@
   });
 
 
-  function onRouteSelect(args: ItemEventData) {
-    // $planJourney.options.finally((options) => {
-    //   select(options[args.index]);
-    // });
+  function onRouteSelectFactory(list: HereApiRoute[]) {
+    return (args: ItemEventData) => {
+      select(list[args.index]);
+    }
   }
 
   function onNavigateBack() {
@@ -86,7 +85,7 @@
     {#await $planJourney.options}
       <label row={4} col={0}>...waiting</label>
     {:then routes}
-      <listView items={routes} on:itemTap={onRouteSelect} row={4} col={0}>
+      <listView items={routes} on:itemTap={onRouteSelectFactory(routes)} row={4} col={0}>
         <Template let:item={route}>
           <Route
             departureTime={new Date(route.sections[0].departure.time)}
@@ -100,5 +99,6 @@
     <button text="More Routes" on:tap="{() => numOfAlternatives += 3}" row={5} col={0} />
 
     <button text="Zurück" on:tap="{onNavigateBack}" row={6} col={0} />
+
   </gridLayout>
 </page>
