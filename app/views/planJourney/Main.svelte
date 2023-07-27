@@ -2,7 +2,7 @@
   import { navigate } from "svelte-native";
   import { Frame, EventData, getRootLayout } from "@nativescript/core";
 
-  import Route from "~/shared/components/Route.svelte";
+  import Route from "~/shared/components/Route2.svelte";
 
   import { journeys } from "~/stores";
   import Accordion from "~/shared/components/Accordion.svelte";
@@ -32,8 +32,10 @@
           type: section.type,
           begin: new Date(section.departure.time),
           end: new Date(section.arrival.time),
-          transport_name: section.transport.name,
+          transport_name: section.transport.name
         }))}
+        departure={journey.departure.name}
+        arrival={journey.arrival.name}
       />
     {/each}
   </stackLayout>
