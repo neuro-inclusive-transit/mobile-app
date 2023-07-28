@@ -2,7 +2,7 @@
   import { navigate } from "svelte-native";
   import { Frame, EventData, getRootLayout } from "@nativescript/core";
 
-  import Route from "~/shared/components/Route2.svelte";
+  import ListRoute from "~/shared/components/ListRoute.svelte";
 
   import { journeys } from "~/stores";
   import Accordion from "~/shared/components/Accordion.svelte";
@@ -23,7 +23,7 @@
     <button text="Reise hinzufügen" on:tap={addJourney} />
 
     {#each $journeys as journey}
-      <Route
+      <ListRoute
         departureTime={new Date(journey.sections[0].departure.time)}
         arrivalTime={new Date(
           journey.sections[journey.sections.length - 1].arrival.time

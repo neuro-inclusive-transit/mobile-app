@@ -24,6 +24,23 @@
     return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
   }
 
+  function getDate(date: Date) {
+
+    var day = date.getDay();
+    var month = date.getMonth();
+    var year = date.getFullYear();
+
+    if(day === new Date().getDay() && month === new Date().getMonth() && year === new Date().getFullYear()) {
+      return "Heute"
+    }
+
+    if(day === new Date().getDay()+1 && month === new Date().getMonth() && year === new Date().getFullYear()) {
+      return "Morgen"
+    }
+
+    return date.getDay() + "." + date.getMonth() + "." + date.getFullYear()
+    }
+
   type RouteSection = {
     type: "walk" | "subway" | "train" | string;
     begin: Date;
@@ -49,10 +66,13 @@
 
 <gridLayout columns="*,auto,auto" rows="auto,auto" horizontalAlignment="center" class="route">
   <stackLayout col={0} row={0}>
-    <label class="fw-bold" text="{departure} > {arrival}" />
-    <label text={getDuration(duration)} />
-    <label text="Aufbruch {getTime(departureTime)} Uhr" />
-    <label text="{departureTime}" />
+    <stackLayout orientation="horizontal">
+    <label class="fw-bold" text="{departure}" />
+    <label class="icon" text="arrow_right" horizontalAlignment="center" />
+    <label class="fw-bold" text="{arrival}" />
+    </stackLayout>
+    <label text="{getDate(departureTime)}" />
+    <label text="{getDuration(duration)}" />
   </stackLayout>
 
   <label col={1} row={0} class="icon color-primary" text={
