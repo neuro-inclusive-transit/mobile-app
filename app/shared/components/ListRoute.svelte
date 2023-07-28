@@ -38,7 +38,12 @@
       return "Morgen"
     }
 
-    return date.getDay() + "." + date.getMonth() + "." + date.getFullYear()
+    var newDay = day.toString();
+    var newMonth = month.toString();
+    if(day < 10) newDay = "0" + newDay;
+    if(month < 10) newMonth = "0" + month;
+
+    return newDay + "." + newMonth + "." + date.getFullYear()
     }
 
   type RouteSection = {
