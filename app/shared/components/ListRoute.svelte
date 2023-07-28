@@ -71,7 +71,7 @@
     <label class="icon" text="arrow_right" horizontalAlignment="center" />
     <label class="fw-bold" text="{arrival}" />
     </stackLayout>
-    <label text="{getDate(departureTime)}" />
+    <label text="{getDate(departureTime)}, {departureTime.getHours()}:{departureTime.getMinutes()} Uhr" />
     <label text="{getDuration(duration)}" />
   </stackLayout>
 
