@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
 	package="__PACKAGE__">
 
 	<supports-screens
@@ -25,6 +26,14 @@
 		android:theme="@style/AppTheme"
 		android:hardwareAccelerated="true">
 
+		<!-- Disable the Auto-InitProvider of the HERE SDK until the InitProvider is removed with release 4.15.0. -->
+		<provider
+    	android:name="com.here.sdk.engine.InitProvider"
+   	 	android:authorities="com.here.sdk.engine.InitProvider"
+    	android:exported="false"
+    	tools:node="remove" />
+
+
 		<activity
 			android:name="com.tns.NativeScriptActivity"
 			android:label="@string/title_activity_kimera"
@@ -42,5 +51,8 @@
 			</intent-filter>
 		</activity>
 		<activity android:name="com.tns.ErrorReportActivity"/>
+
+		<meta-data android:name="com.here.sdk.access_key_id" android:value="oOyfrpXBkz2hMCSFBjB8Bw" />
+		<meta-data android:name="com.here.sdk.access_key_secret" android:value="RG3TyY0rqv22OGe03g1glLncG8LGhnJ5uu0gHGoV__4tbktk27jyezYABHdtc2nWCZNlx_meiX6aJBUumELQlQ" />
 	</application>
 </manifest>
