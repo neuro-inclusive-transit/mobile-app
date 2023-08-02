@@ -1,52 +1,15 @@
-<script lang="ts" context="module">
-  export function getDuration(duration: { hours: number; minutes: number }) {
+<script type="ts">
+  import { sizes } from "../sizes";
+
+  export let crowdPercentage = 0.5;
+  export let route: RouteSection[] = [];
+
+  function getDuration(duration: { hours: number; minutes: number }) {
     if (duration.hours === 0) {
       return duration.minutes + " Min.";
     }
     return duration.hours + " Std. " + duration.minutes + " Min.";
   }
-  export function getTime(date: Date) {
-    return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
-  }
-
-  export function getDate(date: Date) {
-
-    var day = date.getDay();
-    var month = date.getMonth();
-    var year = date.getFullYear();
-
-    if(day === new Date().getDay() && month === new Date().getMonth() && year === new Date().getFullYear()) {
-      return "Heute"
-    }
-
-    if(day === new Date().getDay()+1 && month === new Date().getMonth() && year === new Date().getFullYear()) {
-      return "Morgen"
-    }
-
-    var newDay = day.toString();
-    var newMonth = month.toString();
-    if(day < 10) newDay = "0" + newDay;
-    if(month < 10) newMonth = "0" + month;
-
-    return newDay + "." + newMonth + "." + date.getFullYear()
-    }
-</script>
-
-<script type="ts">
-  import { sizes } from "../sizes";
-
-  export let departureTime = new Date();
-  export let arrivalTime = new Date();
-  export let crowdPercentage = 0.5;
-  export let route: RouteSection[] = [];
-  export let departure: string;
-  export let arrival: string;
-
-  $: msInBetween = arrivalTime.getTime() - departureTime.getTime();
-  $: duration = {
-    hours: Math.floor(msInBetween / 1000 / 60 / 60),
-    minutes: Math.floor((msInBetween / 1000 / 60) % 60)
-  };
 
   type RouteSection = {
     type: "walk" | "subway" | "train" | string;

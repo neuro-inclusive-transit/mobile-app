@@ -2,7 +2,9 @@
   import { navigate } from "svelte-native";
   import { Frame, EventData, getRootLayout } from "@nativescript/core";
 
-  import Route, {getDate, getDuration} from "~/shared/components/Route.svelte";
+  import Route from "~/shared/components/Route.svelte";
+
+  import { calcDurationBetween, printTime, printDate } from "~/shared/utils/time.ts"
 
   import { journeys } from "~/stores";
   import Accordion from "~/shared/components/Accordion.svelte";
@@ -23,10 +25,6 @@
     <button text="Reise hinzufügen" on:tap={addJourney} />
     {#each $journeys as journey}
       <Route
-        departureTime={new Date(journey.sections[0].departure.time)}
-        arrivalTime={new Date(
-          journey.sections[journey.sections.length - 1].arrival.time
-        )}
         route={journey.sections.map((section) => ({
           type: section.type,
           begin: new Date(section.departure.time),
@@ -40,9 +38,11 @@
             <label class="icon" text="arrow_right" horizontalAlignment="center"/>
             <label class="fw-bold" text="{journey.arrival.name}"/>
           </stackLayout>
-          <label text="{getDate(new Date(journey.sections[0].departure.time))}, {new Date(journey.sections[0].departure.time).getHours()}:{new Date(journey.sections[0].departure.time).getMinutes()} Uhr" />
+          <label text="{printDate(new Date(journey.sections[0].departure.time))}, {new Date(journey.sections[0].departure.time).getHours()}:{new Date(journey.sections[0].departure.time).getMinutes()} Uhr" />
 
-          <label text="<duration>" />
+          <label text="{printTime(calcDurationBetween(new Date(journey.sections[0].departure.time, ),new Date(
+            journey.sections[journey.sections.length - 1].arrival.time
+          )))}" />
         </stackLayout>
 
       </Route>

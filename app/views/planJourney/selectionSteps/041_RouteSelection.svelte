@@ -9,7 +9,10 @@
   import { CompanionMode } from "~/types"
 
   import { routeApi, HereApiRoute } from "~/api";
-  import Route, {getDate, getTime, getDuration} from "~/shared/components/Route.svelte";
+  import Route from "~/shared/components/Route.svelte";
+
+  import { calcDurationBetween, printTime, getTime } from "~/shared/utils/time.ts"
+
   import { globals } from "~/shared/sizes";
   import DepartureDestinationSwitcher from "~/shared/components/DepartureDestinationSwitcher.svelte";
 
@@ -88,11 +91,9 @@
       <listView items={routes} on:itemTap={onRouteSelectFactory(routes)} row={4} col={0}>
         <Template let:item={route}>
           <Route
-            departureTime={new Date(route.sections[0].departure.time)}
-            arrivalTime={new Date(route.sections[route.sections.length - 1].arrival.time)}
             route={hereRouteSectionToGenericSection(route.sections)}>
             <stackLayout col={0} row={0} slot="maininfo">
-              <label class="fw-bold" text="<duration>" />
+              <label text="{printTime(calcDurationBetween(new Date(route.sections[0].departure.time), new Date(route.sections[route.sections.length-1].departure.time)))}" />
               <label text="Aufbruch {getTime(new Date(route.sections[0].departure.time))} Uhr" />
             </stackLayout>
           </Route>
