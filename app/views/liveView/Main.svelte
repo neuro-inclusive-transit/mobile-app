@@ -7,6 +7,8 @@
   import Contacts from "./Contacts.svelte";
   import RouteOverview from "./RouteOverview.svelte";
 
+  import Map from "~/shared/components/Map.svelte";
+
   $liveJourney = {
     ...$journeys[0], // TODO: only on user interaction
     isPaused: false,
@@ -185,7 +187,9 @@
           currentSection.actions[$liveJourney.currentAction].action,
           currentSection.actions[$liveJourney.currentAction].direction
         ): 'warning'}" class="icon fs-3xl text-center" on:tap={simulateNextStep} row={1}  />
-        <label text="Karte tbd." row={2}  />
+
+        <Map row={2} />
+
       {:else}
         <label class="icon text-center" on:tap={simulateNextStep} row={1} >
           <formattedString>
