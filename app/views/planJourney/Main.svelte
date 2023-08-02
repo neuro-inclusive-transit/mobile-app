@@ -27,7 +27,7 @@
     <label text="{printDate(new Date(journey.sections[0].departure.time))}"></label>
       <Route
         route={journey.sections.map((section) => ({
-          type: section.type,
+          type: section.transport.mode,
           begin: new Date(section.departure.time),
           end: new Date(section.arrival.time),
           transport_name: section.transport.name

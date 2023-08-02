@@ -1,6 +1,8 @@
 <script type="ts">
   import { sizes } from "../sizes";
 
+  import {transportTypeToIcon} from "~/shared/utilites"
+
   export let route: RouteSection[] = [];
 
   function getDuration(duration: { hours: number; minutes: number }) {
@@ -11,26 +13,12 @@
   }
 
   type RouteSection = {
-    type: "walk" | "subway" | "train" | string;
+    type: string;
     begin: Date;
     end: Date;
     transport_name?: string;
   };
 
-  function getRouteSectionIcon(type: RouteSection['type']) {
-    switch (type) {
-      case "walk":
-        return "directions_walk";
-      case "bus":
-        return "directions_bus";
-      case "subway":
-        return "directions_subway";
-      case "train":
-        return "directions_railway";
-      default:
-        return "directions_walk";
-    }
-  }
 </script>
 
 <gridLayout columns="*,auto,auto" rows="auto,auto" horizontalAlignment="center" class="route">
@@ -43,7 +31,7 @@
   <wrapLayout col={0} row={1} colSpan={3} horizontalAlignment="center" marginTop={sizes.s} class="steps">
     {#each route as section, i}
       <stackLayout class="steps__item" orientation="horizontal">
-        <label class="icon color-primary" text={getRouteSectionIcon(section.type)} horizontalAlignment="center" />
+        <label class="icon color-primary" text={transportTypeToIcon(section.type)} horizontalAlignment="center" />
         <label text={section.transport_name
         ? section.transport_name
         : getDuration({
