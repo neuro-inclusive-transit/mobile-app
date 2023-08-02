@@ -140,44 +140,10 @@
   */
   /* debug: */
   $: currentSection = $liveJourney?.sections[$liveJourney.currentSection];
-
-  private MapView mapView;
-
-@Override
-protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-
-    // Usually, you need to initialize the HERE SDK only once during the lifetime of an application.
-    initializeHERESDK();
-
-    setContentView(R.layout.activity_main);
-
-    // Get a MapView instance from the layout.
-    mapView = findViewById(R.id.map_view);
-    mapView.onCreate(savedInstanceState);
-}
-
-private void loadMapScene() {
-    // Load a scene from the HERE SDK to render the map with a map scheme.
-    mapView.getMapScene().loadScene(MapScheme.NORMAL_DAY, new MapScene.LoadSceneCallback() {
-        @Override
-        public void onLoadScene(@Nullable MapError mapError) {
-            if (mapError == null) {
-                double distanceInMeters = 1000 * 10;
-                MapMeasure mapMeasureZoom = new MapMeasure(MapMeasure.Kind.DISTANCE, distanceInMeters);
-                mapView.getCamera().lookAt(
-                        new GeoCoordinates(52.530932, 13.384915), mapMeasureZoom);
-            } else {
-                Log.d("loadMapScene()", "Loading map failed: mapError: " + mapError.name());
-            }
-        }
-    });
-}
-
 </script>
 
 <page class="bg-default">
-  <actionBar title="Live-Ansichti" />
+  <actionBar title="Live-Ansicht" />
 
   {#if $liveJourney === null || currentSection === undefined || currentSection === false}
 
@@ -219,18 +185,7 @@ private void loadMapScene() {
           currentSection.actions[$liveJourney.currentAction].action,
           currentSection.actions[$liveJourney.currentAction].direction
         ): 'warning'}" class="icon fs-3xl text-center" on:tap={simulateNextStep} row={1}  />
-        <label text="Karte tbd." row={2} 
-        
-        <com.here.sdk.mapview.MapView
-        android:id="@+id/map_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-     
-     
-
-        />
-
-
+        <label text="Karte tbd." row={2}  />
       {:else}
         <label class="icon text-center" on:tap={simulateNextStep} row={1} >
           <formattedString>
@@ -258,6 +213,4 @@ private void loadMapScene() {
 
     {/await}
   {/if}
-
-
 </page>
