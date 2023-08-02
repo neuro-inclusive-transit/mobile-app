@@ -11,7 +11,7 @@
   import { routeApi, HereApiRoute } from "~/api";
   import Route from "~/shared/components/Route.svelte";
 
-  import { calcDurationBetween, printTime, getTime } from "~/shared/utils/time.ts"
+  import { calcDurationBetween, printTime, getTime } from "~/shared/utils/time"
 
   import { globals } from "~/shared/sizes";
   import DepartureDestinationSwitcher from "~/shared/components/DepartureDestinationSwitcher.svelte";

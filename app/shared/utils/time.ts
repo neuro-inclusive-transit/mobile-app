@@ -11,7 +11,7 @@ export function printTime(duration: number) {
   const hours = Math.floor(duration / 1000 / 60 / 60) % 24;
   const minutes = Math.floor((duration / 1000 / 60) % 60);
 
-  if(hours === 0) return `${minutes} Minuten`
+  if(hours === 0) return `${minutes} Min.`
 
   return `${hours} Std. ${minutes} Min.`
 }
