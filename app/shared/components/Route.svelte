@@ -1,7 +1,6 @@
 <script type="ts">
   import { sizes } from "../sizes";
 
-  export let crowdPercentage = 0.5;
   export let route: RouteSection[] = [];
 
   function getDuration(duration: { hours: number; minutes: number }) {
@@ -37,11 +36,7 @@
 <gridLayout columns="*,auto,auto" rows="auto,auto" horizontalAlignment="center" class="route">
     <slot name="maininfo"><label text="No content" /></slot>
 
-  <label col={1} row={0} class="icon color-primary" text={
-    (crowdPercentage > 0.3 ? "person" : "person_outline")
-    + (crowdPercentage > 0.6 ? "person" : "person_outline")
-    + (crowdPercentage > 0.9 ? "person" : "person_outline")
-  } />
+    <slot name="crowdPercentage"></slot>
 
   <label col={2} row={0} class="icon fs-l" text="arrow_forward_ios" />
 

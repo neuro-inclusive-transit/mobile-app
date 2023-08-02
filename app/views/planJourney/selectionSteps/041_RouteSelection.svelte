@@ -28,6 +28,7 @@
   }
 
   let numOfAlternatives = 3;
+  let crowdPercentage = 0.5;
 
   $: $planJourney.options = routeApi.get({
     origin: {
@@ -92,6 +93,11 @@
         <Template let:item={route}>
           <Route
             route={hereRouteSectionToGenericSection(route.sections)}>
+            <label col={1} row={0} class="icon color-primary" slot="crowdPercentage" text={
+              (crowdPercentage > 0.3 ? "person" : "person_outline")
+              + (crowdPercentage > 0.6 ? "person" : "person_outline")
+              + (crowdPercentage > 0.9 ? "person" : "person_outline")
+            } />
             <stackLayout col={0} row={0} slot="maininfo">
               <label text="{printTime(calcDurationBetween(new Date(route.sections[0].departure.time), new Date(route.sections[route.sections.length-1].departure.time)))}" />
               <label text="Aufbruch {getTime(new Date(route.sections[0].departure.time))} Uhr" />

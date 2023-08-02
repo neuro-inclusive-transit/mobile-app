@@ -24,6 +24,7 @@
   <stackLayout class="main-layout">
     <button text="Reise hinzufügen" on:tap={addJourney} />
     {#each $journeys as journey}
+    <label text="{printDate(new Date(journey.sections[0].departure.time))}"></label>
       <Route
         route={journey.sections.map((section) => ({
           type: section.type,
@@ -38,9 +39,9 @@
             <label class="icon" text="arrow_right" horizontalAlignment="center"/>
             <label class="fw-bold" text="{journey.arrival.name}"/>
           </stackLayout>
-          <label text="{printDate(new Date(journey.sections[0].departure.time))}, {new Date(journey.sections[0].departure.time).getHours()}:{new Date(journey.sections[0].departure.time).getMinutes()} Uhr" />
+          <label text="Aufbruch: {new Date(journey.sections[0].departure.time).getHours()}:{new Date(journey.sections[0].departure.time).getMinutes()} Uhr, Erinnerung: ___" />
 
-          <label text="{printTime(calcDurationBetween(new Date(journey.sections[0].departure.time, ),new Date(
+          <label text="Dauer: {printTime(calcDurationBetween(new Date(journey.sections[0].departure.time, ),new Date(
             journey.sections[journey.sections.length - 1].arrival.time
           )))}" />
         </stackLayout>
