@@ -16,7 +16,7 @@ export function printTime(duration: number) {
   return `${hours} Std. ${minutes} Min.`
 }
 
-export function getTime(date: Date) {
+export function printTime(date: Date) {
   return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
 }
 
