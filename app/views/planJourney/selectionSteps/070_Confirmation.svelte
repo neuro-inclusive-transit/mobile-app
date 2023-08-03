@@ -1,5 +1,5 @@
 <script type="ts">
-  import { goBack } from "svelte-native";
+  import { goBack, closeModal } from "svelte-native";
   import { localize as L } from '@nativescript/localize'
   import { EventData, getRootLayout } from "@nativescript/core";
 
@@ -30,12 +30,9 @@
     });
   }
 
-  function closeBottomSheet(args: EventData) {
-    getRootLayout().notify({
-      eventName: "hideBottomSheet",
-      object: args.object,
-      eventData: {}
-    })
+  function closeBottomSheet() {
+    planJourney.reset();
+    closeModal(true);
   }
 </script>
 

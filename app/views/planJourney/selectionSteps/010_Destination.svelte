@@ -1,5 +1,5 @@
 <script type="ts">
-  import { navigate } from "svelte-native";
+  import { navigate, closeModal } from "svelte-native";
   import { Template } from 'svelte-native/components'
   import { localize as L } from '@nativescript/localize'
   import Departure from "./011_Departure.svelte";
@@ -32,16 +32,13 @@
     select(place);
   }
 
-  function closeBottomSheet(args: EventData) {
-    getRootLayout().notify({
-      eventName: "hideBottomSheet",
-      object: args.object,
-      eventData: {}
-    })
+  function closeBottomSheet() {
+    planJourney.reset();
+    closeModal(true);
   }
 </script>
 
-<page class="bg-default">
+<page>
   <stackLayout>
     <button text={L('close')} on:tap="{closeBottomSheet}" class="link" />
     <label text="Deine Favoriten" class="fs-l fw-bold"/>

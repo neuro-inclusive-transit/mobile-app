@@ -1,19 +1,16 @@
 <script type="ts">
-  import { navigate } from "svelte-native";
-  import { Frame, EventData, getRootLayout } from "@nativescript/core";
+  import { showModal } from "svelte-native";
+  import { EventData, } from "@nativescript/core";
 
   import Route from "~/shared/components/Route.svelte";
+  import SelectionProcess from "./SelectionProcess.svelte";
 
   import { calcDurationBetween, printTime, printDate } from "~/shared/utils/time"
 
   import { Journey, journeys } from "~/stores";
 
   function addJourney(args: EventData) {
-    getRootLayout().notify({
-      eventName: "showBottomSheet",
-      object: args.object,
-      eventData: {},
-    });
+    showModal({ page: SelectionProcess as any })
   }
 
   let journeysByDate: Record<string, Journey[]> = {};

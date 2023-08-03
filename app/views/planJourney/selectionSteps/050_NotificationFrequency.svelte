@@ -1,5 +1,5 @@
 <script type="ts">
-  import { navigate, goBack } from "svelte-native";
+  import { navigate, goBack, closeModal } from "svelte-native";
   import { localize as L } from '@nativescript/localize'
   import ReminderSelection from "./060_ReminderSelection.svelte";
   import { getRootLayout, EventData } from "@nativescript/core";
@@ -24,12 +24,9 @@
       frame: 'planJourneySelection',
     });
   }
-  function closeBottomSheet(args: EventData) {
-    getRootLayout().notify({
-      eventName: "hideBottomSheet",
-      object: args.object,
-      eventData: {}
-    })
+  function closeBottomSheet() {
+    planJourney.reset();
+    closeModal(true);
   }
 </script>
 

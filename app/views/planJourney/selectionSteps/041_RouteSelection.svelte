@@ -1,5 +1,5 @@
 <script type="ts">
-  import { navigate, goBack } from "svelte-native";
+  import { navigate, goBack, closeModal } from "svelte-native";
   import { localize as L } from '@nativescript/localize'
   import { Template } from 'svelte-native/components'
   import NotificationFrequency from "./050_NotificationFrequency.svelte";
@@ -55,12 +55,9 @@
       frame: 'planJourneySelection',
     });
   }
-  function closeBottomSheet(args: EventData) {
-    getRootLayout().notify({
-      eventName: "hideBottomSheet",
-      object: args.object,
-      eventData: {}
-    })
+  function closeBottomSheet() {
+    planJourney.reset();
+    closeModal(true);
   }
 
   function hereRouteSectionToGenericSection(sections: HereApiRoute['sections']) {
