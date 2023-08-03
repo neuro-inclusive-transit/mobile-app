@@ -1,9 +1,12 @@
 <script type="ts">
   import { sizes } from "../sizes";
 
-  import {transportTypeToIcon} from "~/shared/utilites"
+  import {transportTypeToIcon} from "~/shared/utilites";
 
   export let route: RouteSection[] = [];
+  let cssClass = "";
+  export { cssClass as class };
+
 
   function getDuration(duration: { hours: number; minutes: number }) {
     if (duration.hours === 0) {
@@ -21,7 +24,7 @@
 
 </script>
 
-<gridLayout columns="*,auto,auto" rows="auto,auto" horizontalAlignment="center" class="route">
+<gridLayout columns="*,auto,auto" rows="auto,auto" horizontalAlignment="center" class="route {cssClass}">
     <slot name="maininfo"><label text="No content" /></slot>
 
     <slot name="crowdPercentage"></slot>

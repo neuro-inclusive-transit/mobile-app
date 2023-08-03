@@ -22,22 +22,20 @@ export function getTime(date: Date) {
 
 export function printDate(date: Date) {
 
-  var day = date.getDay();
+  var day = date.getDate();
   var month = date.getMonth();
   var year = date.getFullYear();
 
-  if(day === new Date().getDay() && month === new Date().getMonth() && year === new Date().getFullYear()) {
+  if(day === new Date().getDate() && month === new Date().getMonth() && year === new Date().getFullYear()) {
     return "Heute"
   }
 
-  if(day === new Date().getDay()+1 && month === new Date().getMonth() && year === new Date().getFullYear()) {
+  if(day === new Date().getDate()+1 && month === new Date().getMonth() && year === new Date().getFullYear()) {
     return "Morgen"
   }
 
-  var newDay = day.toString();
-  var newMonth = month.toString();
-  if(day < 10) newDay = "0" + newDay;
-  if(month < 10) newMonth = "0" + month;
+  var newDay = day.toString().padStart(2, '0');
+  var newMonth = (month + 1).toString().padStart(2, '0');
 
   return newDay + "." + newMonth + "." + date.getFullYear()
-  }
+}
