@@ -10,8 +10,11 @@
 
   import { routeApi, HereApiRoute } from "~/api";
   import Route from "~/shared/components/Route.svelte";
-    import { globals } from "~/shared/sizes";
-    import DepartureDestinationSwitcher from "~/shared/components/DepartureDestinationSwitcher.svelte";
+
+  import { calcDurationBetween, printTime, getTime } from "~/shared/utils/time"
+
+  import { globals } from "~/shared/sizes";
+  import DepartureDestinationSwitcher from "~/shared/components/DepartureDestinationSwitcher.svelte";
 
   function select(route: HereApiRoute) {
     console.log('select', route);
@@ -25,6 +28,7 @@
   }
 
   let numOfAlternatives = 3;
+  let crowdPercentage = 0.5;
 
   $: $planJourney.options = routeApi.get({
     origin: {
@@ -61,7 +65,7 @@
 
   function hereRouteSectionToGenericSection(sections: HereApiRoute['sections']) {
     return sections.map((section) => ({
-      type: section.type,
+      type: section.transport.mode,
       begin: new Date(section.departure.time),
       end: new Date(section.arrival.time),
       transport_name: section.transport.name,
@@ -88,9 +92,17 @@
       <listView items={routes} on:itemTap={onRouteSelectFactory(routes)} row={4} col={0}>
         <Template let:item={route}>
           <Route
-            departureTime={new Date(route.sections[0].departure.time)}
-            arrivalTime={new Date(route.sections[route.sections.length - 1].arrival.time)}
-            route={hereRouteSectionToGenericSection(route.sections)} />
+            route={hereRouteSectionToGenericSection(route.sections)}>
+            <label col={1} row={0} class="icon color-primary" slot="crowdPercentage" text={
+              (crowdPercentage > 0.3 ? "person" : "person_outline")
+              + (crowdPercentage > 0.6 ? "person" : "person_outline")
+              + (crowdPercentage > 0.9 ? "person" : "person_outline")
+            } />
+            <stackLayout col={0} row={0} slot="maininfo">
+              <label text="{printTime(calcDurationBetween(new Date(route.sections[0].departure.time), new Date(route.sections[route.sections.length-1].departure.time)))}" />
+              <label text="Aufbruch {getTime(new Date(route.sections[0].departure.time))} Uhr" />
+            </stackLayout>
+          </Route>
         </Template>
       </listView>
     {:catch error}
