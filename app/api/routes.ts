@@ -113,11 +113,7 @@ export type RouteApiGetResponse = {
 
 
 export const routeApi = {
-  get: async (params: RouteApiGetParams, immediate: boolean = false) => {
-
-    if (!immediate) {
-
-    }
+  get: async (params: RouteApiGetParams) => {
 
     const routeOptions: GetRouteOptions = {
       ...params,
@@ -151,10 +147,6 @@ export const routeApi = {
     }
 
     const responseJson = JSON.parse(response.content.toString()) as RouteApiGetResponse;
-
-    // if (responseJson.routes.length === 0) {
-    //   throw new Error(responseJson.notices?[0] ? responseJson.notices[0].title : 'No route found' : 'No route found')
-    // }
 
     return responseJson.routes;
   }
