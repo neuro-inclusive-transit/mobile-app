@@ -3,7 +3,7 @@
   import { localize as L } from '@nativescript/localize'
   import { Template } from 'svelte-native/components'
   import NotificationFrequency from "./050_NotificationFrequency.svelte";
-  import { getRootLayout, EventData, ItemEventData } from "@nativescript/core";
+  import { getRootLayout, EventData, ItemEventData, Page } from "@nativescript/core";
 
   import { planJourney } from "~/stores"
   import { CompanionMode } from "~/types"
@@ -31,25 +31,23 @@
   let numOfAlternatives = 3;
   let crowdPercentage = 0.5;
 
-  let options: Promise<HereApiRoute[]> = Promise.resolve([]);
 
-  onMount(() => {
-    options = routeApi.get({
-      origin: {
-        lat: $planJourney.departure?.location.lat ?? 0,
-        lng: $planJourney.departure?.location.lng ?? 0,
-      },
-      destination: {
-        lat: $planJourney.arrival?.location.lat ?? 0,
-        lng: $planJourney.arrival?.location.lng ?? 0,
-      },
-      departureTime: $planJourney.time.value, // TODO: switch departureTime / arrivalTime depending on the direction
-      alternatives: numOfAlternatives,
-    });
-  });
-
-
-
+  function calculateOptions() {
+    if ($planJourney.departure && $planJourney.arrival) {
+      $planJourney.options = routeApi.get({
+        origin: {
+          lat: $planJourney.departure.location.lat,
+          lng: $planJourney.departure.location.lng,
+        },
+        destination: {
+          lat: $planJourney.arrival.location.lat,
+          lng: $planJourney.arrival.location.lng,
+        },
+        departureTime: $planJourney.time.value,
+        alternatives: numOfAlternatives,
+      });
+    }
+  }
 
   function onRouteSelectFactory(list: HereApiRoute[]) {
     return (args: ItemEventData) => {
@@ -77,8 +75,8 @@
   }
 </script>
 
-<page actionBarHidden={true}  class="bg-default">
-  <gridLayout class="main-layout" columns="*" rows="auto, auto, auto, auto, auto, *, auto, auto">
+<page actionBarHidden={true} class="bg-default" on:navigatingTo={calculateOptions}>
+  <gridLayout class="main-layout" columns="*" rows="auto, auto, auto, auto, *, auto, auto">
     <button text={L('close')} on:tap="{closeBottomSheet}" row={0} col={0} class="link" />
 
     <DepartureDestinationSwitcher row={1} col={0}
@@ -112,7 +110,7 @@
     {:catch error}
       <label style="color: red" row={4} col={0}>{error}</label>
     {/await}
-    <button text="More Routes" on:tap="{() => numOfAlternatives += 3}" row={5} col={0} />
+    <button text="More Routes" on:tap="{() => {numOfAlternatives += 3; calculateOptions()}}" row={5} col={0} />
 
     <button text="Zurück" on:tap="{onNavigateBack}" row={6} col={0} />
 
