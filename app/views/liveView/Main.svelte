@@ -7,13 +7,6 @@
   import Contacts from "./Contacts.svelte";
   import RouteOverview from "./RouteOverview.svelte";
 
-  $liveJourney = {
-    ...$journeys[0], // TODO: only on user interaction
-    isPaused: false,
-    currentSection: 0,
-    currentAction: 0,
-  };
-
   $: currentLocation = $liveJourney === null ? null : ((section) => {
     if (section === false) return null;
     return {

@@ -24,7 +24,7 @@
 
 </script>
 
-<gridLayout columns="*,auto,auto" rows="auto,auto" horizontalAlignment="center" class="route {cssClass}">
+<gridLayout columns="*,auto,auto" rows="auto,auto" horizontalAlignment="center" class="route {cssClass}" on:tap>
     <slot name="maininfo"><label text="No content" /></slot>
 
     <slot name="crowdPercentage"></slot>
