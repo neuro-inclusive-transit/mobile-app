@@ -1,13 +1,14 @@
 <script type="ts">
-  import { showModal } from "svelte-native";
+  import { navigate, showModal } from "svelte-native";
   import { EventData, } from "@nativescript/core";
+  import { confirm } from '@nativescript/core/ui/dialogs'
 
   import Route from "~/shared/components/Route.svelte";
   import SelectionProcess from "./SelectionProcess.svelte";
 
   import { calcDurationBetween, printTime, printDate } from "~/shared/utils/time"
 
-  import { Journey, journeys } from "~/stores";
+  import { Journey, journeys, liveJourney, tabIndex } from "~/stores";
 
   function addJourney(args: EventData) {
     showModal({ page: SelectionProcess as any })
@@ -19,8 +20,6 @@
     let sortedJourney = $journeys.sort((a, b) => {
       return new Date(a.sections[0].departure.time).getTime() - new Date(b.sections[0].departure.time).getTime()
     })
-
-    sortedJourney = [...sortedJourney, ...sortedJourney, ...sortedJourney, ...sortedJourney]
 
     sortedJourney.filter((journey) => {
       return new Date(journey.sections[journey.sections.length - 1].arrival.time).getTime() > new Date().getTime()
@@ -35,6 +34,39 @@
       }
       journeysByDate[dateString].push(journey)
     });
+  }
+
+  function onRouteSelectFactory(journey: Journey) {
+    return () => {
+
+      // TODO: check if current journey is selected journey
+
+      function updateLiveView() {
+        $liveJourney = {
+          ...journey,
+          isPaused: false,
+          currentSection: 0,
+          currentAction: 0,
+        };
+        $tabIndex = 1;
+      }
+
+      // check if liveJourney has current Route
+      if ($liveJourney !== null) {
+        confirm({
+          title: "Bereits eine Reise aktiv",
+          message: "Möchtest du die aktuelle Reise abbrechen?",
+          okButtonText: "Neue Reise starten",
+          cancelButtonText: "Bestehende Reise fortsetzen"
+        }).then((result) => {
+          if (result) {
+            updateLiveView()
+          }
+        });
+      } else {
+        updateLiveView()
+      }
+    }
   }
 
 </script>
@@ -53,6 +85,7 @@
 
           {#each journeys as journey}
           <Route
+            on:tap={onRouteSelectFactory(journey)}
             class="m-t-s m-b-s"
             route={journey.sections.map((section) => ({
               type: section.transport.mode,

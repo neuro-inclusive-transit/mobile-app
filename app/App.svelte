@@ -2,9 +2,11 @@
   import LiveView from "~/views/liveView/Main.svelte";
   import Profile from "@/views/Profile.svelte";
   import PlanJourney from "@/views/planJourney/Main.svelte";
+
+  import { tabIndex } from "~/stores";
 </script>
 <rootLayout backgroundColor="black">
-  <tabView androidTabsPosition="bottom">
+  <tabView androidTabsPosition="bottom" bind:selectedIndex={$tabIndex}>
     <tabViewItem title="Reise planen">
       <frame id="tabPlanJourney">
         <PlanJourney />
