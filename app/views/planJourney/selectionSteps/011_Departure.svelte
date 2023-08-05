@@ -73,7 +73,7 @@
 </script>
 
 <page actionBarHidden={true} class="bg-default">
-  <stackLayout>
+  <stackLayout class="main-layout">
     <button text={L('close')} on:tap="{closeBottomSheet}" class="link" />
     <label text="Zielort:" class="fs-l fw-bold"/>
     <label text="{$planJourney.arrival?.icon} {$planJourney.arrival?.name}" textWrap={true}  class="fs-l fw-bold m-b-m"/>

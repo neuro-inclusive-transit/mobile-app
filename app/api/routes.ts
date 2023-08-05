@@ -118,8 +118,6 @@ export const routeApi = {
       departureTime: params.departureTime?.toISOString() ?? undefined,
     };
 
-    console.log('routeOptions', routeOptions);
-
     Object.keys(routeOptions).forEach(key => {
       if (routeOptions[key as keyof typeof routeOptions] === undefined) {
         delete routeOptions[key as keyof typeof routeOptions];

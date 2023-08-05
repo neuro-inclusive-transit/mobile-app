@@ -44,7 +44,7 @@
 </script>
 
 <page actionBarHidden={true}  class="bg-default">
-  <stackLayout>
+  <stackLayout class="main-layout">
     <button text={L('close')} on:tap="{closeBottomSheet}" class="link" />
     <DepartureDestinationSwitcher departure="{$planJourney.departure?.name}" destination="{$planJourney.arrival?.name}" on:switchValues={onSwitchValues} />
     <label text="Wann startest du deine Reise?" />

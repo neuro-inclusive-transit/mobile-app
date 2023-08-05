@@ -38,8 +38,8 @@
   }
 </script>
 
-<page>
-  <stackLayout>
+<page class="bg-default">
+  <stackLayout class="main-layout">
     <button text={L('close')} on:tap="{closeBottomSheet}" class="link" />
     <label text="Deine Favoriten" class="fs-l fw-bold"/>
     <listView items="{$places}" height=300 separatorColor="transparent" on:itemTap={onItemTap}>

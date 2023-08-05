@@ -15,6 +15,7 @@
 
   import { globals } from "~/shared/sizes";
   import DepartureDestinationSwitcher from "~/shared/components/DepartureDestinationSwitcher.svelte";
+    import { onMount } from "svelte";
 
   function select(route: HereApiRoute) {
     console.log('select', route);
@@ -30,18 +31,24 @@
   let numOfAlternatives = 3;
   let crowdPercentage = 0.5;
 
-  $: $planJourney.options = routeApi.get({
-    origin: {
-      lat: $planJourney.departure?.location.lat ?? 0,
-      lng: $planJourney.departure?.location.lng ?? 0,
-    },
-    destination: {
-      lat: $planJourney.arrival?.location.lat ?? 0,
-      lng: $planJourney.arrival?.location.lng ?? 0,
-    },
-    departureTime: $planJourney.time.value, // TODO: switch departureTime / arrivalTime depending on the direction
-    alternatives: numOfAlternatives,
+  let options: Promise<HereApiRoute[]> = Promise.resolve([]);
+
+  onMount(() => {
+    options = routeApi.get({
+      origin: {
+        lat: $planJourney.departure?.location.lat ?? 0,
+        lng: $planJourney.departure?.location.lng ?? 0,
+      },
+      destination: {
+        lat: $planJourney.arrival?.location.lat ?? 0,
+        lng: $planJourney.arrival?.location.lng ?? 0,
+      },
+      departureTime: $planJourney.time.value, // TODO: switch departureTime / arrivalTime depending on the direction
+      alternatives: numOfAlternatives,
+    });
   });
+
+
 
 
   function onRouteSelectFactory(list: HereApiRoute[]) {
@@ -71,7 +78,7 @@
 </script>
 
 <page actionBarHidden={true}  class="bg-default">
-  <gridLayout marginLeft={globals.outerPadding} marginRight={globals.outerPadding} columns="*" rows="auto, auto, auto, auto, auto, *, auto, auto">
+  <gridLayout class="main-layout" columns="*" rows="auto, auto, auto, auto, auto, *, auto, auto">
     <button text={L('close')} on:tap="{closeBottomSheet}" row={0} col={0} class="link" />
 
     <DepartureDestinationSwitcher row={1} col={0}

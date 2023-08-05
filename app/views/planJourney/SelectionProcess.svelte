@@ -2,4 +2,4 @@
   import Destination from "./selectionSteps/010_Destination.svelte";
 </script>
 
-<frame id="planJourneySelection" defaultPage="{Destination}" iosIgnoreSafeArea="true" />
+<frame id="planJourneySelection" defaultPage="{Destination}" iosIgnoreSafeArea="true" class="ns-root" />
