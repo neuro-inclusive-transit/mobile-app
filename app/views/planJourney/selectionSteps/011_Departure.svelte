@@ -1,5 +1,5 @@
 <script type="ts">
-  import { navigate, goBack } from "svelte-native";
+  import { navigate, goBack, closeModal } from "svelte-native";
   import { Template } from 'svelte-native/components'
   import { localize as L } from '@nativescript/localize'
   import { getRootLayout, EventData, CoreTypes, ItemEventData } from "@nativescript/core";
@@ -12,6 +12,7 @@
 
   import Confirmation from "./070_Confirmation.svelte";
   import Start from "./020_Start.svelte";
+  import Destination from "./010_Destination.svelte";
 
   function formatAddress(address: StorePlace['address']) {
     if (!address) return '';
@@ -41,11 +42,8 @@
   }
 
   function closeBottomSheet(args: EventData) {
-    getRootLayout().notify({
-      eventName: "hideBottomSheet",
-      object: args.object,
-      eventData: {}
-    })
+    planJourney.reset();
+    closeModal(true);
   }
 
   async function getCurrentLocation() {
@@ -75,7 +73,7 @@
 </script>
 
 <page actionBarHidden={true} class="bg-default">
-  <stackLayout>
+  <stackLayout class="main-layout">
     <button text={L('close')} on:tap="{closeBottomSheet}" class="link" />
     <label text="Zielort:" class="fs-l fw-bold"/>
     <label text="{$planJourney.arrival?.icon} {$planJourney.arrival?.name}" textWrap={true}  class="fs-l fw-bold m-b-m"/>
