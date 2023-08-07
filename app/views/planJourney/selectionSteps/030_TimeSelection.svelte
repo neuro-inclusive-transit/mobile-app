@@ -51,8 +51,10 @@
     <!-- TODO: select ob departure or arrival time -->
     <datePicker bind:date={datePickerValue} minDate={new Date()} />
     <timePicker bind:time={timePickerValue} />
-    <Button content="Zurück" icon="chevron_left" ButtonOrder="XButton" type="secondary" on:tap="{onNavigateBack}" />
-    <Button content="Weiter" icon="chevron_right" ButtonOrder="ButtonX" on:tap="{onNavigateNext}" />
+
+    <Button content="Zurück" icon="chevron_left" iconPosition="pre" type="secondary" on:tap="{onNavigateBack}" />
+    <Button content="Weiter" icon="chevron_right" iconPosition="post" on:tap="{onNavigateNext}" />
+
   </stackLayout>
 
 

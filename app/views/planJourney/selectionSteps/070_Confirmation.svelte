@@ -44,7 +44,7 @@
     <label text="Super!" />
     <label text="Du hast deine Reise von {plannedJourney.departure?.name} nach {plannedJourney.arrival?.name} geplant" textWrap="true" />
     <label text="Du musst {plannedJourney.time.value} los. Wir erinnern dich!" textWrap="true" />
-    <Button content="Zurück" icon="chevron_left" on:tap="{onNavigateBack}" ButtonOrder="XButton" type="secondary" />
+    <Button content="Zurück" icon="chevron_left" on:tap="{onNavigateBack}" iconPosition="pre" type="secondary" />
 
   </stackLayout>
 </page>

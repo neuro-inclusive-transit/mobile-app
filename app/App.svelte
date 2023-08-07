@@ -1,5 +1,5 @@
 <script lang="ts">
-  import LiveView from "~/views/LiveView.svelte";
+  import LiveView from "~/views/liveView/Main.svelte";
   import Profile from "@/views/Profile.svelte";
   import PlanJourney from "@/views/planJourney/Main.svelte";
 
