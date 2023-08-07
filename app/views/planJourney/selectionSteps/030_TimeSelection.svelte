@@ -1,5 +1,5 @@
 <script type="ts">
-  import { navigate, goBack } from "svelte-native";
+  import { navigate, goBack, closeModal } from "svelte-native";
   import { localize as L } from '@nativescript/localize'
   import JourneyPreferences from "./040_JourneyPreferences.svelte";
   import { getRootLayout, EventData } from "@nativescript/core";
@@ -18,12 +18,9 @@
       frame: 'planJourneySelection',
     });
   }
-  function closeBottomSheet(args: EventData) {
-    getRootLayout().notify({
-      eventName: "hideBottomSheet",
-      object: args.object,
-      eventData: {}
-    })
+  function closeBottomSheet() {
+    planJourney.reset();
+    closeModal(true);
   }
   function onSwitchValues() {
     let tmp = $planJourney.departure
@@ -31,16 +28,29 @@
     $planJourney.arrival = tmp
   }
 
+  let timePickerValue = $planJourney.time.value;
+  let datePickerValue = $planJourney.time.value;
+
+  $: $planJourney.time.value = new Date(
+    datePickerValue.getFullYear(),
+    datePickerValue.getMonth(),
+    datePickerValue.getDate(),
+    timePickerValue.getHours(),
+    timePickerValue.getMinutes(),
+    timePickerValue.getSeconds(),
+    timePickerValue.getMilliseconds()
+  );
+
 </script>
 
 <page actionBarHidden={true}  class="bg-default">
-  <stackLayout>
+  <stackLayout class="main-layout">
     <button text={L('close')} on:tap="{closeBottomSheet}" class="link" />
     <DepartureDestinationSwitcher departure="{$planJourney.departure?.name}" destination="{$planJourney.arrival?.name}" on:switchValues={onSwitchValues} />
     <label text="Wann startest du deine Reise?" />
     <!-- TODO: select ob departure or arrival time -->
-    <timePicker bind:time="{$planJourney.time.value}" />
-
+    <datePicker bind:date={datePickerValue} minDate={new Date()} />
+    <timePicker bind:time={timePickerValue} />
     <Button content="Zurück" icon="chevron_left" ButtonOrder="XButton" type="secondary" on:tap="{onNavigateBack}" />
     <Button content="Weiter" icon="chevron_right" ButtonOrder="ButtonX" on:tap="{onNavigateNext}" />
   </stackLayout>

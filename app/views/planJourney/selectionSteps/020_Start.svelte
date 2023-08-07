@@ -1,10 +1,11 @@
 <script type="ts">
-  import { goBack, navigate } from "svelte-native";
+  import { goBack, navigate, closeModal } from "svelte-native";
   import { localize as L } from '@nativescript/localize'
   import { getRootLayout, EventData } from "@nativescript/core";
 
   import Confirmation from "./070_Confirmation.svelte";
   import TimeSelection from "./030_TimeSelection.svelte";
+  import Destination from "./010_Destination.svelte";
 
   import { planJourney } from "~/stores"
   import Button from "~/shared/components/Button.svelte";
@@ -25,17 +26,14 @@
     });
   }
 
-  function closeBottomSheet(args : EventData) {
-    getRootLayout().notify({
-      eventName: "hideBottomSheet",
-      object: args.object,
-      eventData: {}
-    })
+  function closeBottomSheet() {
+    planJourney.reset();
+    closeModal(true);
   }
 </script>
 
 <page actionBarHidden={true}  class="bg-default">
-  <stackLayout>
+  <stackLayout class="main-layout">
     <button text={L('close')} on:tap="{closeBottomSheet}" class="link" />
     <DepartureDestinationSwitcher departure={$planJourney.departure?.name} destination={$planJourney.arrival?.name}/>
 

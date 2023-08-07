@@ -1,5 +1,5 @@
 <script type="ts">
-  import { navigate, goBack } from "svelte-native";
+  import { navigate, goBack, closeModal } from "svelte-native";
   import { localize as L } from '@nativescript/localize'
   import { getRootLayout, EventData } from "@nativescript/core";
   import Confirmation from "./070_Confirmation.svelte";
@@ -17,12 +17,9 @@
       frame: 'planJourneySelection',
     });
   }
-  function closeBottomSheet(args: EventData) {
-    getRootLayout().notify({
-      eventName: "hideBottomSheet",
-      object: args.object,
-      eventData: {}
-    })
+  function closeBottomSheet() {
+    planJourney.reset();
+    closeModal(true);
   }
 
   let timeOptions = [
@@ -33,7 +30,7 @@
 </script>
 
 <page actionBarHidden={true}  class="bg-default">
-  <stackLayout>
+  <stackLayout class="main-layout">
     <button text={L('close')} on:tap="{closeBottomSheet}" class="link" />
     <label text="{$planJourney.departure?.icon} {$planJourney.departure?.name} -> {$planJourney.arrival?.icon} {$planJourney.arrival?.name} @ {$planJourney.time.value}" textWrap="true" />
     <label text="Wie viel früher möchtest du vor Reiseantritt erinnert werden?" />
