@@ -3,7 +3,7 @@
   import { localize as L } from '@nativescript/localize'
   import { getRootLayout, EventData } from "@nativescript/core";
   import Confirmation from "./070_Confirmation.svelte";
-
+  import Button from "~/shared/components/Button.svelte";
   import { planJourney } from "~/stores"
 
   function onNavigateBack() {
@@ -40,7 +40,8 @@
       </stackLayout>
     {/each}
     <!-- TODO: selbst eintragen -->
-    <button text="Zurück" on:tap="{onNavigateBack}" />
-    <button text="Weiter" on:tap="{onNavigateNext}" />
+    <Button content="Zurück" icon="chevron_left" iconPosition="pre" type="secondary" on:tap="{onNavigateBack}" />
+    <Button content="Weiter" icon="chevron_right" iconPosition="post" on:tap="{onNavigateNext}" />
+
   </stackLayout>
 </page>

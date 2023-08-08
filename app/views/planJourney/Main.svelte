@@ -4,13 +4,14 @@
   import { confirm } from '@nativescript/core/ui/dialogs'
 
   import Route from "~/shared/components/Route.svelte";
+  import Button from "~/shared/components/Button.svelte";
   import SelectionProcess from "./SelectionProcess.svelte";
 
   import { calcDurationBetween, printTime, printDate } from "~/shared/utils/time"
 
   import { Journey, journeys, liveJourney, tabIndex } from "~/stores";
 
-  function addJourney(args: EventData) {
+  function addJourney() {
     showModal({ page: SelectionProcess as any })
   }
 
@@ -76,12 +77,14 @@
 
   <gridLayout rows="auto, *" columns="*">
     <stackLayout row={0} class="main-layout">
-      <button  text="Reise hinzufügen" on:tap={addJourney} />
+      <Button content="Neue Reise planen" icon="add" iconPosition="post" on:tap={addJourney} />
     </stackLayout>
     <scrollView row={1}>
       <stackLayout  class="main-layout">
         {#each Object.entries(journeysByDate) as [date, journeys]}
           <label class="m-t-m fs-l fw-bold" text="{date}"></label>
+
+
 
           {#each journeys as journey}
           <Route

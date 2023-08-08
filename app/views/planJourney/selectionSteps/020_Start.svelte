@@ -8,7 +8,7 @@
   import Destination from "./010_Destination.svelte";
 
   import { planJourney } from "~/stores"
-
+  import Button from "~/shared/components/Button.svelte";
   import DepartureDestinationSwitcher from "~/shared/components/DepartureDestinationSwitcher.svelte";
 
   function onPlanNow () {
@@ -37,8 +37,8 @@
     <button text={L('close')} on:tap="{closeBottomSheet}" class="link" />
     <DepartureDestinationSwitcher departure={$planJourney.departure?.name} destination={$planJourney.arrival?.name}/>
 
-    <button text="Jetzt Reise starten" on:tap="{onPlanNow}" />
-    <button text="Für später starten" on:tap="{onPlanLater}" />
+    <Button content="Jetzt Reise starten" icon="navigation" on:tap="{onPlanNow}" />
+    <Button content="Für später starten" icon="calendar_month" type="secondary" on:tap="{onPlanLater}" />
   </stackLayout>
 
 </page>

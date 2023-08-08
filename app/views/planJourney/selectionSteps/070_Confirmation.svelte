@@ -5,6 +5,7 @@
 
   import { journeys, planJourney } from "~/stores"
   import { CompanionMode, JourneyPlanMode, PreferredJourneyMode, PreferredTransportation } from "~/types"
+  import Button from "~/shared/components/Button.svelte";
 
   // TODO: Preference
 
@@ -43,6 +44,7 @@
     <label text="Super!" />
     <label text="Du hast deine Reise von {plannedJourney.departure?.name} nach {plannedJourney.arrival?.name} geplant" textWrap="true" />
     <label text="Du musst {plannedJourney.time.value} los. Wir erinnern dich!" textWrap="true" />
-    <button text="Zurück" on:tap="{onNavigateBack}" />
+    <Button content="Zurück" icon="chevron_left" on:tap="{onNavigateBack}" iconPosition="pre" type="secondary" />
+
   </stackLayout>
 </page>

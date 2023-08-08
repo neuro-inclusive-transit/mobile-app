@@ -6,7 +6,7 @@
 
   import { planJourney } from "~/stores"
   import { CompanionMode } from "~/types"
-
+  import Button from "~/shared/components/Button.svelte";
   import { enumKeys } from "~/shared/utilites";
 
   function select(mode: CompanionMode) {
@@ -42,7 +42,8 @@
     {/each}
 
     <label text="{L('companion_mode._')}: { $planJourney.companionMode }" />
-    <button text="Zurück" on:tap="{onNavigateBack}" />
-    <button text="Weiter" on:tap="{onNavigateNext}" />
+    <Button content="Zurück" icon="chevron_left" iconPosition="pre" type="secondary" on:tap="{onNavigateBack}" />
+    <Button content="Weiter" icon="chevron_right" iconPosition="post" on:tap="{onNavigateNext}" />
+
   </stackLayout>
 </page>

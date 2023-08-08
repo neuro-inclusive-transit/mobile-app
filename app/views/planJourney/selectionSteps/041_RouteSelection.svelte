@@ -16,6 +16,7 @@
   import { globals } from "~/shared/sizes";
   import DepartureDestinationSwitcher from "~/shared/components/DepartureDestinationSwitcher.svelte";
     import { onMount } from "svelte";
+    import Button from "~/shared/components/Button.svelte";
 
   function select(route: HereApiRoute) {
     console.log('select', route);
@@ -110,9 +111,16 @@
     {:catch error}
       <label style="color: red" row={4} col={0}>{error}</label>
     {/await}
-    <button text="More Routes" on:tap="{() => {numOfAlternatives += 3; calculateOptions()}}" row={5} col={0} />
 
-    <button text="Zurück" on:tap="{onNavigateBack}" row={6} col={0} />
+    <stackLayout row={5} col={0}>
+      <Button content="Mehr Routen" on:tap="{() => {numOfAlternatives += 3; calculateOptions()}}" />
+    </stackLayout>
+
+
+    <stackLayout row={6} col={0}>
+      <Button content="Zurück" icon="chevron_left" on:tap="{onNavigateBack}" iconPosition="pre" type="secondary" />
+     </stackLayout>
+
 
   </gridLayout>
 </page>
