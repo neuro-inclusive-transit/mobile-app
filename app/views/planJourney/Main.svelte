@@ -88,10 +88,14 @@
   <actionBar title="Meine Reisen" />
 
   <gridLayout rows="auto, *" columns="*">
-    <stackLayout row={0} class="main-layout">
-      <Button content="Neue Reise planen" icon="add" iconPosition="post" on:tap={addJourney} />
+    <gridLayout row={0} columns="*, auto" class="main-layout">
+      <Button column={1} text="Neue Reise planen" icon="add" iconPosition="post" on:tap={addJourney} />
+    </gridLayout>
+
+    <!-- <stackLayout row={0} class="main-layout">
+      <Button text="Neue Reise planen" icon="add" iconPosition="post" on:tap={addJourney} />
       <button text="Speak" on:tap={async () => await TTS.speak(speakOptions)}></button>
-    </stackLayout>
+    </stackLayout> -->
     <scrollView row={1}>
       <stackLayout  class="main-layout">
         {#each Object.entries(journeysByDate) as [date, journeys]}

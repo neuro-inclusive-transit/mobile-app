@@ -6,7 +6,8 @@
 
   import Contacts from "./Contacts.svelte";
   import RouteOverview from "./RouteOverview.svelte";
-    import SupportBox from "~/shared/components/SupportBox.svelte";
+  import SupportBox from "~/shared/components/SupportBox.svelte";
+  import Button from "~/shared/components/Button.svelte";
 
   $: currentLocation = $liveJourney === null ? null : ((section) => {
     if (section === false) return null;
@@ -171,17 +172,14 @@
 
       {:else}
 
-      <!-- <label text="Zwischenziel: {currentSection.arrival.place.name ?? currentSection.arrival.place.location.lat + '/' + currentSection.arrival.place.location.lng} {currentSection.actions ? currentSection.actions[$liveJourney.currentAction].instruction : 'Keine Aktion'}" textWrap={true} row={0} class="bg-primary-light" /> -->
-
-      <SupportBox row={0} text="Zwischenziel: {currentSection.arrival.place.name ?? currentSection.arrival.place.location.lat + '/' + currentSection.arrival.place.location.lng} {currentSection.actions ? currentSection.actions[$liveJourney.currentAction].instruction : 'Keine Aktion'}" />
-
+      <SupportBox row={0} text="{currentSection.actions ? currentSection.actions[$liveJourney.currentAction].instruction : 'Keine Aktion'}" class="m-b-m" />
 
       {#if currentSection.transport.mode === 'pedestrian'}
         <label text="{currentSection.actions ? getActionIcon(
           currentSection.actions[$liveJourney.currentAction].action,
           currentSection.actions[$liveJourney.currentAction].direction
         ): 'warning'}" class="icon fs-3xl text-center" on:tap={simulateNextStep} row={1}  />
-        <label text="Karte tbd." row={2}  />
+        <label text="Karte tbd. Zwischenziel: {currentSection.arrival.place.name ?? currentSection.arrival.place.location.lat + '/' + currentSection.arrival.place.location.lng}" textWrap={true} row={2}  />
       {:else}
         <label class="icon text-center" on:tap={simulateNextStep} row={1} >
           <formattedString>
@@ -194,7 +192,9 @@
       {/if}
 
 
-      <button text="Gesamtübersicht anzeigen" row={3} on:tap={openRouteOverview} />
+      <gridLayout row="3" columns="*, auto, *">
+        <Button text="Gesamtübersicht anzeigen" icon="route" iconPosition="pre" type="secondary" column={1} on:tap={openRouteOverview} class="m-b-m"/>
+      </gridLayout>
       <flexboxLayout class="bg-primary-light color-primary" row={4}>
         <button text="local_cafe" class="icon" on:tap={togglePause} />
         <button text="contacts" class="icon" on:tap={openContacts} />

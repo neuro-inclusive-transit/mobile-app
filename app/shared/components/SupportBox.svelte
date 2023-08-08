@@ -12,9 +12,13 @@
   export let column: number | undefined = undefined;
   export let rowSpan: number | undefined = undefined;
   export let columnSpan: number | undefined = undefined;
+
+  // class
+  let cssClass: string | undefined = undefined;
+  export { cssClass as class };
 </script>
 
-<gridLayout columns="*,auto" {row} {column} {rowSpan} {columnSpan}>
+<gridLayout columns="*,auto" {row} {column} {rowSpan} {columnSpan} class={cssClass} on:tap>
   <label {text} textWrap="true"></label>
   {#if tts}
     <button column={1} verticalAlignment="bottom" text="volume_up" class="icon" on:tap={onButtonTap}></button>
@@ -33,6 +37,10 @@
   button {
     padding: var(--m);
     margin: calc(var(--s) * -1);
+    font-size: var(--m);
+  }
+
+  label {
     font-size: var(--m);
   }
 </style>

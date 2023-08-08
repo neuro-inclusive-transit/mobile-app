@@ -3,22 +3,26 @@
 
   export let iconPosition: "pre" | "post" = "post";
   export let icon: string | undefined = undefined;
-  export let content: string | undefined = undefined;
+  export let text: string | undefined = undefined;
 
   // grid layout props
   export let row: number | undefined = undefined;
   export let column: number | undefined = undefined;
   export let rowSpan: number | undefined = undefined;
   export let columnSpan: number | undefined = undefined;
+
+  // class
+  let cssClass: string | undefined = undefined;
+  export { cssClass as class };
 </script>
 
-<gridLayout columns="auto,*,auto" rows="auto" class="button {type} {icon ? "icon-" + iconPosition : ""}" on:tap {row} {column} {rowSpan} {columnSpan}>
+<gridLayout columns="auto,*,auto" rows="auto" class="button {type} {icon ? "icon-" + iconPosition : ""} {cssClass}" on:tap {row} {column} {rowSpan} {columnSpan}>
   {#if icon && iconPosition === "pre"}
     <label class="icon" text={icon} verticalAlignment="middle" column={0} />
   {/if}
 
-  {#if content}
-    <label text={content} verticalAlignment="middle" column={1} />
+  {#if text}
+    <label text={text} verticalAlignment="middle" column={1} />
   {:else}
     <slot />
   {/if}
@@ -30,7 +34,7 @@
 
 <style type="scss">
   .button {
-    border-radius: var(--m);
+    border-radius: var(--l);
     padding: var(--xxs) var(--l);
     font-size: var(--s);
     box-shadow: var(--shadow-1);
@@ -62,7 +66,7 @@
   }
 
   .secondary {
-    background-color: var(--color-primary-light);
+    background-color: var(--color-background);
     color: var(--color-primary);
     border-width: 2;
     border-color: var(--color-primary);
