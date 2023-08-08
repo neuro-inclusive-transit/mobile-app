@@ -1,52 +1,44 @@
-<script>
-  import { goBack, navigate } from "svelte-native";
+<script type="ts">
+  import { goBack, navigate, closeModal } from "svelte-native";
+  import { localize as L } from '@nativescript/localize'
+  import { getRootLayout, EventData } from "@nativescript/core";
+
+  import Confirmation from "./070_Confirmation.svelte";
   import TimeSelection from "./030_TimeSelection.svelte";
-  import { getRootLayout } from "@nativescript/core";
+  import Destination from "./010_Destination.svelte";
 
   import { planJourney } from "~/stores"
+  import Button from "~/shared/components/Button.svelte";
+  import DepartureDestinationSwitcher from "~/shared/components/DepartureDestinationSwitcher.svelte";
 
-  function onNavigateBack() {
-    goBack({
-      frame: 'planJourneySelection'
-    });
-  }
-
-  function onNavigateNext() {
-    $planJourney.departure = {
-      id: -1,
-      name: "Aktueller Standort",
-      location: { // Get initial location
-        lat: 50.880382,
-        lng: 7.119409
-      },
-      icon: "📍",
-      currentLocation: true,
-    }
-
+  function onPlanNow () {
+    $planJourney.time.value = new Date();
     navigate({
-      page: TimeSelection,
+      page: Confirmation as any, // Type not compatible
       frame: 'planJourneySelection',
     });
   }
 
-  function closeBottomSheet(args) {
-    getRootLayout().notify({
-      eventName: "hideBottomSheet",
-      object: args.object,
-      eventData: {}
-    })
+  function onPlanLater () {
+    navigate({
+      page: TimeSelection as any, // Type not compatible
+      frame: 'planJourneySelection',
+    });
+  }
+
+  function closeBottomSheet() {
+    planJourney.reset();
+    closeModal(true);
   }
 </script>
 
-<page actionBarHidden=true>
-  <stackLayout>
-    <button text="Close" on:tap="{closeBottomSheet}" />
-    <label text="Zielort:" />
-    <label text="{$planJourney.arrival?.icon} {$planJourney.arrival?.name}" textWrap="true" />
-    <label text="Von wo startest du deine Reise?" />
-    <button text="Aktueller Standort" on:tap="{onNavigateNext}" />
-    <button text="Zurück" on:tap="{onNavigateBack}" />
-  </stackLayout>
+<page actionBarHidden={true}  class="bg-default">
+  <stackLayout class="main-layout">
+    <button text={L('close')} on:tap="{closeBottomSheet}" class="link" />
+    <DepartureDestinationSwitcher departure={$planJourney.departure?.name} destination={$planJourney.arrival?.name}/>
 
+    <Button content="Jetzt Reise starten" icon="navigation" on:tap="{onPlanNow}" />
+    <Button content="Für später starten" icon="calendar_month" type="secondary" on:tap="{onPlanLater}" />
+  </stackLayout>
 
 </page>

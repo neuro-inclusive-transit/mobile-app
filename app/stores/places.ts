@@ -4,7 +4,7 @@ import type { Emoji } from "emoji-type";
 import type { Coordinate, Address } from "~/stores/misc/types";
 
 export interface Place {
-  icon?: Emoji;
+  icon?: Emoji | string;
   name?: string;
   location: Coordinate;
   address?: Address;
@@ -19,7 +19,7 @@ export type TimeAndPlace = {
 export const places = dbStore<Place>('place', [
   {
     icon: '🏠',
-    name: 'Home',
+    name: 'Zuhause',
     location: {
       lat: 50.971558,
       lng: 7.056926,

@@ -1,5 +1,4 @@
 import { Http } from '@nativescript/core';
-import { off } from '@nativescript/core/application';
 
 type GetRouteOptions = {
   origin: string;
@@ -30,6 +29,7 @@ type Place = {
 type TimeAndPlace = {
   time: string;
   place: Place;
+  delay?: number;
 };
 
 type RouteApiGetParams = {
@@ -46,7 +46,10 @@ type RouteApiGetParams = {
   return?: string;
 };
 
-type HereApiRoute = {
+// @see https://developer.here.com/documentation/intermodal-routing/dev_guide/concepts/modes.html
+export type HereApiTransportMode = 'highSpeedTrain' | 'intercityTrain' | 'interRegionalTrain' | 'regionalTrain' | 'cityTrain' | 'bus' | 'ferry' | 'subway' | 'lightRail' | 'privateBus' | 'inclined' | 'aerial' | 'busRapid' | 'monorail' | 'flight' | 'walk' | 'car' | 'bicycle' | 'pedestrian' | string;
+
+export type HereApiRoute = {
   id: string;
   sections: Array<{
     id: string;
@@ -61,7 +64,10 @@ type HereApiRoute = {
       action: string;
       duration: number;
       instruction: string;
-      offset: number;
+      direction?: string;
+      severity?: string;
+      offset?: number;
+      exit?: number;
     }>;
     polyline?: string;
     spans?: Array<{
@@ -72,14 +78,23 @@ type HereApiRoute = {
       }>;
     }>;
     transport: {
-      mode: string;
+      mode: HereApiTransportMode;
       name?: string;
       category?: string;
       color?: string;
       textColor?: string;
       headsign?: string;
       shortName?: string;
-    }
+    },
+    intermediateStops?: Array<{
+      departure: TimeAndPlace;
+      duration?: number;
+    }>,
+    agency?: {
+      id: string;
+      name: string;
+      website: string;
+    };
   }>;
   agency?: {
     id: string;
@@ -88,13 +103,18 @@ type HereApiRoute = {
   };
 }
 
-type RouteApiGetResponse = {
+export type RouteApiGetResponse = {
   routes: Array<HereApiRoute>;
+  notices?: Array<{
+    title: string;
+    code: string;
+  }>;
 };
 
 
 export const routeApi = {
   get: async (params: RouteApiGetParams) => {
+
     const routeOptions: GetRouteOptions = {
       ...params,
       origin: `${params.origin.lat},${params.origin.lng}`,
@@ -114,9 +134,13 @@ export const routeApi = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'return': 'actions,intermediate',
+        'lang': 'de-de',
         ...routeOptions
       },
     });
+
+    console.log('response', response);
 
     if (response.statusCode !== 200 || !response.content) {
       throw new Error(response.content?.toString())
@@ -127,3 +151,4 @@ export const routeApi = {
     return responseJson.routes;
   }
 }
+

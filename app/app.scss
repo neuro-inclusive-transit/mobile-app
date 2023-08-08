@@ -1,0 +1,36 @@
+﻿@import '@nativescript/theme/css/core.css';
+@import 'shared/styles/variables.scss';
+@import 'shared/styles/font.scss';
+@import 'shared/styles/utility.scss';
+@import 'shared/styles/components.scss';
+
+
+.ns-root {
+  @include font-normal;
+  font-size: var(--s);
+  background-color: var(--color-background);
+}
+
+.icon {
+  @include font-icon;
+}
+
+actionBar{
+  background: var(--color-primary);
+  color: var(--color-background);
+  @include font-bold;
+}
+
+.main-layout {
+  padding-left: var(--xl);
+  padding-right: var(--xl);
+  padding-top: var(--l);
+  padding-bottom: var(--l);
+}
+
+.main-layout {
+  padding-left: var(--xl);
+  padding-right: var(--xl);
+  padding-top: var(--l);
+  padding-bottom: var(--l);
+}

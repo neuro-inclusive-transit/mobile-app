@@ -1,50 +1,58 @@
-<script>
-  import { navigate } from "svelte-native";
+<script type="ts">
+  import { navigate, closeModal } from "svelte-native";
   import { Template } from 'svelte-native/components'
-  import DestinationConfirm from "./011_DestinationConfirm.svelte";
-  import { getRootLayout } from "@nativescript/core";
+  import { localize as L } from '@nativescript/localize'
+  import Departure from "./011_Departure.svelte";
+  import { getRootLayout, ItemEventData, EventData } from "@nativescript/core";
+
+  import Place from "~/shared/components/Place.svelte";
+  import Input from "~/shared/components/Input.svelte";
+
+  import type { Place as StorePlace } from "~/stores/places";
 
   import { planJourney, places } from "~/stores"
 
-  function formatAddress(address) {
+  function formatAddress(address: StorePlace['address']) {
+    if (!address) return '';
+
     return `${address.street}, ${address.postcode} ${address.city}`;
   }
 
-  function select (place) {
+  function select (place: StorePlace) {
     $planJourney.arrival = place;
 
     navigate({
-      page: DestinationConfirm,
+      page: Departure as any, // Type not compatible
       frame: 'planJourneySelection',
     });
   }
 
-  function closeBottomSheet(args) {
-    getRootLayout().notify({
-      eventName: "hideBottomSheet",
-      object: args.object,
-      eventData: {}
-    })
+  function onItemTap (args: ItemEventData) {
+    const place = $places[args.index];
+
+    select(place);
+  }
+
+  function closeBottomSheet() {
+    planJourney.reset();
+    closeModal(true);
   }
 </script>
 
-<page>
-  <stackLayout>
-    <button text="Close" on:tap="{closeBottomSheet}" />
-    <label text="Deine Favoriten" />
-    <listView items="{$places}" height=300>
+<page class="bg-default">
+  <stackLayout class="main-layout">
+    <button text={L('close')} on:tap="{closeBottomSheet}" class="link" />
+    <label text="Deine Favoriten" class="fs-l fw-bold"/>
+    <listView items="{$places}" height=300 separatorColor="transparent" on:itemTap={onItemTap}>
       <Template let:item>
-        <stackLayout on:tap="{select(item)}">
-          <label text="{item.icon} {item.name}" />
-          <label text="{item.address ? formatAddress(item.address) : ''}" textWrap="true" />
-        </stackLayout>
+        <Place customIcon={item.icon} name={item.name} address={item.address ? formatAddress(item.address) : ''} />
       </Template>
     </listView>
 
-    <label text="Test: {$planJourney.arrival?.name}" />
+    <label text="Anderes Ziel" class="fs-l fw-bold" />
 
-    <label text="Anderes Ziel" />
+    <Input hint="Dein Ziel" pre="search" elevated />
   </stackLayout>
 
-  <!-- <button text="Weiter" on:tap="{navToNextStep}" /> -->
+  <!-- <ButtonX content="Weiter" icon="chevron_right" on:tap="{navToNextStep}" /> -->
 </page>

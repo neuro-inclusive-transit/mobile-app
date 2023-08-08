@@ -1,0 +1,71 @@
+.fw-bold {
+  @include font-bold;
+}
+
+.fw-normal {
+  @include font-normal;
+}
+
+.fw-italic {
+  @include font-italic;
+}
+
+.fw-bold-italic {
+  @include font-bold-italic;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.color-primary {
+  color: var(--color-primary);
+}
+
+.color-primary-light {
+  color: var(--color-primary-light);
+}
+
+.bg-default {
+  background-color: var(--color-background);
+}
+.bg-light {
+  background-color: var(--color-background-light);
+}
+.bg-primary {
+  background-color: var(--color-primary);
+}
+.bg-primary-light {
+  background-color: var(--color-primary-light);
+}
+
+$sizes: 'xxs', 'xs', 's', 'm', 'l', 'xl', 'xxl', '3xl';
+$directions: (
+  't': 'top',
+  'r': 'right',
+  'b': 'bottom',
+  'l': 'left',
+);
+
+@each $size in $sizes {
+  @each $selector, $property in $directions {
+    .m-#{$selector}-#{$size} { // eg. m-t-xs
+      margin-#{$property}: var(--#{$size});
+    }
+    .p-#{$selector}-#{$size} { // eg. p-t-xs
+      padding-#{$property}: var(--#{$size});
+    }
+  }
+
+  .fs-#{$size} { // eg. fs-xs
+    font-size: var(--#{$size});
+  }
+}

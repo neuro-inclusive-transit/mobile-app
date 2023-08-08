@@ -1,5 +1,5 @@
 {
-  "app.name": "Neuro Inclusive Transit",
+  "app.name": "NIT",
   "preffered_transportation": {
     "_": "Bevorzugtes Transportmittel",
     "car": "Auto",
@@ -18,5 +18,6 @@
     "rarely": "Selten",
     "sometimes": "Gelegentlich",
     "often": "Oft"
-  }
+  },
+  "close": "Schließen"
 }
