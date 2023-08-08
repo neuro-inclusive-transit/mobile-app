@@ -11,6 +11,16 @@
 
   import { Journey, journeys, liveJourney, tabIndex } from "~/stores";
 
+  import { TNSTextToSpeech, SpeakOptions } from 'nativescript-texttospeech';
+
+  let TTS = new TNSTextToSpeech();
+
+  let speakOptions: SpeakOptions = {
+    text: 'Neue Reise planen', /// *** required ***
+    speakRate: 0.55, // optional - default is 1.0
+    locale: 'de-DE', // optional - default is system locale,
+  };
+
   function addJourney() {
     showModal({ page: SelectionProcess as any })
   }
@@ -70,6 +80,8 @@
     }
   }
 
+
+
 </script>
 
 <page class="bg-default">
@@ -78,6 +90,7 @@
   <gridLayout rows="auto, *" columns="*">
     <stackLayout row={0} class="main-layout">
       <Button content="Neue Reise planen" icon="add" iconPosition="post" on:tap={addJourney} />
+      <button text="Speak" on:tap={async () => await TTS.speak(speakOptions)}></button>
     </stackLayout>
     <scrollView row={1}>
       <stackLayout  class="main-layout">

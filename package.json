@@ -11,6 +11,7 @@
     "@triniwiz/nativescript-couchbase": "^1.4.0",
     "emoji-type": "^1.0.4",
     "nativescript-intl": "^4.0.2",
+    "nativescript-texttospeech": "^3.0.1",
     "svelte-native": "~1.0.0"
   },
   "devDependencies": {

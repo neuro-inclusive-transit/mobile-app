@@ -6,6 +6,7 @@
 
   import Contacts from "./Contacts.svelte";
   import RouteOverview from "./RouteOverview.svelte";
+    import SupportBox from "~/shared/components/SupportBox.svelte";
 
   $: currentLocation = $liveJourney === null ? null : ((section) => {
     if (section === false) return null;
@@ -170,7 +171,9 @@
 
       {:else}
 
-      <label text="Zwischenziel: {currentSection.arrival.place.name ?? currentSection.arrival.place.location.lat + '/' + currentSection.arrival.place.location.lng} {currentSection.actions ? currentSection.actions[$liveJourney.currentAction].instruction : 'Keine Aktion'}" textWrap={true} row={0} class="bg-primary-light" />
+      <!-- <label text="Zwischenziel: {currentSection.arrival.place.name ?? currentSection.arrival.place.location.lat + '/' + currentSection.arrival.place.location.lng} {currentSection.actions ? currentSection.actions[$liveJourney.currentAction].instruction : 'Keine Aktion'}" textWrap={true} row={0} class="bg-primary-light" /> -->
+
+      <SupportBox row={0} text="Zwischenziel: {currentSection.arrival.place.name ?? currentSection.arrival.place.location.lat + '/' + currentSection.arrival.place.location.lng} {currentSection.actions ? currentSection.actions[$liveJourney.currentAction].instruction : 'Keine Aktion'}" />
 
 
       {#if currentSection.transport.mode === 'pedestrian'}
