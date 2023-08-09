@@ -1,5 +1,5 @@
 <script type="ts">
-  import { navigate } from "svelte-native";
+  import { navigate, closeModal } from "svelte-native";
   import { Template } from 'svelte-native/components'
   import { localize as L } from '@nativescript/localize'
   import Departure from "./011_Departure.svelte";
@@ -7,6 +7,7 @@
 
   import Place from "~/shared/components/Place.svelte";
   import Input from "~/shared/components/Input.svelte";
+
   import type { Place as StorePlace } from "~/stores/places";
 
   import { planJourney, places } from "~/stores"
@@ -32,17 +33,14 @@
     select(place);
   }
 
-  function closeBottomSheet(args: EventData) {
-    getRootLayout().notify({
-      eventName: "hideBottomSheet",
-      object: args.object,
-      eventData: {}
-    })
+  function closeBottomSheet() {
+    planJourney.reset();
+    closeModal(true);
   }
 </script>
 
 <page class="bg-default">
-  <stackLayout>
+  <stackLayout class="main-layout">
     <button text={L('close')} on:tap="{closeBottomSheet}" class="link" />
     <label text="Deine Favoriten" class="fs-l fw-bold"/>
     <listView items="{$places}" height=300 separatorColor="transparent" on:itemTap={onItemTap}>
@@ -56,5 +54,5 @@
     <Input hint="Dein Ziel" pre="search" elevated />
   </stackLayout>
 
-  <!-- <button text="Weiter" on:tap="{navToNextStep}" /> -->
+  <!-- <ButtonX content="Weiter" icon="chevron_right" on:tap="{navToNextStep}" /> -->
 </page>

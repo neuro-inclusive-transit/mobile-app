@@ -1,5 +1,5 @@
 <script type="ts">
-  import { navigate, goBack } from "svelte-native";
+  import { navigate, goBack, closeModal } from "svelte-native";
   import { localize as L } from '@nativescript/localize'
   import RouteSelection from "./041_RouteSelection.svelte";
   import { EventData, getRootLayout } from "@nativescript/core";
@@ -7,7 +7,11 @@
 
   import { planJourney } from "~/stores"
   import { PreferredJourneyMode } from "~/types"
+
   import BigInput from "~/shared/components/BigInput.svelte"
+
+  import Button from "~/shared/components/Button.svelte";
+
 
   function select(mode: PreferredJourneyMode) {
     $planJourney.preferredJourneyMode = mode;
@@ -24,21 +28,18 @@
       frame: 'planJourneySelection',
     });
   }
-  function closeBottomSheet(args: EventData) {
-    getRootLayout().notify({
-      eventName: "hideBottomSheet",
-      object: args.object,
-      eventData: {}
-    })
+  function closeBottomSheet() {
+    planJourney.reset();
+    closeModal(true);
   }
 </script>
 
 <page actionBarHidden={true}  class="bg-default">
-  <stackLayout>
+  <stackLayout class="main-layout">
     <button text={L('close')} on:tap="{closeBottomSheet}" class="link" />
     <label text="{$planJourney.departure?.icon} {$planJourney.departure?.name} -> {$planJourney.arrival?.icon} {$planJourney.arrival?.name}" textWrap="true" />
     <label text="Bei der Reise ist mir besonders wichtig? " />
-    {#each enumKeys(PreferredJourneyMode) as mode} 
+    {#each enumKeys(PreferredJourneyMode) as mode}
       <stackLayout>
         <button text="{L('preffered_journey_mode.' + PreferredJourneyMode[mode])}" on:tap={() => select(PreferredJourneyMode[mode])} />
         <BigInput icon={"⬆️"} label="{L('preffered_journey_mode.' + PreferredJourneyMode[mode])}"/>
@@ -47,7 +48,8 @@
 
     <label text="{L('preffered_journey_mode._')}: { $planJourney.preferredJourneyMode }" />
 
-    <button text="Zurück" on:tap="{onNavigateBack}" />
-    <button text="Weiter" on:tap="{onNavigateNext}" />
+    <Button content="Zurück" icon="chevron_left" iconPosition="pre" type="secondary" on:tap="{onNavigateBack}" />
+    <Button content="Weiter" icon="chevron_right" iconPosition="post" on:tap="{onNavigateNext}" />
+
   </stackLayout>
 </page>
