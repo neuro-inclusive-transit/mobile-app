@@ -103,7 +103,7 @@
                 <label class="icon" text="arrow_right" horizontalAlignment="center"/>
                 <label class="fw-bold" text="{journey.arrival.name}"/>
               </stackLayout>
-              <label text="Aufbruch: {new Date(journey.sections[0].departure.time).getHours()}:{new Date(journey.sections[0].departure.time).getMinutes()} Uhr" />
+              <label text="Aufbruch: {new Date(journey.sections[0].departure.time).getHours().toString().padStart(2, '0')}:{new Date(journey.sections[0].departure.time).getMinutes().toString().padStart(2, '0')} Uhr" />
               <label text="Erinnerung: {journey.reminderBefore} Min. vorher" />
               <label text="Dauer: {printTime(calcDurationBetween(new Date(journey.sections[0].departure.time, ),new Date(
                 journey.sections[journey.sections.length - 1].arrival.time
