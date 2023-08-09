@@ -1,10 +1,11 @@
 <script type="ts">
+  import { speak } from "~/shared/tts";
+
   export let text: string;
   export let tts: boolean = true;
 
   function onButtonTap() {
-    console.log("button tap");
-    // TODO: add tts
+    speak(text);
   }
 
   // grid layout props
