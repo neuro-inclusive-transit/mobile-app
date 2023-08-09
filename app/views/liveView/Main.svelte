@@ -4,7 +4,8 @@
   import { confirm } from '@nativescript/core/ui/dialogs'
   import { journeys, liveJourney, multiModality } from "~/stores";
   import { routeApi,  } from "~/api";
-  import { speak } from "~/shared/tts";
+  import { speak } from "~/shared/utils/tts";
+  import { playSound } from "~/shared/utils/audio";
 
   import Contacts from "./Contacts.svelte";
   import RouteOverview from "./RouteOverview.svelte";
@@ -54,7 +55,7 @@
     await playAction();
   }
 
-  function playAction () {
+  async function playAction () {
     if (
       $liveJourney === null
       || currentSection === false || currentSection === undefined
@@ -62,6 +63,9 @@
     ) return;
 
     const action = currentSection.actions[$liveJourney.currentAction];
+
+    // TODO: sound does not work
+    // await playSound("passiveNotification");
 
     return speak(action.instruction);
   }

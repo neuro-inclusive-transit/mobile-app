@@ -1,5 +1,5 @@
 <script type="ts">
-  import { speak } from "~/shared/tts";
+  import { speak } from "~/shared/utils/tts";
 
   export let text: string;
   export let tts: boolean = true;
