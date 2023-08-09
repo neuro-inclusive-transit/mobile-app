@@ -1,8 +1,10 @@
 <script type="ts">
   import { navigate } from "svelte-native";
+  import { tick } from 'svelte';
   import { confirm } from '@nativescript/core/ui/dialogs'
-  import { journeys, liveJourney } from "~/stores";
+  import { journeys, liveJourney, multiModality } from "~/stores";
   import { routeApi,  } from "~/api";
+  import { speak } from "~/shared/tts";
 
   import Contacts from "./Contacts.svelte";
   import RouteOverview from "./RouteOverview.svelte";
@@ -24,26 +26,44 @@
     resolve(null);
   });
 
-  function simulateNextStep() {
+  async function simulateNextStep() {
     if ($liveJourney === null) return;
 
 
     if (currentSection && currentSection.actions && currentSection.actions.length > $liveJourney.currentAction + 1) {
       $liveJourney.currentAction++;
+      await tick();
+      await playAction();
       return;
     }
 
     if ($liveJourney.currentSection >= $liveJourney.sections.length - 1) {
       $liveJourney.currentSection = 0;
       $liveJourney.currentAction = 0;
+      await tick();
+      await playAction();
       return;
     }
 
+    // skip sections that are false (e.g. user has paused the journey)
     do {
       $liveJourney.currentSection++;
       $liveJourney.currentAction = 0;
     } while ($liveJourney.sections[$liveJourney.currentSection] === false);
+    await tick();
+    await playAction();
+  }
 
+  function playAction () {
+    if (
+      $liveJourney === null
+      || currentSection === false || currentSection === undefined
+      || !Array.isArray(currentSection.actions) || currentSection.actions.length === 0
+    ) return;
+
+    const action = currentSection.actions[$liveJourney.currentAction];
+
+    return speak(action.instruction);
   }
 
   function getActionIcon(action: string, direction?: string) {
@@ -67,6 +87,16 @@
     navigate({
       page: Contacts as any
     });
+  }
+
+  function toggleAudio() {
+    if ($multiModality.primary === 'auditory') {
+      $multiModality.primary = 'visual';
+      return;
+    }
+
+    $multiModality.primary = 'auditory';
+    playAction();
   }
 
   async function togglePause() {
@@ -199,7 +229,7 @@
         <Button column={0} columnSpan={2} text="Pause" icon="local_cafe" iconPosition="pre" on:tap={togglePause} />
         <Button column={2} icon="contacts" on:tap={openContacts} class="m-l-s"/>
         <Button column={3} icon="warning" class="m-l-s" />
-        <Button column={4} icon="volume_off" class="m-l-s" />
+        <Button column={4} icon={$multiModality.primary === 'auditory' ? 'volume_up' : 'volume_off'} class="m-l-s" on:tap={toggleAudio} />
       </gridLayout>
 
       {/if}
