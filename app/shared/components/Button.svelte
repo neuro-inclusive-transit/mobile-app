@@ -16,15 +16,13 @@
   export { cssClass as class };
 </script>
 
-<gridLayout columns="auto,*,auto" rows="auto" class="button {type} {icon ? "icon-" + iconPosition : ""} {cssClass}" on:tap {row} {column} {rowSpan} {columnSpan}>
+<gridLayout columns="auto,*,auto" rows="auto" class="button {type} {icon ? "icon-" + iconPosition : ""} {text ? '' : 'just-icon'} {cssClass}" on:tap {row} {column} {rowSpan} {columnSpan}>
   {#if icon && iconPosition === "pre"}
     <label class="icon" text={icon} verticalAlignment="middle" column={0} />
   {/if}
 
   {#if text}
-    <label text={text} verticalAlignment="middle" column={1} />
-  {:else}
-    <slot />
+    <label class="text" text={text} verticalAlignment="middle" column={1} />
   {/if}
 
   {#if icon && iconPosition === "post"}
@@ -35,34 +33,39 @@
 <style type="scss">
   .button {
     border-radius: var(--l);
-    padding: var(--xxs) var(--l);
     font-size: var(--s);
     box-shadow: var(--shadow-1);
+    padding: var(--xxs) var(--l);
+
+    &.just-icon {
+      padding: var(--xxs);
+    }
 
     & > .icon {
       font-size: var(--m);
+      text-align: center;
     }
   }
 
   .button.icon-pre {
     padding-left: var(--s);
 
-    & > .icon {
-      margin-right: var(--xxs);
+    & > .text {
+      margin-left: var(--xxs);
     }
   }
 
   .button.icon-post {
     padding-right: var(--s);
 
-    & > .icon {
-      margin-left: var(--xxs);
+    & > .text {
+      margin-right: var(--xxs);
     }
   }
 
   .primary {
     background-color: var(--color-primary);
-    color: var(--color-primary-light);
+    color: var(--color-background-light);
   }
 
   .secondary {

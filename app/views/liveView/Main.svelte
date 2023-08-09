@@ -195,12 +195,12 @@
       <gridLayout row="3" columns="*, auto, *">
         <Button text="Gesamtübersicht anzeigen" icon="route" iconPosition="pre" type="secondary" column={1} on:tap={openRouteOverview} class="m-b-m"/>
       </gridLayout>
-      <flexboxLayout class="bg-primary-light color-primary" row={4}>
-        <button text="local_cafe" class="icon" on:tap={togglePause} />
-        <button text="contacts" class="icon" on:tap={openContacts} />
-        <button text="warning" class="icon" />
-        <button text="volume_off" class="icon" />
-      </flexboxLayout>
+      <gridLayout columns="*, *, *, *, *" rows="auto" row={4} class="m-b-m p-s bg-primary-light border-radius">
+        <Button column={0} columnSpan={2} text="Pause" icon="local_cafe" iconPosition="pre" on:tap={togglePause} />
+        <Button column={2} icon="contacts" on:tap={openContacts} class="m-l-s"/>
+        <Button column={3} icon="warning" class="m-l-s" />
+        <Button column={4} icon="volume_off" class="m-l-s" />
+      </gridLayout>
 
       {/if}
 
