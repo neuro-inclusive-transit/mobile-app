@@ -4,10 +4,11 @@
   import { confirm } from '@nativescript/core/ui/dialogs'
 
   import Route from "~/shared/components/Route.svelte";
+  import { printReminder } from "~/shared/components/Route.svelte";
   import Button from "~/shared/components/Button.svelte";
   import SelectionProcess from "./SelectionProcess.svelte";
 
-  import { calcDurationBetween, printTime, printDate } from "~/shared/utils/time"
+  import { calcDurationBetween, printTime, printDate} from "~/shared/utils/time"
 
   import { Journey, journeys, liveJourney, tabIndex } from "~/stores";
 
@@ -103,8 +104,8 @@
                 <label class="icon" text="arrow_right" horizontalAlignment="center"/>
                 <label class="fw-bold" text="{journey.arrival.name}"/>
               </stackLayout>
-              <label text="Aufbruch: {new Date(journey.sections[0].departure.time).getHours()}:{new Date(journey.sections[0].departure.time).getMinutes()} Uhr" />
-              <label text="Erinnerung: {journey.reminderBefore} Min. vorher" />
+              <label text="Aufbruch: {new Date(journey.sections[0].departure.time).getHours().toString().padStart(2, '0')}:{new Date(journey.sections[0].departure.time).getMinutes().toString().padStart(2, '0')} Uhr" />
+              <label text="{printReminder(journey.reminderBefore)}" />
               <label text="Dauer: {printTime(calcDurationBetween(new Date(journey.sections[0].departure.time, ),new Date(
                 journey.sections[journey.sections.length - 1].arrival.time
               )))}" />
