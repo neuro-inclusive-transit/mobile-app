@@ -8,7 +8,9 @@
   import { planJourney } from "~/stores"
   import { PreferredJourneyMode } from "~/types"
 
-  import BigInput from "~/shared/components/BigInput.svelte"
+  import BigButton from "~/shared/components/BigButton.svelte"
+
+  import {generateIcon} from "~/shared/components/BigButton.svelte"
 
   import Button from "~/shared/components/Button.svelte";
 
@@ -41,8 +43,7 @@
     <label text="Bei der Reise ist mir besonders wichtig? " />
     {#each enumKeys(PreferredJourneyMode) as mode}
       <stackLayout>
-        <button text="{L('preffered_journey_mode.' + PreferredJourneyMode[mode])}" on:tap={() => select(PreferredJourneyMode[mode])} />
-        <BigInput icon={"⬆️"} label="{L('preffered_journey_mode.' + PreferredJourneyMode[mode])}"/>
+        <BigButton icon={generateIcon(PreferredJourneyMode[mode])} label="{L('preffered_journey_mode.' + PreferredJourneyMode[mode])}" on:tap={() => select(PreferredJourneyMode[mode])} />
       </stackLayout>
     {/each}
 

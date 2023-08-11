@@ -6,6 +6,10 @@
   import Button from "~/shared/components/Button.svelte";
   import { planJourney } from "~/stores"
 
+  import BigButton from "~/shared/components/BigButton.svelte"
+
+  import {generateIcon} from "~/shared/components/BigButton.svelte"
+
   function onNavigateBack() {
     goBack({
       frame: 'planJourneySelection',
@@ -36,7 +40,7 @@
     <label text="Wie viel früher möchtest du vor Reiseantritt erinnert werden?" />
     {#each timeOptions as option} }
       <stackLayout>
-        <button text="{option} Min." on:tap={() => {$planJourney.reminderBefore = option}}  />
+          <BigButton label="{option.toString() + " Minuten"}" on:tap={() => {$planJourney.reminderBefore = option}} />
       </stackLayout>
     {/each}
     <!-- TODO: selbst eintragen -->
