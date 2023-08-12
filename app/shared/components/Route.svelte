@@ -1,3 +1,13 @@
+<script lang="ts" context="module">
+    export function printReminder(minutes: number){
+    if (minutes === 0){
+      return "Keine Erinnerung"
+    }
+
+    return `Erinnerung: ${minutes} Min. vorher`
+  }
+</script>
+
 <script type="ts">
   import { sizes } from "../sizes";
 
