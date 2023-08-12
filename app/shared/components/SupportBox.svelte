@@ -4,6 +4,8 @@
   export let text: string;
   export let tts: boolean = true;
 
+  export let type: "big" | "small" = "small";
+
   function onButtonTap() {
     speak(text);
   }
@@ -20,7 +22,7 @@
 </script>
 
 <gridLayout columns="*,auto" {row} {column} {rowSpan} {columnSpan} class={cssClass} on:tap>
-  <label {text} textWrap="true"></label>
+  <label {text} class={type === "big" ? 'fs-xl' : 'fs-m'} textWrap="true"></label>
   {#if tts}
     <button column={1} verticalAlignment="bottom" text="volume_up" class="icon" on:tap={onButtonTap}></button>
   {/if}
@@ -38,10 +40,6 @@
   button {
     padding: var(--m);
     margin: calc(var(--s) * -1);
-    font-size: var(--m);
-  }
-
-  label {
     font-size: var(--m);
   }
 </style>

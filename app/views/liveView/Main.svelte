@@ -206,14 +206,17 @@
 
       {:else}
 
-      <SupportBox row={0} text="{currentSection.actions ? currentSection.actions[$liveJourney.currentAction].instruction : 'Keine Aktion'}" class="m-b-m" />
+      <SupportBox row={0} text="{currentSection.actions ? currentSection.actions[$liveJourney.currentAction].instruction : 'Keine Aktion'}" type={$multiModality.primary === 'auditory' ? 'big' : 'small'} class="m-b-m" />
 
       {#if currentSection.transport.mode === 'pedestrian'}
+
         <label text="{currentSection.actions ? getActionIcon(
           currentSection.actions[$liveJourney.currentAction].action,
           currentSection.actions[$liveJourney.currentAction].direction
-        ): 'warning'}" class="icon fs-3xl text-center" on:tap={simulateNextStep} row={1}  />
+        ): 'warning'}" class="icon text-center {$multiModality.primary === 'auditory' ? 'fs-4xl' : 'fs-3xl'}" on:tap={simulateNextStep} row={1}  />
+
         <label text="Karte tbd. Zwischenziel: {currentSection.arrival.place.name ?? currentSection.arrival.place.location.lat + '/' + currentSection.arrival.place.location.lng}" textWrap={true} row={2}  />
+
       {:else}
         <label class="icon text-center" on:tap={simulateNextStep} row={1} >
           <formattedString>
@@ -227,7 +230,7 @@
 
 
       <gridLayout row="3" columns="*, auto, *">
-        <Button text="Gesamtübersicht anzeigen" icon="route" iconPosition="pre" type="secondary" column={1} on:tap={openRouteOverview} class="m-b-m"/>
+        <Button text="Gesamtübersicht anzeigen" icon="route" iconPosition="pre" type="secondary" column={1} on:tap={openRouteOverview} class="m-b-m {$multiModality.primary === 'auditory' ? 'fs-l' : ''}"/>
       </gridLayout>
       <gridLayout columns="*, *, *, *, *" rows="auto" row={4} class="m-b-m p-s bg-primary-light border-radius">
         <Button column={0} columnSpan={2} text="Pause" icon="local_cafe" iconPosition="pre" on:tap={togglePause} />
