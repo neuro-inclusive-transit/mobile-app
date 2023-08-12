@@ -65,7 +65,7 @@
     const action = currentSection.actions[$liveJourney.currentAction];
 
     // TODO: sound does not work
-    // await playSound("passiveNotification");
+    await playSound("passiveNotification");
 
     return speak(action.instruction);
   }

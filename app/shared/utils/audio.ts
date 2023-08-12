@@ -41,10 +41,7 @@ export function playSound(soundFile: keyof(typeof soundFiles)) {
     };
 
     player.debug = true;
-    player.volume = 1;
 
-    await player.initFromFile(playerOptions);
-
-    await player.play();
+    await player.playFromFile(playerOptions);
   });
 }
