@@ -40,8 +40,8 @@
       </stackLayout>
     {/each}
     <!-- TODO: selbst eintragen -->
-    <Button content="Zurück" icon="chevron_left" iconPosition="pre" type="secondary" on:tap="{onNavigateBack}" />
-    <Button content="Weiter" icon="chevron_right" iconPosition="post" on:tap="{onNavigateNext}" />
+    <Button text="Zurück" icon="chevron_left" iconPosition="pre" type="secondary" on:tap="{onNavigateBack}" />
+    <Button text="Weiter" icon="chevron_right" iconPosition="post" on:tap="{onNavigateNext}" />
 
   </stackLayout>
 </page>

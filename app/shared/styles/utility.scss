@@ -47,7 +47,11 @@
   background-color: var(--color-primary-light);
 }
 
-$sizes: 'xxs', 'xs', 's', 'm', 'l', 'xl', 'xxl', '3xl';
+.border-radius {
+  border-radius: var(--border-radius);
+}
+
+$sizes: 'xxs', 'xs', 's', 'm', 'l', 'xl', 'xxl', '3xl', '4xl';
 $directions: (
   't': 'top',
   'r': 'right',
@@ -63,6 +67,13 @@ $directions: (
     .p-#{$selector}-#{$size} { // eg. p-t-xs
       padding-#{$property}: var(--#{$size});
     }
+  }
+
+  .m-#{$size} { // eg. m-xs
+    margin: var(--#{$size});
+  }
+  .p-#{$size} { // eg. p-xs
+    padding: var(--#{$size});
   }
 
   .fs-#{$size} { // eg. fs-xs
