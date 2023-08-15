@@ -16,7 +16,7 @@ export interface Journey {
   sections: HereApiRoute["sections"];
 }
 
-export const journeys = dbStore<Journey>("journey", [
+export const journeys = dbStore<Journey>("journey"/*, [
   {
     time: {
       type: JourneyPlanMode.Departure,
@@ -337,4 +337,4 @@ export const journeys = dbStore<Journey>("journey", [
         }
       ]
   },
-]);
+]*/);

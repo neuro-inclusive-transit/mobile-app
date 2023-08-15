@@ -105,11 +105,16 @@ export type HereApiRoute = {
 
 export type RouteApiGetResponse = {
   routes: Array<HereApiRoute>;
+  notices?: Array<{
+    title: string;
+    code: string;
+  }>;
 };
 
 
 export const routeApi = {
   get: async (params: RouteApiGetParams) => {
+
     const routeOptions: GetRouteOptions = {
       ...params,
       origin: `${params.origin.lat},${params.origin.lng}`,
@@ -117,8 +122,6 @@ export const routeApi = {
       arrivalTime: params.arrivalTime?.toISOString() ?? undefined,
       departureTime: params.departureTime?.toISOString() ?? undefined,
     };
-
-    console.log('routeOptions', routeOptions);
 
     Object.keys(routeOptions).forEach(key => {
       if (routeOptions[key as keyof typeof routeOptions] === undefined) {

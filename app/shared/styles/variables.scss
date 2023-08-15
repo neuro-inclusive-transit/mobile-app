@@ -30,6 +30,7 @@ $color-white: #f2f4f8;
   --base-xl: 1.96875;
   --base-xxl: 2.5;
   --base-3xl: 3.125;
+  --base-4xl: 3.90625;
   --xxs: calc(var(--base) * var(--base-xxs)); /* 10px */
   --xs: calc(var(--base) * var(--base-xs)); /* 12.5px */
   --s: calc(var(--base) * var(--base-s)); /* 16px */
@@ -38,9 +39,11 @@ $color-white: #f2f4f8;
   --xl: calc(var(--base) * var(--base-xl)); /* 31.25px */
   --xxl: calc(var(--base) * var(--base-xxl)); /* 40px */
   --3xl: calc(var(--base) * var(--base-3xl)); /* 50px */
+  --4xl: calc(var(--base) * var(--base-4xl)); /* 62.5px */
 
 
   --outer-margin: var(--xxl);
   --border-radius: 5pt;
   --shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  --shadow-1: 4px 4px 4px rgba(0, 0, 0, 0.4);
 }

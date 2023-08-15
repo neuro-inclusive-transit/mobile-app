@@ -1,10 +1,11 @@
 <script type="ts">
-  import { goBack } from "svelte-native";
+  import { goBack, closeModal } from "svelte-native";
   import { localize as L } from '@nativescript/localize'
   import { EventData, getRootLayout } from "@nativescript/core";
 
   import { journeys, planJourney } from "~/stores"
   import { CompanionMode, JourneyPlanMode, PreferredJourneyMode, PreferredTransportation } from "~/types"
+  import Button from "~/shared/components/Button.svelte";
 
   // TODO: Preference
 
@@ -30,22 +31,20 @@
     });
   }
 
-  function closeBottomSheet(args: EventData) {
-    getRootLayout().notify({
-      eventName: "hideBottomSheet",
-      object: args.object,
-      eventData: {}
-    })
+  function closeBottomSheet() {
+    planJourney.reset();
+    closeModal(true);
   }
 </script>
 
 <page actionBarHidden={true}  class="bg-default">
-  <stackLayout>
+  <stackLayout class="main-layout">
     <button text={L('close')} on:tap="{closeBottomSheet}" class="link" />
 
     <label text="Super!" />
     <label text="Du hast deine Reise von {plannedJourney.departure?.name} nach {plannedJourney.arrival?.name} geplant" textWrap="true" />
     <label text="Du musst {plannedJourney.time.value} los. Wir erinnern dich!" textWrap="true" />
-    <button text="Zurück" on:tap="{onNavigateBack}" />
+    <Button text="Zurück" icon="chevron_left" on:tap="{onNavigateBack}" iconPosition="pre" type="secondary" />
+
   </stackLayout>
 </page>
