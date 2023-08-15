@@ -4,7 +4,9 @@
     <meta name="viewport" content="initial-scale=1.0, width=device-width" />
     <script src="https://js.api.here.com/v3/3.1/mapsjs-core.js" type="text/javascript" charset="utf-8"></script>
     <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js" type="text/javascript" charset="utf-8"></script>
-
+    <script src="https://js.api.here.com/v3/3.1/mapsjs-mapevents.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" charset="utf-8" src="https://js.api.here.com/v3/3.1/mapsjs-ui.js" ></script>
+    <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
     <style>
       /* http://meyerweb.com/eric/tools/css/reset/
         v2.0 | 20110126
@@ -70,8 +72,23 @@
         'apikey': hereApiKey
       });
 
+      // Retrieve the target element for the map:
+      var targetElement = document.getElementById('mapContainer');
+
       // Obtain the default map types from the platform object
       var maptypes = platform.createDefaultLayers();
+
+      // Enable the event system on the map instance:
+      var mapEvents = new H.mapevents.MapEvents(map);
+
+      // Add event listener:
+      map.addEventListener('tap', function(evt) {
+      // Log 'tap' and 'mouse' events:
+      console.log(evt.type, evt.currentPointer.type); 
+      });
+
+      // Instantiate the default behavior, providing the mapEvents object:
+      var behavior = new H.mapevents.Behavior(mapEvents);
 
       // Instantiate (and display) a map object:
       var map = new H.Map(
@@ -81,6 +98,61 @@
           zoom: 10,
           center: { lng: 13.4, lat: 52.51 }
         });
+       
+      // Create the default UI:
+      const ui = H.ui.UI.createDefault(map, defaultLayers);  
+
+      var routingParameters = {
+        'routingMode': 'fast',
+        'transportMode': 'car',
+        // The start point of the route:
+        'origin': '50.1120423728813,8.68340740740811',
+        // The end point of the route:
+        'destination': '52.5309916298853,13.3846220493377',
+        // Include the route shape in the response
+        'return': 'polyline'
+        };
+
+        
+        // Define a callback function to process the routing response:
+        var onResult = function(result) {
+        // ensure that at least one route was found
+          if (result.routes.length) {
+            result.routes[0].sections.forEach((section) => {
+              // Create a linestring to use as a point source for the route line
+              let linestring = H.geo.LineString.fromFlexiblePolyline(section.polyline);
+
+              // Create a polyline to display the route:
+              let routeLine = new H.map.Polyline(linestring, {
+                style: { strokeColor: 'blue', lineWidth: 3 }
+              });
+
+              // Create a marker for the start point:
+              let startMarker = new H.map.Marker(section.departure.place.location);
+
+              // Create a marker for the end point:
+              let endMarker = new H.map.Marker(section.arrival.place.location);
+
+              // Add the route polyline and the two markers to the map:
+              map.addObjects([routeLine, startMarker, endMarker]);
+
+              // Set the map's viewport to make the whole route visible:
+              map.getViewModel().setLookAtData({bounds: routeLine.getBoundingBox()});
+            });
+          }
+        };
+
+              // Get an instance of the routing service version 8:
+              var router = platform.getRoutingService(null, 8);
+
+              // Call calculateRoute() with the routing parameters,
+              // the callback and an error callback function (called if a
+              // communication error occurs):
+              router.calculateRoute(routingParameters, onResult,
+                function(error) {
+                  alert(error.message);
+                });
+
     </script>
   </body>
 
