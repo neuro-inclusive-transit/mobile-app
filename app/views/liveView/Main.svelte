@@ -188,7 +188,13 @@
           currentSection.actions[$liveJourney.currentAction].direction
         ): 'warning'}" class="icon fs-3xl text-center" on:tap={simulateNextStep} row={1}  />
 
-        <Map row={2} />
+        <Map row={2} bind:currentLocation={currentLocation} startLocation={{
+          lat: currentSection.departure.place.location.lat,
+          lng: currentSection.departure.place.location.lng,
+        }} endLocation={{
+          lat: currentSection.arrival.place.location.lat,
+          lng: currentSection.arrival.place.location.lng,
+        }} />
 
       {:else}
         <label class="icon text-center" on:tap={simulateNextStep} row={1} >
