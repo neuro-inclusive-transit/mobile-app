@@ -123,14 +123,15 @@
     });
   }
 
-  /* live:
-  $: currentSection = currentLive.sections.findIndex((section) => {
-    const now = new Date();
-    const begin = new Date(section.departure.time);
-    const end = new Date(section.arrival.time);
-    return begin <= now && now <= end;
-  });
-  */
+  /* live: */
+  // $: currentSection = $liveJourney?.sections.findIndex((section) => {
+  //   if (section === false) return false;
+
+  //   const now = new Date();
+  //   const begin = new Date(section.departure.time);
+  //   const end = new Date(section.arrival.time);
+  //   return begin <= now && now <= end;
+  // });
   /* debug: */
   $: currentSection = $liveJourney?.sections[$liveJourney.currentSection];
 </script>
