@@ -15,13 +15,16 @@ export function generateIcon(preferredJourneyMode:string){
   import { createEventDispatcher } from "svelte";
   import { PreferredJourneyMode } from "~/types";
 
-  export let icon = "";
+  export let icon = ""
+  $: hasIcon = icon !== ""
   export let label = "Default Label";
 
 </script>
 <gridLayout class="button-style">
     <stackLayout orientation="horizontal" on:tap>
-      <label class="button-icon icon" text="{icon}"/>
+      <label class={hasIcon
+        ? "icon button-withIcon"
+        : "button-withoutIcon" } text="{icon}"/>
       <label class="button-text" text="{label}"/>
     </stackLayout>
 </gridLayout>
@@ -30,7 +33,7 @@ export function generateIcon(preferredJourneyMode:string){
   <style>
       .button-style {
           margin: auto;
-          padding-left: var(--s);
+          padding-left: calc(var(--base-s)*24px);
           padding-right: var(--s);
           width: auto;
           height: 150px;
@@ -41,12 +44,17 @@ export function generateIcon(preferredJourneyMode:string){
           font-size: var(--m);
       }
 
-      .button-text {
-          padding-left: 24px;
+      .button-withIcon {
+          color: var(--color-primary);
+          padding-right: calc(var(--base-s)*8px);
       }
 
-      .button-icon {
-          color: var(--color-primary);
+      .button-withoutIcon {
+          visibility: hidden;
+      }
+
+      .button-text {
+        padding-left: calc(var(--base-s)*16px);
       }
   </style>
 
