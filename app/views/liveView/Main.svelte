@@ -1,11 +1,12 @@
 <script type="ts">
-  import { navigate } from "svelte-native";
+  import { navigate, showModal } from "svelte-native";
   import { tick } from 'svelte';
   import { confirm } from '@nativescript/core/ui/dialogs'
   import { journeys, liveJourney, multiModality } from "~/stores";
   import { routeApi,  } from "~/api";
   import { speak } from "~/shared/utils/tts";
-  import { playSound } from "~/shared/utils/audio";
+  import { playSound } from "~/shared/utils/index";
+  import { transportTypeToIcon } from "~/shared/utilites";
 
   import Contacts from "./Contacts.svelte";
   import RouteOverview from "./RouteOverview.svelte";
@@ -105,13 +106,14 @@
   }
 
   function openRouteOverview() {
-    navigate({
+    console.log('open route overview');
+    showModal({
       page: RouteOverview as any
     });
   }
 
   function openContacts() {
-    navigate({
+    showModal({
       page: Contacts as any
     });
   }
@@ -233,6 +235,13 @@
 
           <SupportBox row={0} text="{currentSection.actions[$liveJourney.currentAction].instruction}" type={$multiModality.primary === 'auditory' ? 'big' : 'small'} class="m-b-m" />
 
+          <label text="{currentSection.actions ? getActionIcon(
+            currentSection.actions[$liveJourney.currentAction].action,
+            currentSection.actions[$liveJourney.currentAction].direction
+          ): 'warning'}" class="icon text-center {$multiModality.primary === 'auditory' ? 'fs-4xl' : 'fs-3xl'}" on:tap={simulateNextStep} row={1}  />
+
+          <label text="Karte tbd. Zwischenziel: {currentSection.arrival.place.name ?? currentSection.arrival.place.location.lat + '/' + currentSection.arrival.place.location.lng}" textWrap={true} row={2}  />
+
         {:else if currentSection.intermediateStops && currentSection.intermediateStops.length > 0}
 
           <SupportBox row={0} text={(() => {
@@ -246,26 +255,19 @@
             }
           })()} type={$multiModality.primary === 'auditory' ? 'big' : 'small'} class="m-b-m" />
 
-        {/if}
+          <label class="icon text-center fs-3xl" on:tap={simulateNextStep} row={1} text={(() => {
+            let id = $liveJourney.currentIntermediateStop;
+            let stop = currentSection.intermediateStops[id];
 
-        {#if currentSection.transport.mode === 'pedestrian'}
+            switch (id) {
+              case 0: return `arrow_forward ${transportTypeToIcon(currentSection.transport.mode)}`;
+              case currentSection.intermediateStops.length - 1: return `arrow_forward door_sliding`;
+              default: return `airline_seat_recline_normal`;
+            }
+          })()} />
 
-          <label text="{currentSection.actions ? getActionIcon(
-            currentSection.actions[$liveJourney.currentAction].action,
-            currentSection.actions[$liveJourney.currentAction].direction
-          ): 'warning'}" class="icon text-center {$multiModality.primary === 'auditory' ? 'fs-4xl' : 'fs-3xl'}" on:tap={simulateNextStep} row={1}  />
-
-          <label text="Karte tbd. Zwischenziel: {currentSection.arrival.place.name ?? currentSection.arrival.place.location.lat + '/' + currentSection.arrival.place.location.lng}" textWrap={true} row={2}  />
-
-        {:else}
-          <label class="icon text-center" on:tap={simulateNextStep} row={1} >
-            <formattedString>
-              <span text="directions_walk" class="fs-3xl" />
-              <span text="arrow_forward" />
-              <span text="door_sliding" class="fs-3xl" />
-            </formattedString>
-          </label>
           <label text="train stop {$liveJourney.currentIntermediateStop}" row={2}  />
+
         {/if}
 
 
