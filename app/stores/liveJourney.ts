@@ -6,6 +6,7 @@ export interface LiveJourney extends Omit<Journey, 'sections'> {
   isPaused: boolean;
   currentSection: number;
   currentAction: number;
+  currentIntermediateStop: number;
 };
 
 
