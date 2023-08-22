@@ -197,7 +197,7 @@
 </script>
 
 <page class="bg-default">
-  <actionBar title="Live-Ansicht" />
+  <actionBar title="Begleitung" />
 
   {#if $liveJourney === null || currentSection === undefined || currentSection === false}
 
