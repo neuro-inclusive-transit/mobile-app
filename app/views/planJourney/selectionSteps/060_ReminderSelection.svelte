@@ -8,7 +8,7 @@
 
   import BigButton from "~/shared/components/BigButton.svelte"
 
-  import {generateIcon} from "~/shared/components/BigButton.svelte"
+  import {generateIcon} from "~/shared/utils/icons"
 
   function onNavigateBack() {
     goBack({

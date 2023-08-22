@@ -11,7 +11,7 @@
 
   import BigButton from "~/shared/components/BigButton.svelte"
 
-  import {generateIcon} from "~/shared/components/BigButton.svelte"
+  import {generateIcon} from "~/shared/utils/icons"
 
   function select(mode: CompanionMode) {
     $planJourney.companionMode = mode;

@@ -10,7 +10,7 @@
 
   import BigButton from "~/shared/components/BigButton.svelte"
 
-  import {generateIcon} from "~/shared/components/BigButton.svelte"
+  import {generateIcon} from "~/shared/utils/icons"
 
   import Button from "~/shared/components/Button.svelte";
 
