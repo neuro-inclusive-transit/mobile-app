@@ -2,7 +2,7 @@
   import { navigate, showModal } from "svelte-native";
   import { tick } from 'svelte';
   import { confirm } from '@nativescript/core/ui/dialogs'
-  import { journeys, liveJourney, multiModality } from "~/stores";
+  import { tabIndex, liveJourney, multiModality } from "~/stores";
   import { routeApi,  } from "~/api";
   import { speak } from "~/shared/utils/tts";
   import { playSound } from "~/shared/utils/index";
@@ -54,14 +54,7 @@
 
     // start over again if we reached the end of the journey
     if ($liveJourney.currentSection >= $liveJourney.sections.length - 1) {
-      $liveJourney.currentSection = 0;
-      $liveJourney.currentAction = 0;
-      $liveJourney.currentIntermediateStop = 0;
-
-      if ($multiModality.primary === 'auditory') {
-        await tick();
-        await playAction();
-      }
+      $liveJourney.isCompleted = true;
       return;
     }
 
@@ -231,6 +224,19 @@
         <button text="call" class="icon" on:tap={openContacts} />
         <button text="warning" class="icon" />
       </flexboxLayout>
+
+      {:else if $liveJourney.isCompleted}
+
+      <SupportBox row={0} text="Sehr gut du hast dein Ziel erreicht." type={$multiModality.primary === 'auditory' ? 'big' : 'small'} class="m-b-m" />
+
+      <label text="place" class="icon text-center fs-4xl" on:tap={simulateNextStep} row={1} rowSpan={2}  />
+
+      <gridLayout row="3" columns="*, auto, *" rowSpan={2}>
+          <Button text="Zur Reisen-Übersicht" icon="travel_explore" iconPosition="pre" type="primary" column={1} on:tap={() => {
+            $tabIndex = 0;
+            $liveJourney = null;
+          }} class="m-b-m {$multiModality.primary === 'auditory' ? 'fs-l' : ''}"/>
+      </gridLayout>
 
       {:else}
 
