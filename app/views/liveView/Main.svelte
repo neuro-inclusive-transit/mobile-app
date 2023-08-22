@@ -73,18 +73,9 @@
   }
 
   async function playAction () {
-    if (
-      $liveJourney === null
-      || currentSection === false || currentSection === undefined
-      || !Array.isArray(currentSection.actions) || currentSection.actions.length === 0
-    ) return;
-
-    const action = currentSection.actions[$liveJourney.currentAction];
-
-    // TODO: sound does not work
     await playSound("passiveNotification");
 
-    return speak(action.instruction);
+    return speak(currentSupportBoxText);
   }
 
   function getActionIcon(action: string, direction?: string) {
@@ -180,6 +171,33 @@
     });
   }
 
+  let currentSupportBoxText = '';
+
+  $: if ($liveJourney && currentSection) {
+    if ($liveJourney.isPaused) {
+      currentSupportBoxText = "Die Routenführung wurde gestoppt. Steige an der nächsten Haltestelle aus und mache eine Pause.";
+    } else if ($liveJourney.isCompleted) {
+      currentSupportBoxText = "Sehr gut du hast dein Ziel erreicht.";
+    } else if (currentSection.actions && currentSection.actions.length > 0) {
+      currentSupportBoxText = currentSection.actions[$liveJourney.currentAction].instruction;
+    } else if (currentSection.intermediateStops) {
+      let id = $liveJourney.currentIntermediateStop;
+      let stop = currentSection.intermediateStops[id];
+
+      if (currentSection.intermediateStops.length === 0) {
+        return `Steige bei ${currentSection.departure.place.name} in die ${currentSection.transport.name} Richtung ${currentSection.transport.headsign} ein und steige bei ${currentSection.arrival.place.name} wieder aus.`;
+      }
+
+      switch (id) {
+        case 0: return `Steige bei ${stop.departure.place.name} in die ${currentSection.transport.name} Richtung ${currentSection.transport.headsign} ein.`;
+        case currentSection.intermediateStops.length - 1: return `Gehe zum Ausgang und steige bei ${currentSection.arrival.place.name} aus.`;
+        default: return `Du bist im richtigen Transportmittel.`;
+      }
+    } else {
+      currentSupportBoxText = `Du musst von {currentSection.departure.place.name} nach {currentSection.arrival.place.name}`;
+    }
+  }
+
   /* live:
   $: currentSection = currentLive.sections.findIndex((section) => {
     const now = new Date();
@@ -216,7 +234,7 @@
 
       {#if $liveJourney.isPaused}
 
-      <label text="Die Routenführung wurde gestoppt. Steige an der nächsten Haltestelle aus und mache eine Pause." textWrap={true} row={0} rowSpan={3} class="bg-primary-light" />
+      <label text={currentSupportBoxText} textWrap={true} row={0} rowSpan={3} class="bg-primary-light" />
 
       <button text="Gesamtübersicht anzeigen" row={3} on:tap={openRouteOverview} />
       <flexboxLayout class="bg-primary-light color-primary" row={4} >
@@ -227,7 +245,7 @@
 
       {:else if $liveJourney.isCompleted}
 
-      <SupportBox row={0} text="Sehr gut du hast dein Ziel erreicht." type={$multiModality.primary === 'auditory' ? 'big' : 'small'} class="m-b-m" />
+      <SupportBox row={0} text={currentSupportBoxText} type={$multiModality.primary === 'auditory' ? 'big' : 'small'} class="m-b-m" />
 
       <label text="place" class="icon text-center fs-4xl" on:tap={simulateNextStep} row={1} rowSpan={2}  />
 
@@ -242,7 +260,7 @@
 
         {#if currentSection.actions && currentSection.actions.length > 0}
 
-          <SupportBox row={0} text="{currentSection.actions[$liveJourney.currentAction].instruction}" type={$multiModality.primary === 'auditory' ? 'big' : 'small'} class="m-b-m" />
+          <SupportBox row={0} text="{currentSupportBoxText}" type={$multiModality.primary === 'auditory' ? 'big' : 'small'} class="m-b-m" />
 
           <label text="{currentSection.actions ? getActionIcon(
             currentSection.actions[$liveJourney.currentAction].action,
@@ -253,20 +271,7 @@
 
         {:else if currentSection.intermediateStops}
 
-          <SupportBox row={0} text={(() => {
-            let id = $liveJourney.currentIntermediateStop;
-            let stop = currentSection.intermediateStops[id];
-
-            if (currentSection.intermediateStops.length === 0) {
-              return `Steige bei ${currentSection.departure.place.name} in die ${currentSection.transport.name} Richtung ${currentSection.transport.headsign} ein und steige bei ${currentSection.arrival.place.name} wieder aus.`;
-            }
-
-            switch (id) {
-              case 0: return `Steige bei ${stop.departure.place.name} in die ${currentSection.transport.name} Richtung ${currentSection.transport.headsign} ein.`;
-              case currentSection.intermediateStops.length - 1: return `Gehe zum Ausgang und steige bei ${currentSection.arrival.place.name} aus.`;
-              default: return `Du bist im richtigen Transportmittel.`;
-            }
-          })()} type={$multiModality.primary === 'auditory' ? 'big' : 'small'} class="m-b-m" />
+          <SupportBox row={0} text={currentSupportBoxText} type={$multiModality.primary === 'auditory' ? 'big' : 'small'} class="m-b-m" />
 
           <label class="icon text-center fs-3xl" on:tap={simulateNextStep} row={1} text={(() => {
             let id = $liveJourney.currentIntermediateStop;
@@ -286,7 +291,7 @@
           <label text="train stop {$liveJourney.currentIntermediateStop}" row={2}  />
         {:else}
 
-          <SupportBox row={0} text="Du musst von {currentSection.departure.place.name} nach {currentSection.arrival.place.name}" type={$multiModality.primary === 'auditory' ? 'big' : 'small'} class="m-b-m" />
+          <SupportBox row={0} text={currentSupportBoxText} type={$multiModality.primary === 'auditory' ? 'big' : 'small'} class="m-b-m" />
 
           <label text={transportTypeToIcon(currentSection.transport.mode)} class="icon text-center fs-3xl" row={1} on:tap={simulateNextStep} />
 

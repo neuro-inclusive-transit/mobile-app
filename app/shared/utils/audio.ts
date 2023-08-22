@@ -8,9 +8,9 @@ const soundFiles = {
   hero: '~/media/hero_simple-celebration-03.wav',
 };
 
-let playerOptions: AudioPlayerOptions = {
-  audioFile: '',
+let genericPlayerOptions: Omit<AudioPlayerOptions, 'audioFile'> = {
   loop: false,
+  audioMixing: true,
   errorCallback: function (errorObject: any) {
     console.log(JSON.stringify(errorObject));
   },
@@ -26,7 +26,10 @@ let playerOptions: AudioPlayerOptions = {
  * @throws Error if sound file is not found
  */
 export function playSound(soundFile: keyof(typeof soundFiles)) {
-  playerOptions.audioFile = soundFiles[soundFile];
+  let playerOptions: AudioPlayerOptions = {
+    ...genericPlayerOptions,
+    audioFile: soundFiles[soundFile],
+  };
 
   console.log('play', playerOptions.audioFile);
 
