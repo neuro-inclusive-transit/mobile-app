@@ -1,11 +1,12 @@
 <script type="ts">
-  import { navigate, showModal } from "svelte-native";
-  import { tick } from 'svelte';
-  import { confirm } from '@nativescript/core/ui/dialogs'
-  import { journeys, liveJourney, multiModality } from "~/stores";
-  import { routeApi,  } from "~/api";
-  import { speak } from "~/shared/utils/tts";
-  import { playSound } from "~/shared/utils/index";
+  import { showModal } from "svelte-native";
+  import { tick, onMount } from 'svelte';
+  import { confirm } from '@nativescript/core/ui/dialogs';
+  import * as geolocation from "@nativescript/geolocation";
+
+  import { LiveJourney, journeys, liveJourney, multiModality } from "~/stores";
+  import { routeApi } from "~/api";
+  import { speak, playSound } from "~/shared/utils/index";
   import { transportTypeToIcon } from "~/shared/utilites";
 
   import Contacts from "./Contacts.svelte";
@@ -13,13 +14,38 @@
   import SupportBox from "~/shared/components/SupportBox.svelte";
   import Button from "~/shared/components/Button.svelte";
 
-  $: currentLocation = $liveJourney === null ? null : ((section) => {
-    if (section === false) return null;
-    return {
-      lat: section.departure.place.location.lat,
-      lng: section.departure.place.location.lng,
-    };
-  })($liveJourney.sections[$liveJourney.currentSection]);
+  let time = new Date();
+
+  onMount(() => {
+		const interval = setInterval(() => {
+			time = new Date();
+		}, 1000);
+
+		return () => {
+			clearInterval(interval);
+		};
+	});
+
+
+  let currentLocation: Record<'lat' | 'lng', number> | null = null;
+
+  // TODO: clear watch when journey is finished
+  let locationWatchId = geolocation.watchLocation(
+    (loc) => {
+      currentLocation = {
+        lat: loc.latitude,
+        lng: loc.longitude,
+      };
+    },
+    (e) => {
+      console.log("Error: " + e.message);
+    },
+    {
+      desiredAccuracy: 3,
+      updateDistance: 10,
+      minimumUpdateTime: 1000 * 5,
+    }
+  );
 
 
   // resolved when route calculation is finished
@@ -28,54 +54,91 @@
     resolve(null);
   });
 
-  async function simulateNextStep() {
+  $: currentSection = $liveJourney?.sections[$liveJourney.currentSection];
+
+  // TODO: initial state
+  let nextTime = new Date();
+
+  $: if ($liveJourney !== null && nextTime >= time) {
+
+    // TODO: ask user if he not there yet and wants to recalculate
+
+    let nextIteration = getNextIteration();
+    if (nextIteration) {
+      let { nextSection, nextAction, nextIntermediateStop } = nextIteration;
+
+      $liveJourney.currentSection = nextSection;
+      $liveJourney.currentAction = nextAction;
+      $liveJourney.currentIntermediateStop = nextIntermediateStop;
+
+      // play sound
+      if ($multiModality.primary === 'auditory') {
+        tick().then(() => {
+          playAction();
+        });
+      }
+
+      let section = $liveJourney.sections[$liveJourney.currentSection];
+      if (section) {
+        nextTime = new Date(section.arrival.time);
+      }
+    }
+  }
+
+  function simulateNextStep() {
     if ($liveJourney === null) return;
 
+    let nextIteration = getNextIteration();
+    if (nextIteration === null) return;
 
-    // iterate actions
-    if (currentSection && currentSection.actions && currentSection.actions.length > $liveJourney.currentAction + 1) {
-      $liveJourney.currentAction++;
-      if ($multiModality.primary === 'auditory') {
-        await tick();
-        await playAction();
-      }
-      return;
-    }
+    let { nextSection, nextAction, nextIntermediateStop } = nextIteration;
 
-    // iterate intermediate stops
-    if (currentSection && currentSection.intermediateStops && currentSection.intermediateStops.length > $liveJourney.currentIntermediateStop + 1) {
-      $liveJourney.currentIntermediateStop++;
-      if ($multiModality.primary === 'auditory') {
-        await tick();
-        await playAction();
-      }
-      return;
-    }
+    $liveJourney.currentSection = nextSection;
+    $liveJourney.currentAction = nextAction;
+    $liveJourney.currentIntermediateStop = nextIntermediateStop;
 
-    // start over again if we reached the end of the journey
-    if ($liveJourney.currentSection >= $liveJourney.sections.length - 1) {
-      $liveJourney.currentSection = 0;
-      $liveJourney.currentAction = 0;
-      $liveJourney.currentIntermediateStop = 0;
-
-      if ($multiModality.primary === 'auditory') {
-        await tick();
-        await playAction();
-      }
-      return;
-    }
-
-    // skip sections that are false (e.g. user has paused the journey)
-    do {
-      $liveJourney.currentSection++;
-    } while ($liveJourney.sections[$liveJourney.currentSection] === false);
-
-    $liveJourney.currentAction = 0;
-    $liveJourney.currentIntermediateStop = 0;
-
+    // play sound
     if ($multiModality.primary === 'auditory') {
-      await tick();
-      await playAction();
+      tick().then(() => {
+        playAction();
+      });
+    }
+  }
+
+  function getNextIteration(): {
+    nextSection: LiveJourney["currentSection"];
+    nextAction: LiveJourney["currentAction"];
+    nextIntermediateStop: LiveJourney["currentIntermediateStop"];
+  } | null {
+    if ($liveJourney === null) return null;
+    if (!currentSection) return null;
+
+    if (currentSection && currentSection.actions && currentSection.actions.length > $liveJourney.currentAction + 1) {
+      // iterate actions
+      return {
+        nextSection: $liveJourney.currentSection,
+        nextAction: $liveJourney.currentAction + 1,
+        nextIntermediateStop: $liveJourney.currentIntermediateStop,
+      };
+    } else if (currentSection && currentSection.intermediateStops && currentSection.intermediateStops.length > $liveJourney.currentIntermediateStop + 1) {
+      // iterate intermediate stops
+      return {
+        nextSection: $liveJourney.currentSection,
+        nextAction: $liveJourney.currentAction,
+        nextIntermediateStop: $liveJourney.currentIntermediateStop + 1,
+      };
+    } else {
+      // iterate sections (but skip pause sections)
+      let nextSection = $liveJourney.currentSection;
+      do {
+        nextSection = nextSection + 1;
+      } while ($liveJourney.sections[nextSection] === false);
+
+      return {
+        nextSection,
+        nextAction: 0,
+        nextIntermediateStop: 0,
+      };
     }
   }
 
@@ -184,19 +247,10 @@
     });
   }
 
-  /* live:
-  $: currentSection = currentLive.sections.findIndex((section) => {
-    const now = new Date();
-    const begin = new Date(section.departure.time);
-    const end = new Date(section.arrival.time);
-    return begin <= now && now <= end;
-  });
-  */
-  /* debug: */
-  $: currentSection = $liveJourney?.sections[$liveJourney.currentSection];
+
 </script>
 
-<page class="bg-default">
+<page class="bg-default" on:navigatingTo={async () => await geolocation.enableLocationRequest()}>
   <actionBar title="Live-Ansicht" />
 
   {#if $liveJourney === null || currentSection === undefined || currentSection === false}
@@ -274,11 +328,18 @@
         <gridLayout row="3" columns="*, auto, *">
           <Button text="Gesamtübersicht anzeigen" icon="route" iconPosition="pre" type="secondary" column={1} on:tap={openRouteOverview} class="m-b-m {$multiModality.primary === 'auditory' ? 'fs-l' : ''}"/>
         </gridLayout>
-        <gridLayout columns="*, *, *, *, *" rows="auto" row={4} class="m-b-m p-s bg-primary-light border-radius">
-          <Button column={0} columnSpan={2} text="Pause" icon="local_cafe" iconPosition="pre" on:tap={togglePause} />
-          <Button column={2} icon="contacts" on:tap={openContacts} class="m-l-s"/>
-          <Button column={3} icon="warning" class="m-l-s" />
-          <Button column={4} icon={$multiModality.primary === 'auditory' ? 'volume_up' : 'volume_off'} class="m-l-s" on:tap={toggleAudio} />
+        <gridLayout columns="*, *, *, *, *" rows="auto,auto" row={4} class="m-b-m p-s bg-primary-light border-radius">
+
+          {#await geolocation.isEnabled() then isEnabled}
+          <label text={
+            (currentLocation ? currentLocation.lat + '/' + currentLocation.lng : `no location (${isEnabled ? 'enabled' : 'disabled' } ${locationWatchId})`)
+          } row={0} column={0} columnSpan={4} />
+          {/await}
+
+          <Button column={0} row={1} columnSpan={2} text="Pause" icon="local_cafe" iconPosition="pre" on:tap={togglePause} />
+          <Button column={2} row={1} icon="contacts" on:tap={openContacts} class="m-l-s"/>
+          <Button column={3} row={1} icon="warning" class="m-l-s" />
+          <Button column={4} row={1} icon={$multiModality.primary === 'auditory' ? 'volume_up' : 'volume_off'} class="m-l-s" on:tap={toggleAudio} />
         </gridLayout>
 
       {/if}

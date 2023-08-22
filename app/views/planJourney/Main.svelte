@@ -2,6 +2,7 @@
   import { navigate, showModal } from "svelte-native";
   import { EventData, } from "@nativescript/core";
   import { confirm } from '@nativescript/core/ui/dialogs'
+  import * as geolocation from "@nativescript/geolocation";
 
   import Route from "~/shared/components/Route.svelte";
   import { printReminder } from "~/shared/components/Route.svelte";
@@ -43,7 +44,7 @@
 
       // TODO: check if current journey is selected journey
 
-      function updateLiveView() {
+      async function updateLiveView() {
         $liveJourney = {
           ...journey,
           isPaused: false,
@@ -51,6 +52,9 @@
           currentAction: 0,
           currentIntermediateStop: 0,
         };
+
+        await geolocation.enableLocationRequest();
+
         $tabIndex = 1;
       }
 
