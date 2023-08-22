@@ -98,10 +98,13 @@
     if (action === 'depart') return 'start';
     if (action === 'arrive') return 'flag';
     if (action === 'continue') return 'straight';
-    if (action === 'roundaboutExit' && direction === 'left') return 'roundabout_right';
-    if (action === 'roundaboutExit' && direction === 'right') return 'roundabout_left';
+    if (action === 'roundaboutExit' && direction === 'right') return 'roundabout_right';
+    if (action === 'roundaboutExit' && direction === 'left') return 'roundabout_left';
+    if (action === 'roundaboutEnter' && direction === 'right') return 'roundabout_right';
+    if (action === 'roundaboutEnter' && direction === 'left') return 'roundabout_left';
     if (action === 'turn' && direction === 'left') return 'turn_left';
     if (action === 'turn' && direction === 'right') return 'turn_right';
+    console.log('action', action, direction);
     return 'next_plan';
   }
 
@@ -242,22 +245,30 @@
 
           <label text="Karte tbd. Zwischenziel: {currentSection.arrival.place.name ?? currentSection.arrival.place.location.lat + '/' + currentSection.arrival.place.location.lng}" textWrap={true} row={2}  />
 
-        {:else if currentSection.intermediateStops && currentSection.intermediateStops.length > 0}
+        {:else if currentSection.intermediateStops}
 
           <SupportBox row={0} text={(() => {
             let id = $liveJourney.currentIntermediateStop;
             let stop = currentSection.intermediateStops[id];
 
+            if (currentSection.intermediateStops.length === 0) {
+              return `Steige bei ${currentSection.departure.place.name} in die ${currentSection.transport.name} Richtung ${currentSection.transport.headsign} ein und steige bei ${currentSection.arrival.place.name} wieder aus.`;
+            }
+
             switch (id) {
               case 0: return `Steige bei ${stop.departure.place.name} in die ${currentSection.transport.name} Richtung ${currentSection.transport.headsign} ein.`;
               case currentSection.intermediateStops.length - 1: return `Gehe zum Ausgang und steige bei ${currentSection.arrival.place.name} aus.`;
-              default: return `Du bist im richtigen Transportmittel. Noch ${currentSection.intermediateStops.length - $liveJourney.currentIntermediateStop} Haltestellen bis du aussteigen musst.`;
+              default: return `Du bist im richtigen Transportmittel.`;
             }
           })()} type={$multiModality.primary === 'auditory' ? 'big' : 'small'} class="m-b-m" />
 
           <label class="icon text-center fs-3xl" on:tap={simulateNextStep} row={1} text={(() => {
             let id = $liveJourney.currentIntermediateStop;
             let stop = currentSection.intermediateStops[id];
+
+            if (currentSection.intermediateStops.length === 0) {
+              return `${transportTypeToIcon(currentSection.transport.mode)} arrow_forward door_sliding`;
+            }
 
             switch (id) {
               case 0: return `arrow_forward ${transportTypeToIcon(currentSection.transport.mode)}`;
@@ -267,6 +278,13 @@
           })()} />
 
           <label text="train stop {$liveJourney.currentIntermediateStop}" row={2}  />
+        {:else}
+
+          <SupportBox row={0} text="Du musst von {currentSection.departure.place.name} nach {currentSection.arrival.place.name}" type={$multiModality.primary === 'auditory' ? 'big' : 'small'} class="m-b-m" />
+
+          <label text={transportTypeToIcon(currentSection.transport.mode)} class="icon text-center fs-3xl" row={1} on:tap={simulateNextStep} />
+
+          <label text="Karte tbd. Ziel: {currentSection.arrival.place.name ?? currentSection.arrival.place.location.lat + '/' + currentSection.arrival.place.location.lng}" textWrap={true} row={2}  />
 
         {/if}
 
