@@ -191,18 +191,24 @@
       </stackLayout>
     {:then _}
 
-      <gridLayout columns="*" rows="auto, auto, *, auto, auto" class="main-layout">
+    <gridLayout columns="*" rows="auto, auto, *, auto, auto" class="main-layout">
 
       {#if $liveJourney.isPaused}
 
-      <label text="Die Routenführung wurde gestoppt. Steige an der nächsten Haltestelle aus und mache eine Pause" textWrap={true} row={0} rowSpan={3} class="bg-primary-light" />
+      <SupportBox text="Die Routenführung wurde gestoppt. Steige an der nächsten Haltestelle aus und mache eine Pause" textWrap={true} row={0} type={$multiModality.primary === 'auditory' ? 'big' : 'small'} class="m-b-m" />
 
-      <button text="Gesamtübersicht anzeigen" row={3} on:tap={openRouteOverview} />
-      <flexboxLayout class="bg-primary-light color-primary" row={4} >
-        <button text="Pause beenden" on:tap={togglePause} />
-        <button text="call" class="icon" on:tap={openContacts} />
-        <button text="warning" class="icon" />
-      </flexboxLayout>
+      <label text="{'local_cafe'}" class="icon text-center {$multiModality.primary === 'auditory' ? 'fs-4xl' : 'fs-3xl'}" row={1}  />
+
+      <gridLayout row={3} columns="*, auto, *">
+         <Button text="Gesamtübersicht anzeigen"  icon="route" iconPosition="pre" type="secondary"  column={1} on:tap={openRouteOverview} class="m-b-m {$multiModality.primary === 'auditory' ? 'fs-l' : ''}" />
+      </gridLayout>
+
+
+      <gridLayout columns="*, *, *, *, *" rows="auto" row={4} class="m-b-m p-s bg-primary-light border-radius">
+        <Button column={0} columnSpan={3} text="Pause beendet" icon="local_cafe" iconPosition="pre" on:tap={togglePause} />
+        <Button column={3} icon="contacts" on:tap={openContacts} class="m-l-s"/>
+        <Button column={4} icon={$multiModality.primary === 'auditory' ? 'volume_up' : 'volume_off'} class="m-l-s" on:tap={toggleAudio} />
+      </gridLayout>
 
       {:else}
 
