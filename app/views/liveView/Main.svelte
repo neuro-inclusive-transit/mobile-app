@@ -185,14 +185,22 @@
       let stop = currentSection.intermediateStops[id];
 
       if (currentSection.intermediateStops.length === 0) {
-        return `Steige bei ${currentSection.departure.place.name} in die ${currentSection.transport.name} Richtung ${currentSection.transport.headsign} ein und steige bei ${currentSection.arrival.place.name} wieder aus.`;
+        currentSupportBoxText = `Steige bei ${currentSection.departure.place.name} in die ${currentSection.transport.name} Richtung ${currentSection.transport.headsign} ein und steige bei ${currentSection.arrival.place.name} wieder aus.`;
+      } else {
+        switch (id) {
+          case 0:
+            currentSupportBoxText = `Steige bei ${stop.departure.place.name} in die ${currentSection.transport.name} Richtung ${currentSection.transport.headsign} ein.`;
+            break;
+          case currentSection.intermediateStops.length - 1:
+            currentSupportBoxText = `Gehe zum Ausgang und steige bei ${currentSection.arrival.place.name} aus.`;
+            break;
+          default:
+            currentSupportBoxText = `Du bist im richtigen Transportmittel.`;
+            break;
+        }
       }
 
-      switch (id) {
-        case 0: return `Steige bei ${stop.departure.place.name} in die ${currentSection.transport.name} Richtung ${currentSection.transport.headsign} ein.`;
-        case currentSection.intermediateStops.length - 1: return `Gehe zum Ausgang und steige bei ${currentSection.arrival.place.name} aus.`;
-        default: return `Du bist im richtigen Transportmittel.`;
-      }
+
     } else {
       currentSupportBoxText = `Du musst von {currentSection.departure.place.name} nach {currentSection.arrival.place.name}`;
     }
