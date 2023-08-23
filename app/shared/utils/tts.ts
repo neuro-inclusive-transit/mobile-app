@@ -2,8 +2,7 @@ import { TNSTextToSpeech, SpeakOptions } from 'nativescript-texttospeech';
 
 const TTS = new TNSTextToSpeech();
 
-let speakOptions: SpeakOptions = {
-  text: '',
+let genericSpeakOptions: Omit<SpeakOptions, 'text'> = {
   speakRate: 0.55,
   locale: 'de-DE',
 };
@@ -14,6 +13,11 @@ let speakOptions: SpeakOptions = {
  * @returns Promise<void> Resolves when speaking is done
  */
 export function speak(text: string) {
-  speakOptions.text = text;
-  return TTS.speak(speakOptions);
+  let TTS = new TNSTextToSpeech();
+  return TTS.speak({
+    ...genericSpeakOptions,
+    text,
+  }).then(() => {
+    TTS.destroy();
+  });
 }
