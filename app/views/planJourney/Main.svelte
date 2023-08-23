@@ -47,6 +47,7 @@
         $liveJourney = {
           ...journey,
           isPaused: false,
+          isCompleted: false,
           currentSection: 0,
           currentAction: 0,
           currentIntermediateStop: 0,
