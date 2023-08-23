@@ -10,9 +10,9 @@
 </script>
 <gridLayout class="button-style">
     <stackLayout orientation="horizontal" on:tap>
-      <label class={hasIcon
-        ? "icon button-withIcon"
-        : "button-withoutIcon" } text="{icon}"/>
+      {#if hasIcon}
+      <label class="icon button-icon" text="{icon}"/>
+      {/if}
       <label class="button-text" text="{label}"/>
     </stackLayout>
 </gridLayout>
@@ -32,13 +32,9 @@
           font-size: var(--m);
       }
 
-      .button-withIcon {
+      .button-icon {
           color: var(--color-primary);
           padding-right: calc(var(--base-s)*8px);
-      }
-
-      .button-withoutIcon {
-          visibility: hidden;
       }
 
       .button-text {
