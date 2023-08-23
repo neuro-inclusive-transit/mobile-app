@@ -9,6 +9,10 @@
   import Button from "~/shared/components/Button.svelte";
   import { enumKeys } from "~/shared/utilites";
 
+  import BigButton from "~/shared/components/BigButton.svelte"
+
+  import {generateIcon} from "~/shared/utils/icons"
+
   function select(mode: CompanionMode) {
     $planJourney.companionMode = mode;
   }
@@ -37,7 +41,7 @@
     <label text="Bei der Reise ist mir besonders wichtig? " />
     {#each enumKeys(CompanionMode) as mode} }
       <stackLayout>
-        <button text="{L('companion_mode.' + CompanionMode[mode])}" on:tap={() => select(CompanionMode[mode])}  />
+        <BigButton icon={generateIcon(CompanionMode[mode])} label="{L('companion_mode.' + CompanionMode[mode])}" on:tap={() => select(CompanionMode[mode])} />
       </stackLayout>
     {/each}
 
