@@ -1,11 +1,17 @@
 <script type="ts">
-  import { navigate } from "svelte-native";
+  import { navigate, showModal } from "svelte-native";
+  import { tick } from 'svelte';
   import { confirm } from '@nativescript/core/ui/dialogs'
-  import { journeys, liveJourney } from "~/stores";
+  import { journeys, liveJourney, multiModality } from "~/stores";
   import { routeApi,  } from "~/api";
+  import { speak } from "~/shared/utils/tts";
+  import { playSound } from "~/shared/utils/index";
+  import { transportTypeToIcon } from "~/shared/utilites";
 
   import Contacts from "./Contacts.svelte";
   import RouteOverview from "./RouteOverview.svelte";
+  import SupportBox from "~/shared/components/SupportBox.svelte";
+  import Button from "~/shared/components/Button.svelte";
 
   $: currentLocation = $liveJourney === null ? null : ((section) => {
     if (section === false) return null;
@@ -22,26 +28,61 @@
     resolve(null);
   });
 
-  function simulateNextStep() {
+  async function simulateNextStep() {
     if ($liveJourney === null) return;
 
 
+    // iterate actions
     if (currentSection && currentSection.actions && currentSection.actions.length > $liveJourney.currentAction + 1) {
       $liveJourney.currentAction++;
+      if ($multiModality.primary === 'auditory') {
+        await tick();
+        await playAction();
+      }
       return;
     }
 
+    // iterate intermediate stops
+    if (currentSection && currentSection.intermediateStops && currentSection.intermediateStops.length > $liveJourney.currentIntermediateStop + 1) {
+      $liveJourney.currentIntermediateStop++;
+      if ($multiModality.primary === 'auditory') {
+        await tick();
+        await playAction();
+      }
+      return;
+    }
+
+    // start over again if we reached the end of the journey
     if ($liveJourney.currentSection >= $liveJourney.sections.length - 1) {
       $liveJourney.currentSection = 0;
       $liveJourney.currentAction = 0;
+      $liveJourney.currentIntermediateStop = 0;
+
+      if ($multiModality.primary === 'auditory') {
+        await tick();
+        await playAction();
+      }
       return;
     }
 
+    // skip sections that are false (e.g. user has paused the journey)
     do {
       $liveJourney.currentSection++;
-      $liveJourney.currentAction = 0;
     } while ($liveJourney.sections[$liveJourney.currentSection] === false);
 
+    $liveJourney.currentAction = 0;
+    $liveJourney.currentIntermediateStop = 0;
+
+    if ($multiModality.primary === 'auditory') {
+      await tick();
+      await playAction();
+    }
+  }
+
+  async function playAction () {
+    await playSound("passiveNotification");
+
+    return speak(currentSupportBoxText);
   }
 
   function getActionIcon(action: string, direction?: string) {
@@ -56,15 +97,26 @@
   }
 
   function openRouteOverview() {
-    navigate({
+    console.log('open route overview');
+    showModal({
       page: RouteOverview as any
     });
   }
 
   function openContacts() {
-    navigate({
+    showModal({
       page: Contacts as any
     });
+  }
+
+  function toggleAudio() {
+    if ($multiModality.primary === 'auditory') {
+      $multiModality.primary = 'visual';
+      return;
+    }
+
+    $multiModality.primary = 'auditory';
+    playAction();
   }
 
   async function togglePause() {
@@ -123,6 +175,25 @@
     });
   }
 
+  let currentSupportBoxText = '';
+
+  $: if ($liveJourney && currentSection) {
+    if ($liveJourney.isPaused) {
+      currentSupportBoxText = "Die Routenführung wurde gestoppt. Steige an der nächsten Haltestelle aus und mache eine Pause.";
+    } else if (currentSection.actions && currentSection.actions.length > 0) {
+      currentSupportBoxText = currentSection.actions[$liveJourney.currentAction].instruction;
+    } else if (currentSection.intermediateStops && currentSection.intermediateStops.length > 0) {
+      let id = $liveJourney.currentIntermediateStop;
+      let stop = currentSection.intermediateStops[id];
+
+      switch (id) {
+        case 0: return `Steige bei ${stop.departure.place.name} in die ${currentSection.transport.name} Richtung ${currentSection.transport.headsign} ein.`;
+        case currentSection.intermediateStops.length - 1: return `Gehe zum Ausgang und steige bei ${currentSection.arrival.place.name} aus.`;
+        default: return `Du bist im richtigen Transportmittel. Noch ${currentSection.intermediateStops.length - $liveJourney.currentIntermediateStop} Haltestellen bis du aussteigen musst.`;
+      }
+    }
+  }
+
   /* live:
   $: currentSection = currentLive.sections.findIndex((section) => {
     const now = new Date();
@@ -136,7 +207,7 @@
 </script>
 
 <page class="bg-default">
-  <actionBar title="Live-Ansicht" />
+  <actionBar title="Begleitung" />
 
   {#if $liveJourney === null || currentSection === undefined || currentSection === false}
 
@@ -159,7 +230,7 @@
 
       {#if $liveJourney.isPaused}
 
-      <label text="Die Routenführung wurde gestoppt. Steige an der nächsten Haltestelle aus und mache eine Pause" textWrap={true} row={0} rowSpan={3} class="bg-primary-light" />
+      <label text={currentSupportBoxText} textWrap={true} row={0} rowSpan={3} class="bg-primary-light" />
 
       <button text="Gesamtübersicht anzeigen" row={3} on:tap={openRouteOverview} />
       <flexboxLayout class="bg-primary-light color-primary" row={4} >
@@ -170,34 +241,46 @@
 
       {:else}
 
-      <label text="Zwischenziel: {currentSection.arrival.place.name ?? currentSection.arrival.place.location.lat + '/' + currentSection.arrival.place.location.lng} {currentSection.actions ? currentSection.actions[$liveJourney.currentAction].instruction : 'Keine Aktion'}" textWrap={true} row={0} class="bg-primary-light" />
+        {#if currentSection.actions && currentSection.actions.length > 0}
+
+          <SupportBox row={0} text="{currentSupportBoxText}" type={$multiModality.primary === 'auditory' ? 'big' : 'small'} class="m-b-m" />
+
+          <label text="{currentSection.actions ? getActionIcon(
+            currentSection.actions[$liveJourney.currentAction].action,
+            currentSection.actions[$liveJourney.currentAction].direction
+          ): 'warning'}" class="icon text-center {$multiModality.primary === 'auditory' ? 'fs-4xl' : 'fs-3xl'}" on:tap={simulateNextStep} row={1}  />
+
+          <label text="Karte tbd. Zwischenziel: {currentSection.arrival.place.name ?? currentSection.arrival.place.location.lat + '/' + currentSection.arrival.place.location.lng}" textWrap={true} row={2}  />
+
+        {:else if currentSection.intermediateStops && currentSection.intermediateStops.length > 0}
+
+          <SupportBox row={0} text={currentSupportBoxText} type={$multiModality.primary === 'auditory' ? 'big' : 'small'} class="m-b-m" />
+
+          <label class="icon text-center fs-3xl" on:tap={simulateNextStep} row={1} text={(() => {
+            let id = $liveJourney.currentIntermediateStop;
+            let stop = currentSection.intermediateStops[id];
+
+            switch (id) {
+              case 0: return `arrow_forward ${transportTypeToIcon(currentSection.transport.mode)}`;
+              case currentSection.intermediateStops.length - 1: return `arrow_forward door_sliding`;
+              default: return `airline_seat_recline_normal`;
+            }
+          })()} />
+
+          <label text="train stop {$liveJourney.currentIntermediateStop}" row={2}  />
+
+        {/if}
 
 
-      {#if currentSection.transport.mode === 'pedestrian'}
-        <label text="{currentSection.actions ? getActionIcon(
-          currentSection.actions[$liveJourney.currentAction].action,
-          currentSection.actions[$liveJourney.currentAction].direction
-        ): 'warning'}" class="icon fs-3xl text-center" on:tap={simulateNextStep} row={1}  />
-        <label text="Karte tbd." row={2}  />
-      {:else}
-        <label class="icon text-center" on:tap={simulateNextStep} row={1} >
-          <formattedString>
-            <span text="directions_walk" class="fs-3xl" />
-            <span text="arrow_forward" />
-            <span text="door_sliding" class="fs-3xl" />
-          </formattedString>
-        </label>
-        <label text="train" row={2}  />
-      {/if}
-
-
-      <button text="Gesamtübersicht anzeigen" row={3} on:tap={openRouteOverview} />
-      <flexboxLayout class="bg-primary-light color-primary" row={4}>
-        <button text="local_cafe" class="icon" on:tap={togglePause} />
-        <button text="contacts" class="icon" on:tap={openContacts} />
-        <button text="warning" class="icon" />
-        <button text="volume_off" class="icon" />
-      </flexboxLayout>
+        <gridLayout row="3" columns="*, auto, *">
+          <Button text="Gesamtübersicht anzeigen" icon="route" iconPosition="pre" type="secondary" column={1} on:tap={openRouteOverview} class="m-b-m {$multiModality.primary === 'auditory' ? 'fs-l' : ''}"/>
+        </gridLayout>
+        <gridLayout columns="*, *, *, *, *" rows="auto" row={4} class="m-b-m p-s bg-primary-light border-radius">
+          <Button column={0} columnSpan={2} text="Pause" icon="local_cafe" iconPosition="pre" on:tap={togglePause} />
+          <Button column={2} icon="contacts" on:tap={openContacts} class="m-l-s"/>
+          <Button column={3} icon="warning" class="m-l-s" />
+          <Button column={4} icon={$multiModality.primary === 'auditory' ? 'volume_up' : 'volume_off'} class="m-l-s" on:tap={toggleAudio} />
+        </gridLayout>
 
       {/if}
 

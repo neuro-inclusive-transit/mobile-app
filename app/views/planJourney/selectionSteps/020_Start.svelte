@@ -37,8 +37,8 @@
     <button text={L('close')} on:tap="{closeBottomSheet}" class="link" />
     <DepartureDestinationSwitcher departure={$planJourney.departure?.name} destination={$planJourney.arrival?.name}/>
 
-    <Button content="Jetzt Reise starten" icon="navigation" on:tap="{onPlanNow}" />
-    <Button content="Für später starten" icon="calendar_month" type="secondary" on:tap="{onPlanLater}" />
+    <Button text="Jetzt Reise starten" icon="navigation" on:tap="{onPlanNow}" />
+    <Button text="Für später starten" icon="calendar_month" type="secondary" on:tap="{onPlanLater}" />
   </stackLayout>
 
 </page>

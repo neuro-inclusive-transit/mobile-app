@@ -103,6 +103,6 @@
       </Template>
     </listView>
 
-    <Button content="Zurück" icon="chevron_left" iconPosition="pre" on:tap={onTapBack} />
+    <Button text="Zurück" icon="chevron_left" iconPosition="pre" on:tap={onTapBack} />
   </stackLayout>
 </page>

@@ -113,12 +113,12 @@
     {/await}
 
     <stackLayout row={5} col={0}>
-      <Button content="Mehr Routen" on:tap="{() => {numOfAlternatives += 3; calculateOptions()}}" />
+      <Button text="Mehr Routen" on:tap="{() => {numOfAlternatives += 3; calculateOptions()}}" />
     </stackLayout>
 
 
     <stackLayout row={6} col={0}>
-      <Button content="Zurück" icon="chevron_left" on:tap="{onNavigateBack}" iconPosition="pre" type="secondary" />
+      <Button text="Zurück" icon="chevron_left" on:tap="{onNavigateBack}" iconPosition="pre" type="secondary" />
      </stackLayout>
 
 
