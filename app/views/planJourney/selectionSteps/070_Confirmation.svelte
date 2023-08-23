@@ -7,7 +7,17 @@
   import { CompanionMode, JourneyPlanMode, PreferredJourneyMode, PreferredTransportation } from "~/types"
   import Button from "~/shared/components/Button.svelte";
 
+  import { printDate } from "~/shared/utils";
+  import { getTime } from "~/shared/utils";
+
   // TODO: Preference
+
+  function checkTime(time: string) {
+    if (time == "Heute") return "heute"
+    if (time == "Morgen") return "morgen"
+
+    return "am " + time
+  }
 
   // save & reset
   const plannedJourney = Object.assign({}, $planJourney);
@@ -37,7 +47,8 @@
 
     <label text="Super!" />
     <label text="Du hast deine Reise von {plannedJourney.departure?.name} nach {plannedJourney.arrival?.name} geplant" textWrap="true" />
-    <label text="Du musst {plannedJourney.time.value} los. Wir erinnern dich!" textWrap="true" />
+    <label text="Du musst {checkTime(printDate(plannedJourney.time.value))} um {getTime(plannedJourney.time.value)} Uhr los." />
+    <label text="Wir erinnern dich {$planJourney.reminderBefore} Minuten vorher!" textWrap="true" />
 
   </stackLayout>
 </page>
