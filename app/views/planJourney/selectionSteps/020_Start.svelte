@@ -30,12 +30,18 @@
     planJourney.reset();
     closeModal(true);
   }
+
+  function onSwitchValues() {
+    let tmp = $planJourney.departure
+    $planJourney.departure = $planJourney.arrival
+    $planJourney.arrival = tmp
+  }
 </script>
 
 <page actionBarHidden={true}  class="bg-default">
   <stackLayout class="main-layout">
     <button text={L('close')} on:tap="{closeBottomSheet}" class="link" />
-    <DepartureDestinationSwitcher departure={$planJourney.departure?.name} destination={$planJourney.arrival?.name}/>
+    <DepartureDestinationSwitcher departure={$planJourney.departure?.name} destination={$planJourney.arrival?.name} on:switchValues={onSwitchValues}/>
 
     <Button text="Jetzt Reise starten" icon="navigation" on:tap="{onPlanNow}" />
     <Button text="Für später starten" icon="calendar_month" type="secondary" on:tap="{onPlanLater}" />
