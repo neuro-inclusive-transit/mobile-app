@@ -44,6 +44,7 @@
       </stackLayout>
     {/each}
     <!-- TODO: selbst eintragen -->
+    <label text="Erinnerung: {$planJourney.reminderBefore} Minuten vorher" />
     <Button text="Zurück" icon="chevron_left" iconPosition="pre" type="secondary" on:tap="{onNavigateBack}" />
     <Button text="Weiter" icon="chevron_right" iconPosition="post" on:tap="{onNavigateNext}" />
 
