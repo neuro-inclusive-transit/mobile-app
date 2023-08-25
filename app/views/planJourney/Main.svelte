@@ -3,6 +3,9 @@
   import { EventData, } from "@nativescript/core";
   import { confirm } from '@nativescript/core/ui/dialogs'
 
+  import { MQTTClient, ClientOptions, SubscribeOptions, ConnectionOptions } from "@edusperoni/nativescript-mqtt";
+  import {Message} from "@edusperoni/nativescript-mqtt/common";
+
   import Route from "~/shared/components/Route.svelte";
   import { printReminder } from "~/shared/components/Route.svelte";
   import Button from "~/shared/components/Button.svelte";
@@ -11,6 +14,77 @@
   import { calcDurationBetween, printTime, printDate} from "~/shared/utils/time"
 
   import { Journey, journeys, liveJourney, tabIndex } from "~/stores";
+  import { connectionType } from "@nativescript/core/connectivity";
+
+  class MyMQTT {
+    mqtt_host: string = "localhost";
+    mqtt_port: number = 1883;
+    mqtt_username: string = "";
+    mqtt_password: string = "";
+    mqtt_useSSL: boolean = false;
+    mqtt_cleanSession: boolean = false;
+    mqtt_autoReconnect: boolean = false;
+
+    mqtt_clientOptions: ClientOptions = {
+        host: this.mqtt_host,
+        port: this.mqtt_port
+    };
+
+    mqtt_client: MQTTClient = new MQTTClient(this.mqtt_clientOptions);
+
+    mqtt_topic: string = "sample-topic";
+
+    constructor() {
+        this.setupHandlers();
+    }
+
+    setupHandlers(): void {
+        this.mqtt_client.onConnectionFailure.on((err: any) => {
+            console.log("Connection failed: " + JSON.stringify(err));
+        });
+        this.mqtt_client.onConnectionSuccess.on(() => {
+            console.log("Connected successfully!");
+            this.subscribe();
+        });
+        this.mqtt_client.onConnectionLost.on((err: any) => {
+            console.log("Connection lost: " + JSON.stringify(err));
+        });
+        this.mqtt_client.onMessageArrived.on((message: Message) => {
+            console.log("Message received: " + message.payload);
+        });
+        this.mqtt_client.onMessageDelivered.on((message: Message) => {
+            console.log("Message delivered: " + message.payload);
+        });
+    }
+
+    subscribe(): void {
+        const opts: SubscribeOptions = {
+            qos: 1
+        };
+
+        this.mqtt_client.subscribe(this.mqtt_topic, opts).then(
+            (params) => console.log(`subscribed to ${this.mqtt_topic} with QoS ${params.grantedQos}`),
+            (err) => console.log("error subscribing")
+        );
+    }
+
+    connect(): void {
+        const connOptions: ConnectionOptions = {
+            cleanSession: this.mqtt_cleanSession,
+            useSSL: this.mqtt_useSSL,
+            userName: this.mqtt_username,
+            password: this.mqtt_password
+        };
+        this.mqtt_client.connect(connOptions).then(() => {
+            console.log("connected");
+        }, (err) => {
+            console.log("connection error: " + err);
+        });
+    }
+  }
+
+  let mqtt: MyMQTT = new MyMQTT();
+  mqtt.connect();
 
   function addJourney() {
     showModal({ page: SelectionProcess as any })
