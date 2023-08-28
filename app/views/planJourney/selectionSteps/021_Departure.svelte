@@ -52,7 +52,7 @@
 
 </script>
 
-<SelectionStep nextPage={TimeSelection} bind:this={wrapper}>
+<SelectionStep nextPage={TimeSelection} bind:this={wrapper} showForwards={false}>
   <label slot="header" text="Planung der Reise nach {$planJourney.arrival?.name ?? formatAddress($planJourney.arrival?.address)}" textWrap={true} class="fs-l fw-bold"/>
 
   <stackLayout class="main-layout">

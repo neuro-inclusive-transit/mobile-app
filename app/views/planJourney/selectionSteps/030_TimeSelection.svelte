@@ -1,27 +1,22 @@
 <script type="ts">
-  import { navigate, goBack, closeModal } from "svelte-native";
-  import { localize as L } from '@nativescript/localize'
+  import { showModal } from "svelte-native";
+  import { Frame } from "@nativescript/core";
+
+  import SelectionStep from "./SelectionStep.svelte";
   import JourneyPreferences from "./040_JourneyPreferences.svelte";
-  import { getRootLayout, EventData } from "@nativescript/core";
+  import DatePicker from "./DatePicker.svelte";
+
   import DepartureDestinationSwitcher from "~/shared/components/DepartureDestinationSwitcher.svelte";
   import Button from "~/shared/components/Button.svelte";
-  import { planJourney } from "~/stores"
 
-  function onNavigateBack() {
-    goBack({
-      frame: 'planJourneySelection',
-    });
+  import { getTime, isToday, isTomorrow, printDate } from "~/shared/utils/time";
+
+  import { planJourney } from "~/stores";
+
+  async function openDateModal() {
+    datePickerValue = await showModal({ page: DatePicker as any, target: Frame.topmost().currentPage, props: { date: $planJourney.time.value }});
   }
-  function onNavigateNext() {
-    navigate({
-      page: JourneyPreferences as any, // Type not compatible
-      frame: 'planJourneySelection',
-    });
-  }
-  function closeBottomSheet() {
-    planJourney.reset();
-    closeModal(true);
-  }
+
   function onSwitchValues() {
     let tmp = $planJourney.departure
     $planJourney.departure = $planJourney.arrival
@@ -41,21 +36,35 @@
     timePickerValue.getMilliseconds()
   );
 
+  $: isTodayOrTomorrow = isToday($planJourney.time.value) || isTomorrow($planJourney.time.value);
+
+  function setToday() {
+    datePickerValue = new Date();
+  }
+
+  function setTomorrow() {
+    datePickerValue = new Date(new Date().setDate(new Date().getDate() + 1));
+  }
+
 </script>
 
-<page actionBarHidden={true}  class="bg-default">
-  <stackLayout class="main-layout">
-    <button text={L('close')} on:tap="{closeBottomSheet}" class="link" />
-    <DepartureDestinationSwitcher departure="{$planJourney.departure?.name}" destination="{$planJourney.arrival?.name}" on:switchValues={onSwitchValues} />
-    <label text="Wann startest du deine Reise?" />
+<SelectionStep nextPage={JourneyPreferences}>
+  <DepartureDestinationSwitcher slot="header" departure="{$planJourney.departure?.name}" destination="{$planJourney.arrival?.name}" on:switchValues={onSwitchValues} />
+
+  <gridLayout class="main-layout" columns="*" rows="auto, auto, *, auto">
+    <label text="Wann startest du deine Reise?" textWrap={true} class="fs-l m-b-m"/>
+
+    <gridLayout columns="*, *, auto" class="m-b-m" row={1}>
+      <Button column={0} text={isTodayOrTomorrow ? 'Heute' : 'H'} class="m-r-s" type={(isToday($planJourney.time.value) ? 'primary' : 'secondary')} on:tap={setToday} />
+      <Button column={1} text={isTodayOrTomorrow ? 'Morgen' : 'M'} type={(isTomorrow($planJourney.time.value) ? 'primary' : 'secondary')} class="m-r-s" on:tap={setTomorrow}/>
+      <Button column={2} text={(isTodayOrTomorrow ? '' : printDate($planJourney.time.value))} type={isTodayOrTomorrow ? 'secondary' : 'primary'} icon="calendar_month" on:tap={openDateModal} iconPosition="pre"/>
+    </gridLayout>
+
     <!-- TODO: select ob departure or arrival time -->
-    <datePicker bind:date={datePickerValue} minDate={new Date()} />
-    <timePicker bind:time={timePickerValue} />
+    <timePicker bind:time={timePickerValue} iosPreferredDatePickerStyle="1" row={2} />
 
-    <Button text="Zurück" icon="chevron_left" iconPosition="pre" type="secondary" on:tap="{onNavigateBack}" />
-    <Button text="Weiter" icon="chevron_right" iconPosition="post" on:tap="{onNavigateNext}" />
+    <label text={$planJourney.time.value.toJSON()} textWrap={true} class="fs-xs m-b-m" row={3} />
 
-  </stackLayout>
+  </gridLayout>
 
-
-</page>
+</SelectionStep>

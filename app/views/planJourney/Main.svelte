@@ -1,5 +1,5 @@
 <script type="ts">
-  import { navigate, showModal } from "svelte-native";
+  import { showModal } from "svelte-native";
   import { EventData, } from "@nativescript/core";
   import { confirm } from '@nativescript/core/ui/dialogs'
 
