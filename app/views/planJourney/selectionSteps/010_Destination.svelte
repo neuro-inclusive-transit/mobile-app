@@ -1,9 +1,8 @@
 <script type="ts">
-  import { navigate, closeModal } from "svelte-native";
-  import { Template } from 'svelte-native/components'
-  import { localize as L } from '@nativescript/localize'
+  import SelectionStep from "./SelectionStep.svelte";
+  import type { ItemEventData } from "@nativescript/core";
+
   import Departure from "./011_Departure.svelte";
-  import { getRootLayout, ItemEventData, EventData } from "@nativescript/core";
 
   import Place from "~/shared/components/Place.svelte";
   import Input from "~/shared/components/Input.svelte";
@@ -12,47 +11,35 @@
 
   import { planJourney, places } from "~/stores"
 
+  let wrapper: SelectionStep;
+
   function formatAddress(address: StorePlace['address']) {
     if (!address) return '';
 
     return `${address.street}, ${address.postcode} ${address.city}`;
   }
 
-  function select (place: StorePlace) {
-    $planJourney.arrival = place;
+  function onPlaceTapFactory(place: StorePlace) {
+    return () => {
+      $planJourney.arrival = place;
 
-    navigate({
-      page: Departure as any, // Type not compatible
-      frame: 'planJourneySelection',
-    });
+      wrapper.navForwards();
+    }
   }
 
-  function onItemTap (args: ItemEventData) {
-    const place = $places[args.index];
-
-    select(place);
-  }
-
-  function closeBottomSheet() {
-    planJourney.reset();
-    closeModal(true);
-  }
 </script>
 
-<page class="bg-default">
+<SelectionStep nextPage={Departure} bind:this={wrapper} showBackwards={false} showForwards={false}>
+  <label slot="header" text="Neue Reise planen" class="fs-l"/>
+
   <stackLayout class="main-layout">
-    <button text={L('close')} on:tap="{closeBottomSheet}" class="link" />
-    <label text="Deine Favoriten" class="fs-l fw-bold"/>
-    <listView items="{$places}" height=300 separatorColor="transparent" on:itemTap={onItemTap}>
-      <Template let:item>
-        <Place customIcon={item.icon} name={item.name} address={item.address ? formatAddress(item.address) : ''} />
-      </Template>
-    </listView>
+    <label text="Deine Favoriten" class="fs-m fw-bold m-b-m"/>
+    {#each $places as place}
+      <Place customIcon={place.icon} name={place.name} address={place.address ? formatAddress(place.address) : ''} class="m-b-m" on:tap={onPlaceTapFactory(place)}/>
+    {/each}
 
-    <label text="Anderes Ziel" class="fs-l fw-bold" />
-
-    <Input hint="Dein Ziel" pre="search" elevated />
+    <label text="Anderes Ziel" class="fs-m fw-bold m-b-m m-t-l" />
+    <Input text="Suche nach Ort" pre="search" class="m-b-m" elevated />
   </stackLayout>
 
-  <!-- <ButtonX content="Weiter" icon="chevron_right" on:tap="{navToNextStep}" /> -->
-</page>
+</SelectionStep>
