@@ -1,19 +1,16 @@
 <script type="ts">
-  import { navigate, goBack, closeModal } from "svelte-native";
-  import { Template } from 'svelte-native/components'
-  import { localize as L } from '@nativescript/localize'
-  import { getRootLayout, EventData, CoreTypes, ItemEventData } from "@nativescript/core";
+  import { CoreTypes } from "@nativescript/core";
   import * as geolocation from '@nativescript/geolocation'
 
   import { planJourney, places, Place as StorePlace } from "~/stores"
 
   import Place from "~/shared/components/Place.svelte";
   import Input from "~/shared/components/Input.svelte";
-  import Button from "~/shared/components/Button.svelte";
 
-  import Confirmation from "./070_Confirmation.svelte";
   import Start from "./020_Start.svelte";
-  import Destination from "./010_Destination.svelte";
+  import SelectionStep from "./SelectionStep.svelte";
+
+  let wrapper: SelectionStep;
 
   function formatAddress(address: StorePlace['address']) {
     if (!address) return '';
@@ -21,30 +18,12 @@
     return `${address.street}, ${address.postcode} ${address.city}`;
   }
 
-  function select (place: StorePlace) {
-    $planJourney.departure = place;
+  function onPlaceTapFactory(place: StorePlace) {
+    return () => {
+      $planJourney.departure = place;
 
-    navigate({
-      page: Start as any, // Type not compatible
-      frame: 'planJourneySelection',
-    });
-  }
-
-  function onItemTap(places: StorePlace[]){
-    return function (args: ItemEventData) {
-      const place = places[args.index];
-
-      select(place);
+      wrapper.navForwards();
     }
-  }
-
-  function onTapBack () {
-    goBack();
-  }
-
-  function closeBottomSheet(args: EventData) {
-    planJourney.reset();
-    closeModal(true);
   }
 
   async function getCurrentLocation() {
@@ -73,36 +52,28 @@
 
 </script>
 
-<page actionBarHidden={true} class="bg-default">
-  <stackLayout class="main-layout">
-    <button text={L('close')} on:tap="{closeBottomSheet}" class="link" />
-    <label text="Zielort:" class="fs-l fw-bold"/>
-    <label text="{$planJourney.arrival?.icon} {$planJourney.arrival?.name}" textWrap={true}  class="fs-l fw-bold m-b-m"/>
+<SelectionStep nextPage={Start} bind:this={wrapper}>
+  <label slot="header" text="Deine Reise nach {$planJourney.arrival?.name ?? formatAddress($planJourney.arrival?.address)}" textWrap={true} class="fs-l fw-bold"/>
 
-    <label text="Von wo startest du deine Reise?" class="fs-l m-b-m" textWrap={true} />
+  <stackLayout class="main-layout">
+    <label text="Von wo startest du deine Reise" textWrap={true} class="fs-l m-b-m"/>
 
     {#await getCurrentLocation()}
       ...Lade Standort
-    {:then location}
-      <listView items="{location}" height=100 separatorColor="transparent" on:itemTap={onItemTap(location)}>
-        <Template let:item>
-          <Place customIcon={item.icon} name={item.name} address="{item.location.lat} / {item.location.lng}" />
-        </Template>
-      </listView>
+    {:then locations}
+      {#each locations as location}
+        <Place customIcon={location.icon} name={location.name} address="{location.location.lat} / {location.location.lng}" class="m-b-m" on:tap={onPlaceTapFactory(location)}/>
+      {/each}
     {:catch}
       <Place customIcon="📍" name="Aktueller Standort" address="Standort konnte nicht ermittelt werden" />
     {/await}
 
-    <label text="Anderen Startpunkt" class="fs-l m-b-m m-t-l" textWrap={true} />
+    <label text="Anderer Startpunkt" class="fs-l m-b-m m-t-l" />
+    <Input text="Suche nach Ort" pre="search" class="m-b-m" elevated />
 
-    <Input hint="Dein Startpunkt" pre="search" elevated />
-
-    <listView items="{$places}" height=300 separatorColor="transparent" on:itemTap={onItemTap($places)}>
-      <Template let:item>
-        <Place customIcon={item.icon} name={item.name} address={item.address ? formatAddress(item.address) : ''} />
-      </Template>
-    </listView>
-
-    <Button text="Zurück" icon="chevron_left" iconPosition="pre" on:tap={onTapBack} />
+    {#each $places as place}
+      <Place customIcon={place.icon} name={place.name} address={place.address ? formatAddress(place.address) : ''} class="m-b-m" on:tap={onPlaceTapFactory(place)}/>
+    {/each}
   </stackLayout>
-</page>
+
+</SelectionStep>
