@@ -20,12 +20,12 @@
       frame: "planJourneySelection",
     });
   }
-  export function navForwards() {
-    if (!nextPage) {
+  export function navForwards(page?: any) {
+    if (!nextPage && !page) {
       return;
     }
     navigate({
-      page: nextPage,
+      page: page ? page : nextPage,
       frame: "planJourneySelection",
     });
   }

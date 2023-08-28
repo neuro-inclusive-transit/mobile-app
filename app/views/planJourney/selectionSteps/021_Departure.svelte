@@ -7,7 +7,7 @@
   import Place from "~/shared/components/Place.svelte";
   import Input from "~/shared/components/Input.svelte";
 
-  import Start from "./020_Start.svelte";
+  import TimeSelection from "./030_TimeSelection.svelte";
   import SelectionStep from "./SelectionStep.svelte";
 
   let wrapper: SelectionStep;
@@ -31,9 +31,9 @@
 
     const currentLocation = await geolocation.getCurrentLocation({
       desiredAccuracy: CoreTypes.Accuracy.high,
-      maximumAge: 5000,
+      maximumAge: 40,
       timeout: 20000
-    })
+    });
 
     // TODO: convert to address
 
@@ -52,14 +52,14 @@
 
 </script>
 
-<SelectionStep nextPage={Start} bind:this={wrapper}>
-  <label slot="header" text="Deine Reise nach {$planJourney.arrival?.name ?? formatAddress($planJourney.arrival?.address)}" textWrap={true} class="fs-l fw-bold"/>
+<SelectionStep nextPage={TimeSelection} bind:this={wrapper}>
+  <label slot="header" text="Planung der Reise nach {$planJourney.arrival?.name ?? formatAddress($planJourney.arrival?.address)}" textWrap={true} class="fs-l fw-bold"/>
 
   <stackLayout class="main-layout">
-    <label text="Von wo startest du deine Reise" textWrap={true} class="fs-l m-b-m"/>
+    <label text="Von wo startest du deine Reise?" textWrap={true} class="fs-l m-b-m"/>
 
     {#await getCurrentLocation()}
-      ...Lade Standort
+      <activityIndicator busy="{true}" />
     {:then locations}
       {#each locations as location}
         <Place customIcon={location.icon} name={location.name} address="{location.location.lat} / {location.location.lng}" class="m-b-m" on:tap={onPlaceTapFactory(location)}/>

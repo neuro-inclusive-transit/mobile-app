@@ -1,6 +1,6 @@
 <script type="ts">
   import SelectionStep from "./SelectionStep.svelte";
-  import Departure from "./011_Departure.svelte";
+  import Start from "./020_Start.svelte";
 
   import Place from "~/shared/components/Place.svelte";
   import Input from "~/shared/components/Input.svelte";
@@ -26,7 +26,7 @@
 
 </script>
 
-<SelectionStep nextPage={Departure} bind:this={wrapper} showBackwards={false} showForwards={false}>
+<SelectionStep nextPage={Start} bind:this={wrapper} showBackwards={false} showForwards={false}>
   <label slot="header" text="Neue Reise planen" textWrap={true} class="fs-l fw-bold"/>
 
   <stackLayout class="main-layout">
