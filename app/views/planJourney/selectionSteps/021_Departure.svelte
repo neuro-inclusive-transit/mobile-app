@@ -75,7 +75,7 @@
     <label text="Anderer Startpunkt" class="fs-l m-b-m m-t-l" />
     <Input text="Suche nach Ort" pre="search" class="m-b-m" elevated />
 
-    {#each $places as place}
+     {#each $places.filter((place) => place !== $planJourney.arrival) as place}
       <Place customIcon={place.icon} name={place.name} address={place.address ? formatAddress(place.address) : ''} class="m-b-m" on:tap={onPlaceTapFactory(place)}/>
     {/each}
   </stackLayout>

@@ -34,7 +34,7 @@
 
   <stackLayout class="main-layout">
     <label text="Ziel aus deinen Favoriten" textWrap={true} class="fs-l m-b-m"/>
-    {#each $places as place}
+    {#each $places.filter((place) => place !== $planJourney.departure) as place}
       <Place customIcon={place.icon} name={place.name} address={place.address ? formatAddress(place.address) : ''} class="m-b-m" on:tap={onPlaceTapFactory(place)}/>
     {/each}
 

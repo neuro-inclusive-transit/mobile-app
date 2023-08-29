@@ -47,4 +47,19 @@ export const places = dbStore<Place>('place', [
     },
     currentLocation: false,
   },
+  {
+    icon: '🎓',
+    name: 'TH Köln GM',
+    location: {
+      lat: 51.023470,
+      lng: 7.562043
+    },
+    address: {
+      street: 'Steinmüllerallee 1',
+      postcode: '51643',
+      city: 'Gummersbach',
+      country: 'Germany',
+    },
+    currentLocation: false,
+  }
 ]);

@@ -1,8 +1,7 @@
 <script type="ts">
   import { navigate, goBack, closeModal } from "svelte-native";
-  import { localize as L } from '@nativescript/localize'
+  import { localize as L } from '@nativescript/localize';
   import ReminderSelection from "./060_ReminderSelection.svelte";
-  import { getRootLayout, EventData } from "@nativescript/core";
 
   import { planJourney } from "~/stores"
   import { CompanionMode } from "~/types"

@@ -2,11 +2,15 @@
   import { localize as L } from '@nativescript/localize';
   import { Frame, confirm } from "@nativescript/core";
   import { goBack, navigate, closeModal } from "svelte-native";
-  import type { BackNavigationOptions, NavigationOptions } from "svelte-native/dom";
+  import type { NavigationOptions } from "svelte-native/dom";
 
   import { planJourney } from "~/stores";
+  import { printDate, getTime } from "~/shared/utils/time";
+  import {JourneyPlanMode} from "~/types";
+
   import Button from "~/shared/components/Button.svelte";
   import DepartureDestinationSwitcher from "~/shared/components/DepartureDestinationSwitcher.svelte";
+
 
   import { id as pageDestinationId } from "./010_Destination.svelte";
   import { id as pagDepartureId } from "./021_Departure.svelte";
@@ -15,6 +19,7 @@
 
   export let showForwards = true;
   export let showBackwards = true;
+  export let showTime = false;
 
   export let nextPage: any = undefined; // Type not compatible with SvelteComponent
 
@@ -88,7 +93,30 @@
     <stackLayout row={0} columnSpan={3} class="main-layout">
       <button text={L('close')} on:tap="{closeBottomSheet}" class="link text-left m-b-xxs" />
       <slot name="header">
-        <DepartureDestinationSwitcher departure="{$planJourney.departure?.name}" destination="{$planJourney.arrival?.name}" on:switchValues={onSwitchValues} on:tapDeparture={onTapDeparture} on:tapDestination={onTapDestination}/>
+        <DepartureDestinationSwitcher departure="{$planJourney.departure?.name}" destination="{$planJourney.arrival?.name}" on:switchValues={onSwitchValues} on:tapDeparture={onTapDeparture} on:tapDestination={onTapDestination} />
+
+        {#if showTime}
+        <label text={(() => {
+          let string = ''
+
+          switch ($planJourney.time.type) {
+            case JourneyPlanMode.Arrival:
+              string = 'Ankunft: ';
+              break;
+            case JourneyPlanMode.Departure:
+            default:
+              string = 'Abfahrt: ';
+              break;
+          }
+
+          string += printDate($planJourney.time.value);
+          string += " ";
+          string += getTime($planJourney.time.value);
+          string += " Uhr";
+
+          return string;
+        })()} textWrap={true} class="fs-s m-t-s" />
+        {/if}
       </slot>
     </stackLayout>
 

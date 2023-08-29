@@ -65,9 +65,16 @@
 
   <label slot="header" text="Deine Reise nach {$planJourney.arrival?.name ?? formatAddress($planJourney.arrival?.address)}" textWrap={true} class="fs-l fw-bold"/>
 
-  <gridLayout columns="*, auto, *" rows="*, auto, auto">
-    <Button text="Jetzt Reise beginnen" icon="navigation" on:tap="{onStartNow}" class="m-b-m" column={1} row={1} />
-    <Button text="Für später planen" icon="calendar_month" type="secondary" on:tap="{onStartLater}" column={1} row={2} />
-  </gridLayout>
+  <stackLayout class="main-layout">
+
+    <label text={formatAddress($planJourney.arrival?.address)} textWrap={true} class="fs-s m-b-xxl"/>
+
+    <gridLayout columns="*, auto, *" rows="auto, auto">
+      <Button text="Jetzt Reise beginnen" icon="navigation" on:tap="{onStartNow}" class="m-b-m" column={1} row={0} />
+      <Button text="Für später planen" icon="calendar_month" type="secondary" on:tap="{onStartLater}" column={1} row={1} />
+    </gridLayout>
+
+  </stackLayout>
+
 
 </SelectionStep>
