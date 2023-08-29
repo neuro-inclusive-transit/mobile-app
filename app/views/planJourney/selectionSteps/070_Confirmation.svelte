@@ -15,7 +15,10 @@
   function saveToJourneys() {
     if ($planJourney.departure === null
       || $planJourney.arrival === null
-      || $planJourney.preferredRoute === null) {
+      || $planJourney.preferredRoute === null
+      || $planJourney.preferredRoute.sections.length === 0
+      || $planJourney.companionMode === null
+      || $planJourney.reminderBefore === null) {
       return;
     }
 
@@ -50,7 +53,7 @@
   </stackLayout>
 
   <gridLayout slot="footer" columns="*, auto, *" rows="auto">
-    <Button text="Zu deinen geplanten Reisen" icon="travel_explore" row={0} column={1} on:tap={closeBottomSheet} class="m-b-xl" />
+    <Button text="Zu deinen geplanten Reisen" icon="travel_explore" row={0} column={1} on:tap={closeBottomSheet} class="m-b-xl" iconPosition="pre" />
   </gridLayout>
 
 </SelectionStep>

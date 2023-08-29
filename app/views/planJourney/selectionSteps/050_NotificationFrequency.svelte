@@ -19,7 +19,6 @@
   function factoryOnSelect(mode: CompanionMode) {
     return () => {
       $planJourney.companionMode = mode;
-      wrapper.navForwards();
     }
   }
 
@@ -33,7 +32,7 @@
   export const id = 'selectionStep_NotificationFrequency';
 </script>
 
-<SelectionStep nextPage={ReminderSelection} bind:this={wrapper} showForwards={false} showTime={true} {id}>
+<SelectionStep nextPage={ReminderSelection} bind:this={wrapper} showForwards={$planJourney.companionMode !== null} showTime={true} {id}>
 
   <stackLayout class="main-layout">
     <label text="Wie sehr sollen wir dich bei der Navigation begleiten?" textWrap={true} class="fs-l fw-bold m-b-xl"/>
@@ -41,10 +40,8 @@
     <button class="link m-b-m" text="Was bedeutet das?" on:tap={openDateModal} />
 
     {#each enumKeys(CompanionMode) as mode}
-      <BigButton icon={generateIcon(CompanionMode[mode])} label="{L('companion_mode.' + CompanionMode[mode])}" on:tap={factoryOnSelect(CompanionMode[mode])} class="m-b-m"/>
+      <BigButton icon={generateIcon(CompanionMode[mode])} label="{L('companion_mode.' + CompanionMode[mode])}" on:tap={factoryOnSelect(CompanionMode[mode])} class="m-b-m" selected={CompanionMode[mode] === $planJourney.companionMode} />
     {/each}
-
-    <button text="Ich weiß nicht..." class="link m-t-m" on:tap={factoryOnSelect(CompanionMode[enumKeys(CompanionMode)[1]])} />
   </stackLayout>
 
 </SelectionStep>

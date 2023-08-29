@@ -16,7 +16,6 @@
   function factoryOnSelect(mode: PreferredJourneyMode) {
     return () => {
       $planJourney.preferredJourneyMode = mode;
-      wrapper.navForwards();
     }
   }
 
@@ -26,16 +25,19 @@
   export const id = 'selectionStep_JourneyPreferences';
 </script>
 
-<SelectionStep nextPage={RouteSelection} bind:this={wrapper} showForwards={false} showTime={true} {id}>
+<SelectionStep nextPage={RouteSelection} bind:this={wrapper} showForwards={$planJourney.preferredJourneyMode !== null} showTime={true} {id}>
 
   <stackLayout class="main-layout">
     <label text="Bei der Reise ist mir besonders wichtig?" textWrap={true} class="fs-l fw-bold m-b-xl"/>
 
     {#each enumKeys(PreferredJourneyMode) as mode}
-      <BigButton icon={generateIcon(PreferredJourneyMode[mode])} label="{L('preffered_journey_mode.' + PreferredJourneyMode[mode])}" on:tap={factoryOnSelect(PreferredJourneyMode[mode])} class="m-b-m"/>
+      <BigButton icon={generateIcon(PreferredJourneyMode[mode])} label="{L('preffered_journey_mode.' + PreferredJourneyMode[mode])}" on:tap={factoryOnSelect(PreferredJourneyMode[mode])} class="m-b-m" selected={PreferredJourneyMode[mode] === $planJourney.preferredJourneyMode}/>
     {/each}
 
-    <button text="Mir egal" class="link m-t-m" on:tap={factoryOnSelect(PreferredJourneyMode[enumKeys(PreferredJourneyMode)[0]])} />
+    <button text="Mir egal" class="link m-t-m" on:tap={() => {
+      factoryOnSelect(PreferredJourneyMode[enumKeys(PreferredJourneyMode)[0]])();
+      wrapper.navForwards();
+    }} />
   </stackLayout>
 
 </SelectionStep>

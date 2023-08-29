@@ -3,11 +3,13 @@
   $: hasIcon = icon !== "";
   export let label = "Default Label";
 
+  export let selected = false;
+
   let customClass = "";
   export { customClass as class };
 </script>
 
-<gridLayout class="button-style {customClass}">
+<gridLayout class="button {customClass}" class:selected>
   <stackLayout orientation="horizontal" on:tap>
     {#if hasIcon}
       <label class="icon button-icon" text={icon} />
@@ -16,8 +18,8 @@
   </stackLayout>
 </gridLayout>
 
-<style>
-  .button-style {
+<style lang="scss">
+  .button {
     padding-left: calc(var(--base-s) * 24px);
     padding-right: var(--s);
     width: auto;
@@ -36,5 +38,14 @@
 
   .button-text {
     padding-left: calc(var(--base-s) * 16px);
+  }
+
+  .button.selected {
+    background-color: var(--color-primary);
+    color: var(--color-background-light);
+
+    .button-icon {
+      color: var(--color-background-light);
+    }
   }
 </style>

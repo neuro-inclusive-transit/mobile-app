@@ -20,6 +20,9 @@
   export let showBackwards = true;
   export let showTime = false;
 
+  export let forwardsText: string = "Weiter";
+  export let backwardsText: string = "Zurück";
+
   export let nextPage: any = undefined; // Type not compatible with SvelteComponent
 
   export function closeBottomSheet() {
@@ -126,10 +129,10 @@
     <stackLayout orientation="horizontal" column={1} row={2} class="main-layout footer">
       <slot name="footer">
         {#if showBackwards}
-        <Button text="Zurück" icon="chevron_left" on:tap="{() => navBackwards()}" iconPosition="pre" type="secondary" class="{ showForwards ? 'm-r-m' : '' }" />
+        <Button text={backwardsText} icon="chevron_left" on:tap="{() => navBackwards()}" iconPosition="pre" type="secondary" class="{ showForwards ? 'm-r-m' : '' }" />
         {/if}
         {#if showForwards}
-        <Button text="Weiter" icon="chevron_right" on:tap="{() => navForwards()}" iconPosition="post" type="primary" />
+        <Button text={forwardsText} icon="chevron_right" on:tap="{() => navForwards()}" iconPosition="post" type="primary" />
         {/if}
       </slot>
     </stackLayout>
