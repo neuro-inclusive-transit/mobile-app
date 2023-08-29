@@ -1,52 +1,50 @@
 <script type="ts">
-  import { navigate, goBack, closeModal } from "svelte-native";
+  import { Frame } from "@nativescript/core";
   import { localize as L } from '@nativescript/localize';
-  import ReminderSelection from "./060_ReminderSelection.svelte";
+  import { showModal } from "svelte-native";
 
-  import { planJourney } from "~/stores"
-  import { CompanionMode } from "~/types"
-  import Button from "~/shared/components/Button.svelte";
+  import SelectionStep from "./SelectionStep.svelte";
+  import HelpModal from "./050a_HelpModal.svelte";
+  import ReminderSelection from './060_ReminderSelection.svelte';
+
+  import { planJourney } from "~/stores";
+  import { CompanionMode } from "~/types";
+
+  import BigButton from "~/shared/components/BigButton.svelte";;
+  import { generateIcon } from "~/shared/utils/icons"
   import { enumKeys } from "~/shared/utilites";
 
-  import BigButton from "~/shared/components/BigButton.svelte"
+  let wrapper: SelectionStep;
 
-  import {generateIcon} from "~/shared/utils/icons"
-
-  function select(mode: CompanionMode) {
-    $planJourney.companionMode = mode;
+  function factoryOnSelect(mode: CompanionMode) {
+    return () => {
+      $planJourney.companionMode = mode;
+      wrapper.navForwards();
+    }
   }
 
-  function onNavigateBack() {
-    goBack({
-      frame: 'planJourneySelection',
-    });
+  async function openDateModal() {
+    await showModal({ page: HelpModal as any, target: Frame.topmost().currentPage });
   }
-  function onNavigateNext() {
-    navigate({
-      page: ReminderSelection as any,
-      frame: 'planJourneySelection',
-    });
-  }
-  function closeBottomSheet() {
-    planJourney.reset();
-    closeModal(true);
-  }
+
 </script>
 
-<page actionBarHidden={true} class="bg-default">
+<script type="ts" context="module">
+  export const id = 'selectionStep_NotificationFrequency';
+</script>
+
+<SelectionStep nextPage={ReminderSelection} bind:this={wrapper} showForwards={false} showTime={true} {id}>
+
   <stackLayout class="main-layout">
-    <button text={L('close')} on:tap="{closeBottomSheet}" class="link" />
-    <label text="{$planJourney.departure?.icon} {$planJourney.departure?.name} -> {$planJourney.arrival?.icon} {$planJourney.arrival?.name} @ {$planJourney.time.value}" textWrap="true" />
-    <label text="Bei der Reise ist mir besonders wichtig? " />
-    {#each enumKeys(CompanionMode) as mode} }
-      <stackLayout>
-        <BigButton icon={generateIcon(CompanionMode[mode])} label="{L('companion_mode.' + CompanionMode[mode])}" on:tap={() => select(CompanionMode[mode])} />
-      </stackLayout>
+    <label text="Wie sehr sollen wir dich bei der Navigation begleiten?" textWrap={true} class="fs-l fw-bold m-b-xl"/>
+
+    <button class="link m-b-m" text="Was bedeutet das?" on:tap={openDateModal} />
+
+    {#each enumKeys(CompanionMode) as mode}
+      <BigButton icon={generateIcon(CompanionMode[mode])} label="{L('companion_mode.' + CompanionMode[mode])}" on:tap={factoryOnSelect(CompanionMode[mode])} class="m-b-m"/>
     {/each}
 
-    <label text="{L('companion_mode._')}: { $planJourney.companionMode }" />
-    <Button text="Zurück" icon="chevron_left" iconPosition="pre" type="secondary" on:tap="{onNavigateBack}" />
-    <Button text="Weiter" icon="chevron_right" iconPosition="post" on:tap="{onNavigateNext}" />
-
+    <button text="Ich weiß nicht..." class="link m-t-m" on:tap={factoryOnSelect(CompanionMode[enumKeys(CompanionMode)[1]])} />
   </stackLayout>
-</page>
+
+</SelectionStep>

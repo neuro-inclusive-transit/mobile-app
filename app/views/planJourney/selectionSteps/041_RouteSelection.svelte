@@ -59,10 +59,10 @@
   export const id = 'selectionStep_RouteSelection';
 </script>
 
-<SelectionStep nextPage={NotificationFrequency} bind:this={wrapper} showForwards={false} showTime={true} {id} on:navigatingTo={calculateOptions}>
+<SelectionStep nextPage={NotificationFrequency} bind:this={wrapper} showForwards={false} showTime={true} {id}>
 
   <stackLayout class="main-layout">
-    <label text="{L('preffered_journey_mode.' + $planJourney.preferredJourneyMode)} Routen-Optionen" textWrap={true} class="fs-l fw-bold m-b-xl"/>
+    <label text="Deine möglichen Routen" textWrap={true} class="fs-l fw-bold m-b-xl"/>
 
     {#await $planJourney.options}
       <activityIndicator busy="{true}" />
@@ -83,11 +83,11 @@
           </stackLayout>
         </Route>
       {/each}
+
+      <button text="Weitere Optionen" class="link m-t-s" on:tap="{() => {numOfAlternatives += 3; calculateOptions()}}" />
     {:catch error}
       <label style="color: red">{error}</label>
     {/await}
-
-    <button text="Mehr Routen" class="link m-t-s" on:tap="{() => {numOfAlternatives += 3; calculateOptions()}}" />
   </stackLayout>
 
 </SelectionStep>

@@ -5,7 +5,7 @@
 
   import SelectionStep from "./SelectionStep.svelte";
   import JourneyPreferences from "./040_JourneyPreferences.svelte";
-  import DatePicker from "./DatePicker.svelte";
+  import DatePicker from "./030a_DatePicker.svelte";
 
   import Button from "~/shared/components/Button.svelte";
 
