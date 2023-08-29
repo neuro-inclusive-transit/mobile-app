@@ -87,7 +87,7 @@
   }
 </script>
 
-<page actionBarHidden={true} class="bg-default" {id}>
+<page actionBarHidden={true} class="bg-default" {id} on:navigatedTo on:navigatedFrom>
   <gridLayout columns="*, auto, *" rows="auto, *, auto" class="p-t-m">
 
     <stackLayout row={0} columnSpan={3} class="main-layout">

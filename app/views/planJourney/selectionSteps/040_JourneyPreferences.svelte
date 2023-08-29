@@ -23,7 +23,7 @@
 </script>
 
 <script type="ts" context="module">
-  export const id = 'selectionStep_TimeDepartureArrival';
+  export const id = 'selectionStep_JourneyPreferences';
 </script>
 
 <SelectionStep nextPage={RouteSelection} bind:this={wrapper} showForwards={false} showTime={true} {id}>
