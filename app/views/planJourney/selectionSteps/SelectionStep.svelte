@@ -11,7 +11,6 @@
   import Button from "~/shared/components/Button.svelte";
   import DepartureDestinationSwitcher from "~/shared/components/DepartureDestinationSwitcher.svelte";
 
-
   import { id as pageDestinationId } from "./010_Destination.svelte";
   import { id as pagDepartureId } from "./021_Departure.svelte";
 
@@ -23,7 +22,7 @@
 
   export let nextPage: any = undefined; // Type not compatible with SvelteComponent
 
-  function closeBottomSheet() {
+  export function closeBottomSheet() {
     planJourney.reset();
     closeModal(true);
   }
@@ -87,7 +86,7 @@
   }
 </script>
 
-<page actionBarHidden={true} class="bg-default" {id}>
+<page actionBarHidden={true} class="bg-default" {id} on:navigatedFrom on:navigatedTo>
   <gridLayout columns="*, auto, *" rows="auto, *, auto" class="p-t-m">
 
     <stackLayout row={0} columnSpan={3} class="main-layout">

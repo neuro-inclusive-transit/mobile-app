@@ -1,7 +1,4 @@
 <script type="ts">
-  import { onMount } from "svelte";
-  import { localize as L } from '@nativescript/localize';
-
   import SelectionStep from "./SelectionStep.svelte";
   import NotificationFrequency from "./050_NotificationFrequency.svelte";
 
@@ -15,10 +12,6 @@
   let wrapper: SelectionStep;
   let numOfAlternatives = 3;
   let crowdPercentage = 0.5;
-
-  onMount(() => {
-    calculateOptions();
-  });
 
   function factoryOnSelect(route: HereApiRoute) {
     return () => {
@@ -59,7 +52,7 @@
   export const id = 'selectionStep_RouteSelection';
 </script>
 
-<SelectionStep nextPage={NotificationFrequency} bind:this={wrapper} showForwards={false} showTime={true} {id}>
+<SelectionStep nextPage={NotificationFrequency} on:navigatedTo={() => calculateOptions()} bind:this={wrapper} showForwards={false} showTime={true} {id}>
 
   <stackLayout class="main-layout">
     <label text="Deine möglichen Routen" textWrap={true} class="fs-l fw-bold m-b-xl"/>

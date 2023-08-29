@@ -24,7 +24,7 @@
 </script>
 
 <script type="ts" context="module">
-  export const id = 'selectionStep_NotificationFrequency';
+  export const id = 'selectionStep_ReminderSelection';
 </script>
 
 <SelectionStep nextPage={Confirmation} bind:this={wrapper} showForwards={false} showTime={true} {id}>
