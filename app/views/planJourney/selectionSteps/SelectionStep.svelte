@@ -1,6 +1,6 @@
 <script type="ts">
   import { localize as L } from '@nativescript/localize';
-  import { Frame } from "@nativescript/core";
+  import { Frame, confirm } from "@nativescript/core";
   import { goBack, navigate, closeModal } from "svelte-native";
   import type { BackNavigationOptions, NavigationOptions } from "svelte-native/dom";
 
@@ -8,8 +8,8 @@
   import Button from "~/shared/components/Button.svelte";
   import DepartureDestinationSwitcher from "~/shared/components/DepartureDestinationSwitcher.svelte";
 
-  import { id as destinationId } from "./010_Destination.svelte";
-  import { id as departureId } from "./021_Departure.svelte";
+  import { id as pageDestinationId } from "./010_Destination.svelte";
+  import { id as pagDepartureId } from "./021_Departure.svelte";
 
   export let id: string | undefined = undefined;
 
@@ -56,11 +56,29 @@
   }
 
   function onTapDeparture() {
-    navBackwards(departureId)
+    confirm({
+      title: 'Möchtest du den Startort ändern?',
+      message: 'Deine bisherigen Angaben bleiben bestehen.',
+      okButtonText: 'Ja, ändern',
+      cancelButtonText: 'Abbrechen',
+    }).then((result) => {
+      if (result) {
+        navBackwards(pagDepartureId)
+      }
+    });
   }
 
   function onTapDestination() {
-    navBackwards(destinationId)
+    confirm({
+      title: 'Möchtest du das Ziel ändern?',
+      message: 'Deine bisherigen Angaben bleiben bestehen.',
+      okButtonText: 'Ja, ändern',
+      cancelButtonText: 'Abbrechen',
+    }).then((result) => {
+      if (result) {
+        navBackwards(pageDestinationId)
+      }
+    });
   }
 </script>
 
