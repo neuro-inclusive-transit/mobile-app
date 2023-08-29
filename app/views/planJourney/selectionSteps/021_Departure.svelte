@@ -7,7 +7,7 @@
   import Place from "~/shared/components/Place.svelte";
   import Input from "~/shared/components/Input.svelte";
 
-  import TimeSelection from "./030_TimeSelection.svelte";
+  import TimeDepartureArrival from "./022_TimeDepartureArrival.svelte";
   import SelectionStep from "./SelectionStep.svelte";
 
   let wrapper: SelectionStep;
@@ -52,7 +52,11 @@
 
 </script>
 
-<SelectionStep nextPage={TimeSelection} bind:this={wrapper} showForwards={false}>
+<script type="ts" context="module">
+  export const id = 'selectionStep_Departure';
+</script>
+
+<SelectionStep nextPage={TimeDepartureArrival} bind:this={wrapper} showForwards={false} {id}>
   <label slot="header" text="Planung der Reise nach {$planJourney.arrival?.name ?? formatAddress($planJourney.arrival?.address)}" textWrap={true} class="fs-l fw-bold"/>
 
   <stackLayout class="main-layout">

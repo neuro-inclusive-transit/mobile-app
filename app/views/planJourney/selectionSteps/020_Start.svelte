@@ -39,7 +39,7 @@
 
     getCurrentLocation().then((place) => {
       $planJourney.departure = place;
-      wrapper.navForwards(JourneyPreferences);
+      wrapper.navForwards(JourneyPreferences as any);
     }).catch((err) => {
       wrapper.navForwards();
     });
@@ -54,11 +54,14 @@
 
     return `${address.street}, ${address.postcode} ${address.city}`;
   }
+</script>
 
+<script type="ts" context="module">
+  export const id = 'selectionStep_Start';
 </script>
 
 
-<SelectionStep nextPage={Departure} bind:this={wrapper} showBackwards={false} showForwards={false}>
+<SelectionStep nextPage={Departure} bind:this={wrapper} showForwards={false} {id}>
 
   <label slot="header" text="Deine Reise nach {$planJourney.arrival?.name ?? formatAddress($planJourney.arrival?.address)}" textWrap={true} class="fs-l fw-bold"/>
 

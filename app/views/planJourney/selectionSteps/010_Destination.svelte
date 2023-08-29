@@ -23,14 +23,17 @@
       wrapper.navForwards();
     }
   }
-
 </script>
 
-<SelectionStep nextPage={Start} bind:this={wrapper} showBackwards={false} showForwards={false}>
+<script type="ts" context="module">
+  export const id = 'selectionStep_Destination';
+</script>
+
+<SelectionStep nextPage={Start} bind:this={wrapper} showBackwards={false} showForwards={false} {id}>
   <label slot="header" text="Neue Reise planen" textWrap={true} class="fs-l fw-bold"/>
 
   <stackLayout class="main-layout">
-    <label text="Deine Favoriten" textWrap={true} class="fs-l m-b-m"/>
+    <label text="Ziel aus deinen Favoriten" textWrap={true} class="fs-l m-b-m"/>
     {#each $places as place}
       <Place customIcon={place.icon} name={place.name} address={place.address ? formatAddress(place.address) : ''} class="m-b-m" on:tap={onPlaceTapFactory(place)}/>
     {/each}

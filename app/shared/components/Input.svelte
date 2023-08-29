@@ -24,9 +24,12 @@
     paddingRight: $$props['paddingRight'],
   };
 
+  let customClass = '';
+  export { customClass as class };
+
 </script>
 
-<gridLayout columns="auto,*" rows="auto" id="wrapper" class:elevated {...gridProps}>
+<gridLayout columns="auto,*" rows="auto" id="wrapper" class:elevated class="{customClass}" {...gridProps} on:tap>
   <label text={pre} class="icon" row={0} col={0}/>
   <textField {...$$restProps} row={0} col={1} margin={0} />
 </gridLayout>

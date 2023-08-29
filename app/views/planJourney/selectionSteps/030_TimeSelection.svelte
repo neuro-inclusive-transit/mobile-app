@@ -12,6 +12,7 @@
   import { getTime, isToday, isTomorrow, printDate } from "~/shared/utils/time";
 
   import { planJourney } from "~/stores";
+  import { JourneyPlanMode } from "~/types";
 
   async function openDateModal() {
     datePickerValue = await showModal({ page: DatePicker as any, target: Frame.topmost().currentPage, props: { date: $planJourney.time.value }});
@@ -48,13 +49,24 @@
 
 </script>
 
-<SelectionStep nextPage={JourneyPreferences}>
-  <DepartureDestinationSwitcher slot="header" departure="{$planJourney.departure?.name}" destination="{$planJourney.arrival?.name}" on:switchValues={onSwitchValues} />
+<script type="ts" context="module">
+  export const id = 'selectionStep_TimeSelection';
+</script>
+
+<SelectionStep nextPage={JourneyPreferences} {id}>
 
   <gridLayout class="main-layout" columns="*" rows="auto, auto, *, auto">
-    <label text="Wann startest du deine Reise?" textWrap={true} class="fs-l m-b-m"/>
+    <label text={(() => {
+      switch ($planJourney.time.type) {
+        case JourneyPlanMode.Arrival:
+          return 'Wann möchtest du ankommen?';
+        case JourneyPlanMode.Departure:
+        default:
+          return 'Wann möchtest du losfahren?';
+      }
+    })()} textWrap={true} class="fs-l m-b-m"/>
 
-    <gridLayout columns="*, *, auto" class="m-b-m" row={1}>
+    <gridLayout columns="*, *, auto"  class="m-b-m" row={1}>
       <Button column={0} text={isTodayOrTomorrow ? 'Heute' : 'H'} class="m-r-s" type={(isToday($planJourney.time.value) ? 'primary' : 'secondary')} on:tap={setToday} />
       <Button column={1} text={isTodayOrTomorrow ? 'Morgen' : 'M'} type={(isTomorrow($planJourney.time.value) ? 'primary' : 'secondary')} class="m-r-s" on:tap={setTomorrow}/>
       <Button column={2} text={(isTodayOrTomorrow ? '' : printDate($planJourney.time.value))} type={isTodayOrTomorrow ? 'secondary' : 'primary'} icon="calendar_month" on:tap={openDateModal} iconPosition="pre"/>
