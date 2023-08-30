@@ -1,50 +1,80 @@
 <script type="ts">
-  import { goBack, navigate, closeModal } from "svelte-native";
-  import { localize as L } from '@nativescript/localize'
-  import { getRootLayout, EventData } from "@nativescript/core";
+  import { CoreTypes } from "@nativescript/core";
+  import * as geolocation from '@nativescript/geolocation'
 
-  import Confirmation from "./070_Confirmation.svelte";
-  import TimeSelection from "./030_TimeSelection.svelte";
-  import Destination from "./010_Destination.svelte";
+  import SelectionStep from "./SelectionStep.svelte";
+  import Departure from "./021_Departure.svelte";
+  import JourneyPreferences from "./040_JourneyPreferences.svelte";
 
-  import { planJourney } from "~/stores"
+  import { planJourney, Place as StorePlace } from "~/stores"
+
   import Button from "~/shared/components/Button.svelte";
-  import DepartureDestinationSwitcher from "~/shared/components/DepartureDestinationSwitcher.svelte";
 
-  function onPlanNow () {
+  let wrapper: SelectionStep;
+
+  async function getCurrentLocation() {
+    await geolocation.enableLocationRequest();
+
+    const currentLocation = await geolocation.getCurrentLocation({
+      desiredAccuracy: CoreTypes.Accuracy.high,
+      maximumAge: 40,
+      timeout: 20000
+    });
+
+    // TODO: convert to address
+
+    return {
+      name: 'Aktueller Standort',
+      location: {
+        lat: currentLocation.latitude,
+        lng: currentLocation.longitude,
+      },
+      icon: '📍',
+      currentLocation: true,
+    };
+  }
+
+  function onStartNow () {
     $planJourney.time.value = new Date();
-    navigate({
-      page: Confirmation as any, // Type not compatible
-      frame: 'planJourneySelection',
+
+    getCurrentLocation().then((place) => {
+      $planJourney.departure = place;
+      wrapper.navForwards(JourneyPreferences as any);
+    }).catch((err) => {
+      wrapper.navForwards();
     });
   }
 
-  function onPlanLater () {
-    navigate({
-      page: TimeSelection as any, // Type not compatible
-      frame: 'planJourneySelection',
-    });
+  function onStartLater () {
+    wrapper.navForwards();
   }
 
-  function closeBottomSheet() {
-    planJourney.reset();
-    closeModal(true);
-  }
+  function formatAddress(address: StorePlace['address']) {
+    if (!address) return '';
 
-  function onSwitchValues() {
-    let tmp = $planJourney.departure
-    $planJourney.departure = $planJourney.arrival
-    $planJourney.arrival = tmp
+    return `${address.street}, ${address.postcode} ${address.city}`;
   }
 </script>
 
-<page actionBarHidden={true}  class="bg-default">
-  <stackLayout class="main-layout">
-    <button text={L('close')} on:tap="{closeBottomSheet}" class="link" />
-    <DepartureDestinationSwitcher departure={$planJourney.departure?.name} destination={$planJourney.arrival?.name} on:switchValues={onSwitchValues}/>
+<script type="ts" context="module">
+  export const id = 'selectionStep_Start';
+</script>
 
-    <Button text="Jetzt Reise starten" icon="navigation" on:tap="{onPlanNow}" />
-    <Button text="Für später starten" icon="calendar_month" type="secondary" on:tap="{onPlanLater}" />
+
+<SelectionStep nextPage={Departure} bind:this={wrapper} showForwards={false} {id}>
+
+  <label slot="header" text="Deine Reise nach {$planJourney.arrival?.name ?? formatAddress($planJourney.arrival?.address)}" textWrap={true} class="fs-l fw-bold"/>
+
+  <stackLayout class="main-layout">
+
+    <label text={formatAddress($planJourney.arrival?.address)} textWrap={true} class="fs-s m-b-xxl"/>
+
+    <gridLayout columns="*, auto, *" rows="auto, auto">
+      <Button text="Jetzt Reise beginnen" icon="navigation" on:tap="{onStartNow}" class="m-b-m" column={1} row={0} />
+      <Button text="Für später planen" icon="calendar_month" type="secondary" on:tap="{onStartLater}" column={1} row={1} />
+    </gridLayout>
+
   </stackLayout>
 
-</page>
+
+</SelectionStep>

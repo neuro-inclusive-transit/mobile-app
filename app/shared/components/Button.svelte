@@ -36,6 +36,9 @@
     font-size: var(--s);
     box-shadow: var(--shadow-1);
     padding: var(--xxs) var(--l);
+    font-weight: var(--fw-bold);
+    border-width: 2;
+    border-color: var(--color-primary);
 
     &.just-icon {
       padding: var(--xxs);
@@ -71,8 +74,6 @@
   .secondary {
     background-color: var(--color-background);
     color: var(--color-primary);
-    border-width: 2;
-    border-color: var(--color-primary);
   }
 
   .ghost {
@@ -80,5 +81,6 @@
     text-decoration: underline;
     color: var(--color-primary);
     box-shadow: none;
+    background-color: transparent;
   }
 </style>
