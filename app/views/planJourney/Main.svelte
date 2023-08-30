@@ -1,10 +1,10 @@
 <script type="ts">
+  import {onMount} from "svelte";
   import { navigate, showModal } from "svelte-native";
   import { EventData, } from "@nativescript/core";
-  import { confirm } from '@nativescript/core/ui/dialogs'
+  import { confirm } from '@nativescript/core/ui/dialogs';
 
   import { MQTTClient, ClientOptions, SubscribeOptions, ConnectionOptions } from "@edusperoni/nativescript-mqtt";
-  import {Message} from "@edusperoni/nativescript-mqtt/common";
 
   import Route from "~/shared/components/Route.svelte";
   import { printReminder } from "~/shared/components/Route.svelte";
@@ -23,11 +23,12 @@
     mqtt_password: string = "";
     mqtt_useSSL: boolean = false;
     mqtt_cleanSession: boolean = false;
-    mqtt_autoReconnect: boolean = false;
+    mqtt_autoReconnect: boolean = true;
+
 
     mqtt_clientOptions: ClientOptions = {
-        host: this.mqtt_host,
-        port: this.mqtt_port
+      host: this.mqtt_host,
+      port: this.mqtt_port
     };
 
     mqtt_client: MQTTClient = new MQTTClient(this.mqtt_clientOptions);
@@ -49,11 +50,11 @@
         this.mqtt_client.onConnectionLost.on((err: any) => {
             console.log("Connection lost: " + JSON.stringify(err));
         });
-        this.mqtt_client.onMessageArrived.on((message: Message) => {
-            console.log("Message received: " + message.payload);
+        this.mqtt_client.onMessageArrived.on((message) => {
+            console.log("Message received: " + JSON.stringify(message));
         });
-        this.mqtt_client.onMessageDelivered.on((message: Message) => {
-            console.log("Message delivered: " + message.payload);
+        this.mqtt_client.onMessageDelivered.on((message) => {
+            console.log("Message delivered: " + JSON.stringify(message));
         });
     }
 
@@ -73,18 +74,20 @@
             cleanSession: this.mqtt_cleanSession,
             useSSL: this.mqtt_useSSL,
             userName: this.mqtt_username,
-            password: this.mqtt_password
+            password: this.mqtt_password,
+            mqttVersion: 3
         };
         this.mqtt_client.connect(connOptions).then(() => {
             console.log("connected");
         }, (err) => {
-            console.log("connection error: " + err);
+            console.log("connection error: " + JSON.stringify(err));
         });
     }
   }
 
+
   let mqtt: MyMQTT = new MyMQTT();
-  mqtt.connect();
+
 
   function addJourney() {
     showModal({ page: SelectionProcess as any })
@@ -156,6 +159,7 @@
 
   <gridLayout rows="auto, *" columns="*">
     <gridLayout row={0} columns="*, auto" class="main-layout">
+      <Button column={0} text="Connect" on:tap={() => mqtt.connect()} />
       <Button column={1} text="Neue Reise planen" icon="add" iconPosition="post" on:tap={addJourney} />
     </gridLayout>
 
