@@ -18,7 +18,7 @@
 
   class MyMQTT {
     mqtt_host: string = "localhost";
-    mqtt_port: number = 1883;
+    mqtt_port: number = 9001;
     mqtt_username: string = "";
     mqtt_password: string = "";
     mqtt_useSSL: boolean = false;
@@ -33,7 +33,7 @@
 
     mqtt_client: MQTTClient = new MQTTClient(this.mqtt_clientOptions);
 
-    mqtt_topic: string = "sample-topic";
+    mqtt_topic: string = "#";
 
     constructor() {
         this.setupHandlers();
@@ -78,7 +78,6 @@
             mqttVersion: 3
         };
         this.mqtt_client.connect(connOptions).then(() => {
-            console.log("connected");
         }, (err) => {
             console.log("connection error: " + JSON.stringify(err));
         });
@@ -87,6 +86,7 @@
 
 
   let mqtt: MyMQTT = new MyMQTT();
+  mqtt.connect();
 
 
   function addJourney() {
@@ -159,7 +159,6 @@
 
   <gridLayout rows="auto, *" columns="*">
     <gridLayout row={0} columns="*, auto" class="main-layout">
-      <Button column={0} text="Connect" on:tap={() => mqtt.connect()} />
       <Button column={1} text="Neue Reise planen" icon="add" iconPosition="post" on:tap={addJourney} />
     </gridLayout>
 
