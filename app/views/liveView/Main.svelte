@@ -223,11 +223,12 @@
 
   {#if $liveJourney === null || currentSection === undefined || currentSection === false}
 
-  <stackLayout class="main-layout">
-    <label text="route" class="icon fs-xxl" />
-    <label text='Du hast aktuell keine Navigation aktiviert. In dem Menu "Route planen" kannst du eine Route erstellen und die Navigation starten.' textWrap={true} />
-    <button text="Reise planen" />
-  </stackLayout>
+  <gridLayout rows="*, *, *" padding="20">
+    <label text="route" class="icon fs-xxl" verticalAlignment="top" horizontalAlignment="center" />
+    <label text='Du hast aktuell keine Navigation aktiviert. In dem Menü "Planung" kannst du eine Route erstellen und die Navigation starten.' textWrap="true" verticalAlignment="middle"/>
+    <button text="Route planen" verticalAlignment="bottom"/>
+  </gridLayout>
+  
 
   {:else}
 
