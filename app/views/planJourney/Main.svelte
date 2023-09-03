@@ -4,7 +4,7 @@
   import { EventData, } from "@nativescript/core";
   import { confirm } from '@nativescript/core/ui/dialogs';
 
-  import { MQTTClient, ClientOptions, SubscribeOptions, ConnectionOptions } from "@edusperoni/nativescript-mqtt";
+  import { MQTT } from "~/shared/utils/mqtt";
 
   import Route from "~/shared/components/Route.svelte";
   import { printReminder } from "~/shared/components/Route.svelte";
@@ -16,78 +16,8 @@
   import { Journey, journeys, liveJourney, tabIndex } from "~/stores";
   import { connectionType } from "@nativescript/core/connectivity";
 
-  class MyMQTT {
-    mqtt_host: string = "localhost";
-    mqtt_port: number = 9001;
-    mqtt_username: string = "";
-    mqtt_password: string = "";
-    mqtt_useSSL: boolean = false;
-    mqtt_cleanSession: boolean = false;
-    mqtt_autoReconnect: boolean = true;
-
-
-    mqtt_clientOptions: ClientOptions = {
-      host: this.mqtt_host,
-      port: this.mqtt_port
-    };
-
-    mqtt_client: MQTTClient = new MQTTClient(this.mqtt_clientOptions);
-
-    mqtt_topic: string = "#";
-
-    constructor() {
-        this.setupHandlers();
-    }
-
-    setupHandlers(): void {
-        this.mqtt_client.onConnectionFailure.on((err: any) => {
-            console.log("Connection failed: " + JSON.stringify(err));
-        });
-        this.mqtt_client.onConnectionSuccess.on(() => {
-            console.log("Connected successfully!");
-            this.subscribe();
-        });
-        this.mqtt_client.onConnectionLost.on((err: any) => {
-            console.log("Connection lost: " + JSON.stringify(err));
-        });
-        this.mqtt_client.onMessageArrived.on((message) => {
-            console.log("Message received: " + JSON.stringify(message));
-        });
-        this.mqtt_client.onMessageDelivered.on((message) => {
-            console.log("Message delivered: " + JSON.stringify(message));
-        });
-    }
-
-    subscribe(): void {
-        const opts: SubscribeOptions = {
-            qos: 1
-        };
-
-        this.mqtt_client.subscribe(this.mqtt_topic, opts).then(
-            (params) => console.log(`subscribed to ${this.mqtt_topic} with QoS ${params.grantedQos}`),
-            (err) => console.log("error subscribing")
-        );
-    }
-
-    connect(): void {
-        const connOptions: ConnectionOptions = {
-            cleanSession: this.mqtt_cleanSession,
-            useSSL: this.mqtt_useSSL,
-            userName: this.mqtt_username,
-            password: this.mqtt_password,
-            mqttVersion: 3
-        };
-        this.mqtt_client.connect(connOptions).then(() => {
-        }, (err) => {
-            console.log("connection error: " + JSON.stringify(err));
-        });
-    }
-  }
-
-
-  let mqtt: MyMQTT = new MyMQTT();
+  let mqtt: MQTT = new MQTT();
   mqtt.connect();
-
 
   function addJourney() {
     showModal({ page: SelectionProcess as any })
