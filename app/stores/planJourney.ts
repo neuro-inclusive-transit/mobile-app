@@ -12,10 +12,10 @@ export const planJourney = localStore<JourneyPlan>({
     value: new Date(),
   },
   options: new Promise((resolve, reject) => { resolve([]) }),
-  companionMode: CompanionMode.Rarely,
-  reminderBefore: 0,
-  preferredTransport: PreferredTransportation.Car,
-  preferredJourneyMode: PreferredJourneyMode.Fastest,
+  companionMode: null,
+  reminderBefore: null,
+  preferredTransport: null,
+  preferredJourneyMode: null,
   preferredRoute: null,
 });
 
@@ -28,9 +28,9 @@ export type JourneyPlan = {
     value: Date;
   }
   options: Promise<HereApiRoute[]>;
-  companionMode: CompanionMode;
-  reminderBefore: number;
-  preferredTransport: PreferredTransportation;
-  preferredJourneyMode: PreferredJourneyMode;
+  companionMode: CompanionMode | null;
+  reminderBefore: number | null;
+  preferredTransport: PreferredTransportation | null;
+  preferredJourneyMode: PreferredJourneyMode | null;
   preferredRoute: HereApiRoute | null;
 }

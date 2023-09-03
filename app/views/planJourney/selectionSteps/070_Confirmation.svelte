@@ -1,33 +1,33 @@
 <script type="ts">
-  import { goBack, closeModal } from "svelte-native";
-  import { localize as L } from '@nativescript/localize'
-  import { EventData, getRootLayout } from "@nativescript/core";
+  import { onMount } from "svelte";
+  import { closeModal } from "svelte-native";
 
-  import { journeys, planJourney } from "~/stores"
-  import { CompanionMode, JourneyPlanMode, PreferredJourneyMode, PreferredTransportation } from "~/types"
+  import SelectionStep from "./SelectionStep.svelte";
+  import Confirmation from "./070_Confirmation.svelte";
+
   import Button from "~/shared/components/Button.svelte";
 
-  // TODO: Preference
+  import { planJourney, journeys } from "~/stores";
+  import { printDate, getTime } from "~/shared/utils/time";
 
-  // save & reset
-  const plannedJourney = Object.assign({}, $planJourney);
+  let wrapper: SelectionStep;
 
-  if ($planJourney.departure !== null && $planJourney.arrival !== null && $planJourney.preferredRoute !== null) {
+  function saveToJourneys() {
+    if ($planJourney.departure === null
+      || $planJourney.arrival === null
+      || $planJourney.preferredRoute === null
+      || $planJourney.preferredRoute.sections.length === 0
+      || $planJourney.companionMode === null
+      || $planJourney.reminderBefore === null) {
+      return;
+    }
+
     journeys.save({
       departure: $planJourney.departure,
       arrival: $planJourney.arrival,
-      time: $planJourney.time,
       reminderBefore: $planJourney.reminderBefore,
       companionMode: $planJourney.companionMode,
       sections: $planJourney.preferredRoute.sections,
-    });
-  }
-
-  planJourney.reset();
-
-  function onNavigateBack() {
-    goBack({
-      frame: 'planJourneySelection',
     });
   }
 
@@ -35,16 +35,25 @@
     planJourney.reset();
     closeModal(true);
   }
+
 </script>
 
-<page actionBarHidden={true}  class="bg-default">
-  <stackLayout class="main-layout">
-    <button text={L('close')} on:tap="{closeBottomSheet}" class="link" />
+<script type="ts" context="module">
+  export const id = 'selectionStep_Confirmation';
+</script>
 
-    <label text="Super!" />
-    <label text="Du hast deine Reise von {plannedJourney.departure?.name} nach {plannedJourney.arrival?.name} geplant" textWrap="true" />
-    <label text="Du musst {plannedJourney.time.value} los. Wir erinnern dich!" textWrap="true" />
-    <Button text="Zurück" icon="chevron_left" on:tap="{onNavigateBack}" iconPosition="pre" type="secondary" />
+<SelectionStep nextPage={Confirmation} bind:this={wrapper} {id} on:navigatedTo={saveToJourneys}>
 
+  <label slot="header" text="Super!" textWrap={true} class="fs-xxl fw-bold color-primary m-b-l"/>
+
+  <stackLayout class="main-layout fs-l">
+    <label text="Du hast deine Reise von {$planJourney.departure?.name} nach {$planJourney.arrival?.name} geplant" textWrap="true" class="m-b-m"/>
+
+    <label text="Du musst {printDate(new Date($planJourney.preferredRoute?.sections[0].departure?.time ?? 0)).toLowerCase()} um {getTime(new Date($planJourney.preferredRoute?.sections[0].departure?.time ?? 0))} Uhr los. Wir erinnern dich {$planJourney.reminderBefore} Minuten vorher." textWrap="true" />
   </stackLayout>
-</page>
+
+  <gridLayout slot="footer" columns="*, auto, *" rows="auto">
+    <Button text="Zu deinen geplanten Reisen" icon="travel_explore" row={0} column={1} on:tap={closeBottomSheet} class="m-b-xl" iconPosition="pre" />
+  </gridLayout>
+
+</SelectionStep>
