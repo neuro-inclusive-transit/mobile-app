@@ -245,7 +245,7 @@
 
       <SupportBox text={currentSupportBoxText} row={0} type={$multiModality.primary === 'auditory' ? 'big' : 'small'} class="m-b-m" />
 
-      <label text="{'local_cafe'}" class="icon text-center {$multiModality.primary === 'auditory' ? 'fs-4xl' : 'fs-3xl'}" row={1}  />
+      <label text="{'motion_photos_paused'}" class="icon text-center {$multiModality.primary === 'auditory' ? 'fs-4xl' : 'fs-3xl'}" row={1}  />
 
       <gridLayout row={3} columns="*, auto, *">
          <Button text="Gesamtübersicht anzeigen"  icon="route" iconPosition="pre" type="secondary"  column={1} on:tap={openRouteOverview} class="m-b-m {$multiModality.primary === 'auditory' ? 'fs-l' : ''}" />
@@ -253,7 +253,7 @@
 
 
       <gridLayout columns="*, *, *, *, *" rows="auto" row={4} class="m-b-m p-s bg-primary-light border-radius">
-        <Button column={0} columnSpan={3} text="Pause beenden" icon="local_cafe" iconPosition="pre" on:tap={togglePause} />
+        <Button column={0} columnSpan={3} text="Pause vorbei" icon="check_circle_outline" iconPosition="pre" on:tap={togglePause} />
         <Button column={3} icon="contacts" on:tap={openContacts} class="m-l-s"/>
         <Button column={4} icon={$multiModality.primary === 'auditory' ? 'volume_up' : 'volume_off'} class="m-l-s" on:tap={toggleAudio} />
       </gridLayout>
@@ -319,7 +319,7 @@
           <Button text="Gesamtübersicht anzeigen" icon="route" iconPosition="pre" type="secondary" column={1} on:tap={openRouteOverview} class="m-b-m {$multiModality.primary === 'auditory' ? 'fs-l' : ''}"/>
         </gridLayout>
         <gridLayout columns="*, *, *, *, *" rows="auto" row={4} class="m-b-m p-s bg-primary-light border-radius">
-          <Button column={0} columnSpan={2} text="Pause" icon="local_cafe" iconPosition="pre" on:tap={togglePause} />
+          <Button column={0} columnSpan={2} text="Pause" icon="motion_photos_paused" iconPosition="pre" on:tap={togglePause} />
           <Button column={2} icon="contacts" on:tap={openContacts} class="m-l-s"/>
           <Button column={3} icon="warning" class="m-l-s" />
           <Button column={4} icon={$multiModality.primary === 'auditory' ? 'volume_up' : 'volume_off'} class="m-l-s" on:tap={toggleAudio} />
