@@ -7,10 +7,6 @@ import { HereApiRoute } from "~/api/routes";
 export interface Journey {
   departure: Place;
   arrival: Place;
-  time: {
-    type: JourneyPlanMode;
-    value: Date;
-  };
   reminderBefore: Minutes;
   companionMode: CompanionMode;
   sections: HereApiRoute["sections"];

@@ -1,50 +1,43 @@
 <script type="ts">
-  import { navigate, goBack, closeModal } from "svelte-native";
-  import { localize as L } from '@nativescript/localize'
-  import RouteSelection from "./041_RouteSelection.svelte";
-  import { EventData, getRootLayout } from "@nativescript/core";
+  import { localize as L } from '@nativescript/localize';
+
+  import SelectionStep from "./SelectionStep.svelte";
+  import RouteSelection from './041_RouteSelection.svelte';
+
+  import { planJourney } from "~/stores";
+  import { PreferredJourneyMode } from "~/types";
+
+  import BigButton from "~/shared/components/BigButton.svelte";;
+  import { generateIcon } from "~/shared/utils/icons"
   import { enumKeys } from "~/shared/utilites";
 
-  import { planJourney } from "~/stores"
-  import { PreferredJourneyMode } from "~/types"
-  import Button from "~/shared/components/Button.svelte";
+  let wrapper: SelectionStep;
 
-  function select(mode: PreferredJourneyMode) {
-    $planJourney.preferredJourneyMode = mode;
+  function factoryOnSelect(mode: PreferredJourneyMode) {
+    return () => {
+      $planJourney.preferredJourneyMode = mode;
+    }
   }
 
-  function onNavigateBack() {
-    goBack({
-      frame: 'planJourneySelection',
-    });
-  }
-  function onNavigateNext() {
-    navigate({
-      page: RouteSelection as any,
-      frame: 'planJourneySelection',
-    });
-  }
-  function closeBottomSheet() {
-    planJourney.reset();
-    closeModal(true);
-  }
 </script>
 
-<page actionBarHidden={true}  class="bg-default">
+<script type="ts" context="module">
+  export const id = 'selectionStep_JourneyPreferences';
+</script>
+
+<SelectionStep nextPage={RouteSelection} bind:this={wrapper} showForwards={$planJourney.preferredJourneyMode !== null} showTime={true} {id}>
+
   <stackLayout class="main-layout">
-    <button text={L('close')} on:tap="{closeBottomSheet}" class="link" />
-    <label text="{$planJourney.departure?.icon} {$planJourney.departure?.name} -> {$planJourney.arrival?.icon} {$planJourney.arrival?.name}" textWrap="true" />
-    <label text="Bei der Reise ist mir besonders wichtig? " />
-    {#each enumKeys(PreferredJourneyMode) as mode} }
-      <stackLayout>
-        <button text="{L('preffered_journey_mode.' + PreferredJourneyMode[mode])}" on:tap={() => select(PreferredJourneyMode[mode])}  />
-      </stackLayout>
+    <label text="Bei der Reise ist mir besonders wichtig?" textWrap={true} class="fs-l fw-bold m-b-xl"/>
+
+    {#each enumKeys(PreferredJourneyMode) as mode}
+      <BigButton icon={generateIcon(PreferredJourneyMode[mode])} label="{L('preffered_journey_mode.' + PreferredJourneyMode[mode])}" on:tap={factoryOnSelect(PreferredJourneyMode[mode])} class="m-b-m" selected={PreferredJourneyMode[mode] === $planJourney.preferredJourneyMode}/>
     {/each}
 
-    <label text="{L('preffered_journey_mode._')}: { $planJourney.preferredJourneyMode }" />
-
-    <Button text="Zurück" icon="chevron_left" iconPosition="pre" type="secondary" on:tap="{onNavigateBack}" />
-    <Button text="Weiter" icon="chevron_right" iconPosition="post" on:tap="{onNavigateNext}" />
-
+    <button text="Mir egal" class="link m-t-m" on:tap={() => {
+      factoryOnSelect(PreferredJourneyMode[enumKeys(PreferredJourneyMode)[0]])();
+      wrapper.navForwards();
+    }} />
   </stackLayout>
-</page>
+
+</SelectionStep>

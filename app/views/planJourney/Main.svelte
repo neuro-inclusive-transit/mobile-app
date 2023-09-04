@@ -1,5 +1,5 @@
 <script type="ts">
-  import { navigate, showModal } from "svelte-native";
+  import { showModal } from "svelte-native";
   import { EventData, } from "@nativescript/core";
   import { confirm } from '@nativescript/core/ui/dialogs'
 
@@ -29,8 +29,6 @@
       let date = new Date(journey.sections[0].departure.time)
       let dateString = printDate(date);
 
-      console.log(dateString, journey.sections[0].departure.time)
-
       if (!journeysByDate[dateString]) {
         journeysByDate[dateString] = []
       }
@@ -47,6 +45,7 @@
         $liveJourney = {
           ...journey,
           isPaused: false,
+          isCompleted: false,
           currentSection: 0,
           currentAction: 0,
           currentIntermediateStop: 0,
@@ -88,8 +87,6 @@
       <stackLayout  class="main-layout">
         {#each Object.entries(journeysByDate) as [date, journeys]}
           <label class="m-t-m fs-l fw-bold" text="{date}"></label>
-
-
 
           {#each journeys as journey}
           <Route
