@@ -253,7 +253,7 @@
 
 
       <gridLayout columns="*, *, *, *, *" rows="auto" row={4} class="m-b-m p-s bg-primary-light border-radius">
-        <Button column={0} columnSpan={3} text="Pause beendet" icon="local_cafe" iconPosition="pre" on:tap={togglePause} />
+        <Button column={0} columnSpan={3} text="Pause beenden" icon="local_cafe" iconPosition="pre" on:tap={togglePause} />
         <Button column={3} icon="contacts" on:tap={openContacts} class="m-l-s"/>
         <Button column={4} icon={$multiModality.primary === 'auditory' ? 'volume_up' : 'volume_off'} class="m-l-s" on:tap={toggleAudio} />
       </gridLayout>
