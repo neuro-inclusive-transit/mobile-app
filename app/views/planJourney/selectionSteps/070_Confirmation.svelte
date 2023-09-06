@@ -10,6 +10,11 @@
   import { planJourney, journeys } from "~/stores";
   import { printDate, getTime } from "~/shared/utils/time";
 
+  import { mqtt_client } from "~/views/planJourney/Main.svelte";
+  import { subscribe } from "~/shared/utils/mqtt";
+
+  subscribe(mqtt_client, '#')
+
   let wrapper: SelectionStep;
 
   function saveToJourneys() {
