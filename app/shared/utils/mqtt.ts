@@ -67,7 +67,7 @@ export class MQTT {
 */
 
 
-export function subscribe(client: MQTTClient, topic: string): void {
+export function subscribeTopic(client: MQTTClient, topic: string): void {
     const opts: SubscribeOptions = {
         qos: 1
     };

@@ -16,9 +16,6 @@
   import { Journey, journeys, liveJourney, tabIndex } from "~/stores";
   import { connectionType } from "@nativescript/core/connectivity";
 
-  //const mqtt: MQTT = new MQTT();
-  //mqtt.connect();
-
   const mqtt_host: string = "localhost";
   const mqtt_port: number = 9001;
   const mqtt_username: string = "";
@@ -28,9 +25,9 @@
   const mqtt_autoReconnect: boolean = true;
 
   const mqtt_clientOptions: ClientOptions = {
-        host: mqtt_host,
-        port: mqtt_port
-      };
+      host: mqtt_host,
+      port: mqtt_port
+    };
 
   export const mqtt_client: MQTTClient = new MQTTClient(mqtt_clientOptions);
 
