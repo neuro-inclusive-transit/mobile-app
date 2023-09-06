@@ -11,7 +11,7 @@
   import { calcDurationBetween, printTime, printDate} from "~/shared/utils/time"
 
   import { MQTTClient, ClientOptions, SubscribeOptions, ConnectionOptions } from "@edusperoni/nativescript-mqtt";
-  import { connectMQTT } from "~/shared/utils/mqtt";
+  import { connectMQTT, subscribeTopic } from "~/shared/utils/mqtt";
 
   import { Journey, journeys, liveJourney, tabIndex } from "~/stores";
   import { connectionType } from "@nativescript/core/connectivity";
@@ -99,6 +99,7 @@
 
   <gridLayout rows="auto, *" columns="*">
     <gridLayout row={0} columns="*, auto" class="main-layout">
+      <Button column={0} text="Subscribe" on:tap={() => subscribeTopic(mqtt_client, '#')} />
       <Button column={1} text="Neue Reise planen" icon="add" iconPosition="post" on:tap={addJourney} />
     </gridLayout>
 

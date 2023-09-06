@@ -13,7 +13,7 @@
   import { mqtt_client } from "~/views/planJourney/Main.svelte";
   import { subscribeTopic } from "~/shared/utils/mqtt";
 
-  subscribeTopic(mqtt_client, '#')
+  // subscribeTopic(mqtt_client, '#')
 
   let wrapper: SelectionStep;
 
