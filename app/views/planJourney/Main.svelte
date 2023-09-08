@@ -10,28 +10,13 @@
 
   import { calcDurationBetween, printTime, printDate} from "~/shared/utils/time"
 
-  import { MQTTClient, ClientOptions, SubscribeOptions, ConnectionOptions } from "@edusperoni/nativescript-mqtt";
-  import { connectMQTT, subscribeTopic } from "~/shared/utils/mqtt";
+  import { createClient, startConnection } from "~/shared/utils/mqtt";
 
   import { Journey, journeys, liveJourney, tabIndex } from "~/stores";
   import { connectionType } from "@nativescript/core/connectivity";
 
-  const mqtt_host: string = "localhost";
-  const mqtt_port: number = 9001;
-  const mqtt_username: string = "";
-  const mqtt_password: string = "";
-  const mqtt_useSSL: boolean = false;
-  const mqtt_cleanSession: boolean = false;
-  const mqtt_autoReconnect: boolean = true;
-
-  const mqtt_clientOptions: ClientOptions = {
-      host: mqtt_host,
-      port: mqtt_port
-    };
-
-  export const mqtt_client: MQTTClient = new MQTTClient(mqtt_clientOptions);
-
-  connectMQTT(mqtt_client, mqtt_cleanSession, mqtt_useSSL, mqtt_username, mqtt_password);
+  createClient();
+  startConnection();
 
   function addJourney() {
     showModal({ page: SelectionProcess as any })
@@ -99,7 +84,6 @@
 
   <gridLayout rows="auto, *" columns="*">
     <gridLayout row={0} columns="*, auto" class="main-layout">
-      <Button column={0} text="Subscribe" on:tap={() => subscribeTopic(mqtt_client, '#')} />
       <Button column={1} text="Neue Reise planen" icon="add" iconPosition="post" on:tap={addJourney} />
     </gridLayout>
 

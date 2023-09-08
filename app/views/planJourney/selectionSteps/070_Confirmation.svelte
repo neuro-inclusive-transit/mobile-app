@@ -10,10 +10,9 @@
   import { planJourney, journeys } from "~/stores";
   import { printDate, getTime } from "~/shared/utils/time";
 
-  import { mqtt_client } from "~/views/planJourney/Main.svelte";
   import { subscribeTopic } from "~/shared/utils/mqtt";
 
-  // subscribeTopic(mqtt_client, '#')
+  subscribeTopic('#')
 
   let wrapper: SelectionStep;
 

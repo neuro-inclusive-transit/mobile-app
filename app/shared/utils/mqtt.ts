@@ -1,73 +1,27 @@
 import { MQTTClient, ClientOptions, SubscribeOptions, ConnectionOptions } from "@edusperoni/nativescript-mqtt";
 
-/*
-export class MQTT {
-    mqtt_host: string = "localhost";
-    mqtt_port: number = 9001;
-    mqtt_username: string = "";
-    mqtt_password: string = "";
-    mqtt_useSSL: boolean = false;
-    mqtt_cleanSession: boolean = false;
-    mqtt_autoReconnect: boolean = true;
+const defaultConnOption: ConnectionOptions = {
+    cleanSession: false,
+    useSSL: false,
+    userName: "",
+    password: "",
+    mqttVersion: 3
+}
 
-    mqtt_clientOptions: ClientOptions = {
-      host: this.mqtt_host,
-      port: this.mqtt_port
-    };
+const mqtt_clientOptions: ClientOptions = {
+    host: "localhost", // TODO: ENV
+    port: 9001// TODO: ENV
+  };
 
-    mqtt_client: MQTTClient = new MQTTClient(this.mqtt_clientOptions);
+export let client: MQTTClient;
 
-    constructor() {
-        this.setupHandlers();
-    }
+export function createClient() {
+    // if existiert schon dann rau
 
-    setupHandlers(): void {
-        this.mqtt_client.onConnectionFailure.on((err: any) => {
-            console.log("Connection failed: " + JSON.stringify(err));
-        });
-        this.mqtt_client.onConnectionSuccess.on(() => {
-            console.log("Connected successfully!");
-        });
-        this.mqtt_client.onConnectionLost.on((err: any) => {
-            console.log("Connection lost: " + JSON.stringify(err));
-        });
-        this.mqtt_client.onMessageArrived.on((message) => {
-            console.log("Message received: " + JSON.stringify(message));
-        });
-        this.mqtt_client.onMessageDelivered.on((message) => {
-            console.log("Message delivered: " + JSON.stringify(message));
-        });
-    }
+    client = new MQTTClient(mqtt_clientOptions);
+}
 
-    subscribe(topic: string): void {
-        const opts: SubscribeOptions = {
-            qos: 1
-        };
-
-        this.mqtt_client.subscribe(topic, opts).then(
-            (params) => console.log(`subscribed to ${topic} with QoS ${params.grantedQos}`),
-            (err) => console.log("error subscribing")
-        );
-    }
-
-    connect(): void {
-        const connOptions: ConnectionOptions = {
-            cleanSession: this.mqtt_cleanSession,
-            useSSL: this.mqtt_useSSL,
-            userName: this.mqtt_username,
-            password: this.mqtt_password,
-            mqttVersion: 3
-        };
-        this.mqtt_client.connect(connOptions).then(() => {
-        }, (err) => {
-            console.log("connection error: " + JSON.stringify(err));
-        });
-    }
-  }
-*/
-
-
-export function subscribeTopic(client: MQTTClient, topic: string): void {
+export function subscribeTopic(topic: string): void {
     const opts: SubscribeOptions = {
         qos: 1
     };
@@ -78,16 +32,14 @@ export function subscribeTopic(client: MQTTClient, topic: string): void {
     );
 }
 
-export function connectMQTT(client: MQTTClient, mqtt_cleanSession:boolean, mqtt_useSSL:boolean, mqtt_username:string, mqtt_password:string): void {
+export function startConnection(connOptions?: Partial<ConnectionOptions>): void {
 
-    const connOptions: ConnectionOptions = {
-        cleanSession: mqtt_cleanSession,
-        useSSL: mqtt_useSSL,
-        userName: mqtt_username,
-        password: mqtt_password,
-        mqttVersion: 3
-    };
-    client.connect(connOptions).then(() => {
+    const combinedConnOptions: ConnectionOptions = {
+        ...defaultConnOption,
+        ...connOptions
+    }
+
+    client.connect(combinedConnOptions).then(() => {
     }, (err) => {
         console.log("connection error: " + JSON.stringify(err));
     });
