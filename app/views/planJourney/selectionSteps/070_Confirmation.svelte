@@ -10,10 +10,6 @@
   import { planJourney, journeys } from "~/stores";
   import { printDate, getTime } from "~/shared/utils/time";
 
-  import { subscribeTopic } from "~/shared/utils/mqtt";
-
-  subscribeTopic('#')
-
   let wrapper: SelectionStep;
 
   function saveToJourneys() {
