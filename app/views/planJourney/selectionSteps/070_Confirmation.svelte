@@ -7,12 +7,15 @@
 
   import Button from "~/shared/components/Button.svelte";
 
-  import { planJourney, journeys } from "~/stores";
+  import { planJourney, journeys, JourneyPlan } from "~/stores";
   import { printDate, getTime } from "~/shared/utils/time";
+
+  import { subscribeTopic } from "~/shared/utils/mqtt";
 
   let wrapper: SelectionStep;
 
   function saveToJourneys() {
+    subscribeTrains($planJourney);
     if ($planJourney.departure === null
       || $planJourney.arrival === null
       || $planJourney.preferredRoute === null
@@ -34,6 +37,25 @@
   function closeBottomSheet() {
     planJourney.reset();
     closeModal(true);
+  }
+
+  function subscribeTrains(journey: JourneyPlan){
+    console.log("subscribeTrains");
+
+    if(journey.preferredRoute != null){
+      journey.preferredRoute.sections.forEach(section => {
+        console.log(section.departure.place.evaNr);
+        if(section.departure.place.type === "station"){
+          if (section.transport.name != undefined){
+            let train: string = section.transport.name;
+            train = train.replace("S", "");
+            train = train.replace("RB", "");
+
+            subscribeTopic(section.departure.place.evaNr + "/" + train);
+          }
+        }
+      });
+    }
   }
 
 </script>

@@ -6,8 +6,6 @@
 
   import { routeApi, HereApiRoute } from "~/api";
 
-  import { subscribeTopic } from "~/shared/utils/mqtt";
-
   import Route from "~/shared/components/Route.svelte";
   import { calcDurationBetween, printTime, getTime } from "~/shared/utils/time";
 
@@ -16,7 +14,6 @@
   let crowdPercentage = 0.5;
 
   function factoryOnSelect(route: HereApiRoute) {
-    subscribeTrains(route);
     return () => {
       $planJourney.preferredRoute = route;
       wrapper.navForwards();
@@ -48,22 +45,6 @@
       end: new Date(section.arrival.time),
       transport_name: section.transport.name,
     }));
-  }
-
-  function subscribeTrains(journey: HereApiRoute){
-
-    journey.sections.forEach(section => {
-      console.log(section.departure.place.evaNr);
-      if(section.departure.place.type === "station"){
-        if (section.transport.name != undefined){
-          let train: string = section.transport.name;
-          train = train.replace("S", "");
-          train = train.replace("RB", "");
-
-          subscribeTopic(section.departure.place.evaNr + "/" + train);
-      }
-    }
-    });
   }
 
 </script>
