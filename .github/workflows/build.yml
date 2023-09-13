@@ -1,0 +1,29 @@
+name: Test Build
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest]
+        include:
+          - os: windows-latest
+            platform: android
+          - os: macos-latest
+            platform: ios
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    - uses: hrueger/setup-nativescript@v1.1.0
+      with:
+        nativescript-version: '8.5.3'
+    - name: Build
+      run: ns build ${{ matrix.platform }}
