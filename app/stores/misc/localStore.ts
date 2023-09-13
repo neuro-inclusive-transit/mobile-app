@@ -7,6 +7,6 @@ export function localStore<T>(initialData: T) {
     subscribe,
     set,
     update,
-    reset : () => set(initialData)
+    reset: () => set(initialData),
   };
 }

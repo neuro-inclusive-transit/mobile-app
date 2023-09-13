@@ -1,10 +1,10 @@
-import { TNSTextToSpeech, SpeakOptions } from 'nativescript-texttospeech';
+import { TNSTextToSpeech, SpeakOptions } from "nativescript-texttospeech";
 
 const TTS = new TNSTextToSpeech();
 
-let genericSpeakOptions: Omit<SpeakOptions, 'text'> = {
+let genericSpeakOptions: Omit<SpeakOptions, "text"> = {
   speakRate: 0.55,
-  locale: 'de-DE',
+  locale: "de-DE",
 };
 
 /**

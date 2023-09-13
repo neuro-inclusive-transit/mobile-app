@@ -5,19 +5,19 @@ export enum CompanionMode {
 }
 
 export enum JourneyPlanMode {
-  Departure = 'departure',
-  Arrival = 'arrival',
+  Departure = "departure",
+  Arrival = "arrival",
 }
 
 export enum PreferredTransportation {
-  Car = 'car',
-  Bus = 'bus',
-  LongDistanceTrain = 'long-distance-train',
-  SubUrbanTrain = 'sub-urban-train',
+  Car = "car",
+  Bus = "bus",
+  LongDistanceTrain = "long-distance-train",
+  SubUrbanTrain = "sub-urban-train",
 }
 
 export enum PreferredJourneyMode {
-  Fastest = 'fastest',
-  LeastChanges = 'least-changes',
-  LeastWalking = 'least-walking',
+  Fastest = "fastest",
+  LeastChanges = "least-changes",
+  LeastWalking = "least-walking",
 }

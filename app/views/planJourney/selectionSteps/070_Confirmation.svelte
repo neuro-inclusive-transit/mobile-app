@@ -1,3 +1,7 @@
+<script type="ts" context="module">
+  export const id = "selectionStep_Confirmation";
+</script>
+
 <script type="ts">
   import { onMount } from "svelte";
   import { closeModal } from "svelte-native";
@@ -13,12 +17,14 @@
   let wrapper: SelectionStep;
 
   function saveToJourneys() {
-    if ($planJourney.departure === null
-      || $planJourney.arrival === null
-      || $planJourney.preferredRoute === null
-      || $planJourney.preferredRoute.sections.length === 0
-      || $planJourney.companionMode === null
-      || $planJourney.reminderBefore === null) {
+    if (
+      $planJourney.departure === null ||
+      $planJourney.arrival === null ||
+      $planJourney.preferredRoute === null ||
+      $planJourney.preferredRoute.sections.length === 0 ||
+      $planJourney.companionMode === null ||
+      $planJourney.reminderBefore === null
+    ) {
       return;
     }
 
@@ -35,25 +41,48 @@
     planJourney.reset();
     closeModal(true);
   }
-
 </script>
 
-<script type="ts" context="module">
-  export const id = 'selectionStep_Confirmation';
-</script>
-
-<SelectionStep nextPage={Confirmation} bind:this={wrapper} {id} on:navigatedTo={saveToJourneys}>
-
-  <label slot="header" text="Super!" textWrap={true} class="fs-xxl fw-bold color-primary m-b-l"/>
+<SelectionStep
+  nextPage={Confirmation}
+  bind:this={wrapper}
+  {id}
+  on:navigatedTo={saveToJourneys}
+>
+  <label
+    slot="header"
+    text="Super!"
+    textWrap={true}
+    class="fs-xxl fw-bold color-primary m-b-l"
+  />
 
   <stackLayout class="main-layout fs-l">
-    <label text="Du hast deine Reise von {$planJourney.departure?.name} nach {$planJourney.arrival?.name} geplant" textWrap="true" class="m-b-m"/>
+    <label
+      text="Du hast deine Reise von {$planJourney.departure
+        ?.name} nach {$planJourney.arrival?.name} geplant"
+      textWrap="true"
+      class="m-b-m"
+    />
 
-    <label text="Du musst {printDate(new Date($planJourney.preferredRoute?.sections[0].departure?.time ?? 0)).toLowerCase()} um {getTime(new Date($planJourney.preferredRoute?.sections[0].departure?.time ?? 0))} Uhr los. Wir erinnern dich {$planJourney.reminderBefore} Minuten vorher." textWrap="true" />
+    <label
+      text="Du musst {printDate(
+        new Date($planJourney.preferredRoute?.sections[0].departure?.time ?? 0),
+      ).toLowerCase()} um {getTime(
+        new Date($planJourney.preferredRoute?.sections[0].departure?.time ?? 0),
+      )} Uhr los. Wir erinnern dich {$planJourney.reminderBefore} Minuten vorher."
+      textWrap="true"
+    />
   </stackLayout>
 
   <gridLayout slot="footer" columns="*, auto, *" rows="auto">
-    <Button text="Zu deinen geplanten Reisen" icon="travel_explore" row={0} column={1} on:tap={closeBottomSheet} class="m-b-xl" iconPosition="pre" />
+    <Button
+      text="Zu deinen geplanten Reisen"
+      icon="travel_explore"
+      row={0}
+      column={1}
+      on:tap={closeBottomSheet}
+      class="m-b-xl"
+      iconPosition="pre"
+    />
   </gridLayout>
-
 </SelectionStep>

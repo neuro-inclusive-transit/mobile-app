@@ -5,6 +5,7 @@
 
   import { tabIndex } from "~/stores";
 </script>
+
 <rootLayout backgroundColor="black">
   <tabView androidTabsPosition="bottom" bind:selectedIndex={$tabIndex}>
     <tabViewItem title="Planung">
