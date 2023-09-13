@@ -4,7 +4,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "lint": "eslint --ext .js,.ts,.svelte app"
+    "lint": "eslint --ext .js,.ts,.svelte app",
+    "lint:fix": "eslint --fix --ext .js,.ts,.svelte app"
   },
   "dependencies": {
     "@nativescript/core": "~8.5.0",
@@ -24,8 +25,12 @@
     "@nativescript/types": "~8.5.0",
     "@nativescript/webpack": "~5.0.14",
     "@typescript-eslint/parser": "^6.5.0",
-    "eslint": "^8.48.0",
-    "eslint-plugin-svelte": "^2.33.0",
+    "eslint": "^8.49.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.0",
+    "eslint-plugin-svelte": "^2.33.1",
+    "prettier": "^3.0.3",
+    "prettier-plugin-svelte": "^3.0.3",
     "svelte": "~3.44.0",
     "svelte-loader": "^3.1.2",
     "svelte-native-preprocessor": "^1.0.0",
