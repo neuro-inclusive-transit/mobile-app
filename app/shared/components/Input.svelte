@@ -1,4 +1,5 @@
 <script type="ts">
+  // eslint-disable-next-line no-unused-vars
   interface $$Props
     extends Partial<svelteNative.JSX.IntrinsicElements["textField"]> {
     pre?: string;

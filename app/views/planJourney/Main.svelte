@@ -1,6 +1,5 @@
 <script type="ts">
   import { showModal } from "svelte-native";
-  import { EventData } from "@nativescript/core";
   import { confirm } from "@nativescript/core/ui/dialogs";
 
   import Route from "~/shared/components/Route.svelte";

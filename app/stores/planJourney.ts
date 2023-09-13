@@ -15,7 +15,7 @@ export const planJourney = localStore<JourneyPlan>({
     type: JourneyPlanMode.Departure,
     value: new Date(),
   },
-  options: new Promise((resolve, reject) => {
+  options: new Promise((resolve) => {
     resolve([]);
   }),
   companionMode: null,

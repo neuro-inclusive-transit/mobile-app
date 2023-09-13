@@ -1,5 +1,4 @@
 <script type="ts">
-  import { navigate } from "svelte-native";
   import { contacts } from "~/stores";
 </script>
 

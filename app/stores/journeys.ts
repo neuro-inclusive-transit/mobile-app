@@ -1,7 +1,7 @@
 import { dbStore } from "~/stores/misc/dbStore";
 import { Minutes } from "~/stores/misc/types";
 import { Place } from "~/stores/places";
-import { CompanionMode, JourneyPlanMode } from "~/types";
+import { CompanionMode } from "~/types";
 import { HereApiRoute } from "~/api/routes";
 
 export interface Journey {

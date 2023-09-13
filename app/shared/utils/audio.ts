@@ -37,7 +37,7 @@ export function playSound(soundFile: keyof typeof soundFiles) {
     player.dispose();
   }
 
-  return new Promise<void>(async (resolve, reject) => {
+  return new Promise<void>((resolve) => {
     playerOptions.completeCallback = () => {
       console.log("play complete");
       resolve();
@@ -45,6 +45,6 @@ export function playSound(soundFile: keyof typeof soundFiles) {
 
     player.debug = true;
 
-    await player.playFromFile(playerOptions);
+    player.playFromFile(playerOptions);
   });
 }

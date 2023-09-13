@@ -3,7 +3,6 @@
 </script>
 
 <script type="ts">
-  import { onMount } from "svelte";
   import { closeModal } from "svelte-native";
 
   import SelectionStep from "./SelectionStep.svelte";

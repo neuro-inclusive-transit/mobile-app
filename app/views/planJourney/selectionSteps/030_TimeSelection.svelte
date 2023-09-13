@@ -5,13 +5,7 @@
 <script type="ts">
   import { onMount, tick } from "svelte";
   import { showModal } from "svelte-native";
-  import {
-    Frame,
-    isAndroid,
-    isIOS,
-    TimePicker,
-    EventData,
-  } from "@nativescript/core";
+  import { Frame, TimePicker } from "@nativescript/core";
 
   import SelectionStep from "./SelectionStep.svelte";
   import JourneyPreferences from "./040_JourneyPreferences.svelte";
@@ -88,6 +82,7 @@
   let renderTimePicker = true;
   $: reMountTimePicker(minHour, minMinute);
 
+  // eslint-disable-next-line no-unused-vars
   async function reMountTimePicker(..._: any[]) {
     renderTimePicker = false;
     await tick();

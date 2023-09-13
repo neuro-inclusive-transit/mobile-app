@@ -46,7 +46,7 @@
         $planJourney.departure = place;
         wrapper.navForwards(JourneyPreferences as any);
       })
-      .catch((err) => {
+      .catch(() => {
         wrapper.navForwards();
       });
   }

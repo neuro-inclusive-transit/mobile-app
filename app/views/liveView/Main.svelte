@@ -1,5 +1,5 @@
 <script type="ts">
-  import { navigate, showModal } from "svelte-native";
+  import { showModal } from "svelte-native";
   import { tick } from "svelte";
   import { confirm } from "@nativescript/core/ui/dialogs";
   import { tabIndex, liveJourney, multiModality } from "~/stores";
@@ -151,36 +151,41 @@
 
     // TODO: Check if next step is reachable
 
-    calculateNewJourney = new Promise(async (resolve) => {
+    calculateNewJourney = new Promise((resolve) => {
       if ($liveJourney == null) {
         resolve(null);
         return;
       }
 
-      console.log("calculate new journey");
+      routeApi
+        .get({
+          origin: currentLocation ? currentLocation : { lat: 0, lng: 0 },
+          destination: $liveJourney.arrival.location,
+          departureTime: new Date(),
+          alternatives: 1,
+        })
+        .then((nextOptions) => {
+          if ($liveJourney == null) {
+            resolve(null);
+            return;
+          }
 
-      const nextOptions = await routeApi.get({
-        origin: currentLocation ? currentLocation : { lat: 0, lng: 0 },
-        destination: $liveJourney.arrival.location,
-        departureTime: new Date(),
-        alternatives: 1,
-      });
-
-      console.log("nextOptions", nextOptions);
-
-      $liveJourney = {
-        ...$liveJourney,
-        sections: [
-          ...$liveJourney.sections.slice(0, $liveJourney.currentSection + 1),
-          false,
-          ...nextOptions[0].sections,
-        ],
-        currentSection: $liveJourney.currentSection + 2,
-      };
-
-      console.log("new live journey", $liveJourney);
-
-      resolve(null);
+          $liveJourney = {
+            ...$liveJourney,
+            sections: [
+              ...$liveJourney.sections.slice(
+                0,
+                $liveJourney.currentSection + 1,
+              ),
+              false,
+              ...nextOptions[0].sections,
+            ],
+            currentSection: $liveJourney.currentSection + 2,
+          };
+        })
+        .then(() => {
+          resolve(null);
+        });
     });
   }
 
@@ -243,7 +248,7 @@
         horizontalAlignment="center"
       />
       <label
-        text="Du hast aktuell keine Navigation aktiviert. In dem Menü "Planung" kannst du eine Route erstellen und die Navigation starten."
+        text="Du hast aktuell keine Navigation aktiviert. In dem Menü Planung kannst du eine Route erstellen und die Navigation starten."
         textWrap="true"
         verticalAlignment="middle"
       />
@@ -255,7 +260,7 @@
         <label text="route" class="icon fs-xxl" />
         <label text="Deine Route wird berechnet..." textWrap={true} />
       </stackLayout>
-    {:then _}
+    {:then}
       <gridLayout
         columns="*"
         rows="auto, auto, *, auto, auto"
@@ -399,7 +404,6 @@
               row={1}
               text={(() => {
                 let id = $liveJourney.currentIntermediateStop;
-                let stop = currentSection.intermediateStops[id];
 
                 if (currentSection.intermediateStops.length === 0) {
                   return `${transportTypeToIcon(

@@ -1,6 +1,6 @@
 <script type="ts">
   import { closeModal } from "svelte-native";
-  import { journeys, liveJourney } from "~/stores";
+  import { liveJourney } from "~/stores";
   import { dateToTime, transportTypeToIcon } from "~/shared/utilites";
   import { localize as L } from "@nativescript/localize";
 
