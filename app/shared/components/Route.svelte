@@ -1,22 +1,21 @@
 <script lang="ts" context="module">
-    export function printReminder(minutes: number){
-    if (minutes === 0){
-      return "Keine Erinnerung"
+  export function printReminder(minutes: number) {
+    if (minutes === 0) {
+      return "Keine Erinnerung";
     }
 
-    return `Erinnerung: ${minutes} Min. vorher`
+    return `Erinnerung: ${minutes} Min. vorher`;
   }
 </script>
 
 <script type="ts">
   import { sizes } from "../sizes";
 
-  import {transportTypeToIcon} from "~/shared/utilites";
+  import { transportTypeToIcon } from "~/shared/utilites";
 
   export let route: RouteSection[] = [];
   let cssClass = "";
   export { cssClass as class };
-
 
   function getDuration(duration: { hours: number; minutes: number }) {
     if (duration.hours === 0) {
@@ -31,34 +30,67 @@
     end: Date;
     transport_name?: string;
   };
-
 </script>
 
-<gridLayout columns="*,auto,auto" rows="auto,auto" horizontalAlignment="center" class="route {cssClass}" on:tap>
-    <slot name="maininfo"><label text="No content" /></slot>
+<gridLayout
+  columns="*,auto,auto"
+  rows="auto,auto"
+  horizontalAlignment="center"
+  class="route {cssClass}"
+  on:tap
+>
+  <slot name="maininfo"><label text="No content" /></slot>
 
-    <slot name="crowdPercentage"></slot>
+  <slot name="crowdPercentage" />
 
   <label col={2} row={0} class="icon fs-l" text="arrow_forward_ios" />
 
-  <wrapLayout col={0} row={1} colSpan={3} horizontalAlignment="center" marginTop={sizes.s} class="steps">
+  <wrapLayout
+    col={0}
+    row={1}
+    colSpan={3}
+    horizontalAlignment="center"
+    marginTop={sizes.s}
+    class="steps"
+  >
     {#each route as section, i}
       <stackLayout class="steps__item" orientation="horizontal">
-        <label class="icon color-primary" text={transportTypeToIcon(section.type)} horizontalAlignment="center" />
-        <label text={section.transport_name
-        ? section.transport_name
-        : getDuration({
-          hours: Math.floor((section.end.getTime() - section.begin.getTime()) / 1000 / 60 / 60),
-          minutes: Math.floor(((section.end.getTime() - section.begin.getTime()) / 1000 / 60) % 60)
-        })} horizontalAlignment="center" paddingRight="8" />
+        <label
+          class="icon color-primary"
+          text={transportTypeToIcon(section.type)}
+          horizontalAlignment="center"
+        />
+        <label
+          text={section.transport_name
+            ? section.transport_name
+            : getDuration({
+                hours: Math.floor(
+                  (section.end.getTime() - section.begin.getTime()) /
+                    1000 /
+                    60 /
+                    60,
+                ),
+                minutes: Math.floor(
+                  ((section.end.getTime() - section.begin.getTime()) /
+                    1000 /
+                    60) %
+                    60,
+                ),
+              })}
+          horizontalAlignment="center"
+          paddingRight="8"
+        />
       </stackLayout>
 
       {#if i < route.length - 1}
-        <label class="icon steps__next" text="chevron_right" horizontalAlignment="center" />
+        <label
+          class="icon steps__next"
+          text="chevron_right"
+          horizontalAlignment="center"
+        />
       {/if}
     {/each}
   </wrapLayout>
-
 </gridLayout>
 
 <style>

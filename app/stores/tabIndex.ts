@@ -1,3 +1,3 @@
-import { localStore } from './misc/localStore';
+import { localStore } from "./misc/localStore";
 
 export const tabIndex = localStore<number>(0);
