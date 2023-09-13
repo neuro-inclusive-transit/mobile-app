@@ -40,11 +40,9 @@
   }
 
   function subscribeTrains(journey: JourneyPlan){
-    console.log("subscribeTrains");
 
     if(journey.preferredRoute != null){
       journey.preferredRoute.sections.forEach(section => {
-        console.log(section.departure.place.evaNr);
         if(section.departure.place.type === "station"){
           if (section.transport.name != undefined){
             let train: string = section.transport.name;
