@@ -3,6 +3,7 @@
   import { EventData, } from "@nativescript/core";
   import { confirm } from '@nativescript/core/ui/dialogs'
 
+  import ProgressComponent from "~/shared/components/ProgressComponent.svelte";
   import Route from "~/shared/components/Route.svelte";
   import { printReminder } from "~/shared/components/Route.svelte";
   import Button from "~/shared/components/Button.svelte";
@@ -78,10 +79,15 @@
 <page class="bg-default">
   <actionBar title="Meine Reisen" />
 
-  <gridLayout rows="auto, *" columns="*">
+  <gridLayout rows="auto, *, *" columns="*">
     <gridLayout row={0} columns="*, auto" class="main-layout">
       <Button column={1} text="Neue Reise planen" icon="add" iconPosition="post" on:tap={addJourney} />
     </gridLayout>
+
+    <gridLayout row={2} columns="*, auto" class="main-layout">
+      <ProgressComponent />
+    </gridLayout>
+
 
     <scrollView row={1}>
       <stackLayout  class="main-layout">
