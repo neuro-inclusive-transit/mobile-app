@@ -202,14 +202,13 @@
         currentSection.actions[$liveJourney.currentAction].instruction;
     } else if (currentSection.intermediateStops) {
       let id = $liveJourney.currentIntermediateStop;
-      let stop = currentSection.intermediateStops[id];
 
       if (currentSection.intermediateStops.length === 0) {
         currentSupportBoxText = `Steige bei ${currentSection.departure.place.name} in die ${currentSection.transport.name} Richtung ${currentSection.transport.headsign} ein und steige bei ${currentSection.arrival.place.name} wieder aus.`;
       } else {
         switch (id) {
           case 0:
-            currentSupportBoxText = `Steige bei ${stop.departure.place.name} in die ${currentSection.transport.name} Richtung ${currentSection.transport.headsign} ein.`;
+            currentSupportBoxText = `Steige bei ${currentSection.departure.place.name} in die ${currentSection.transport.name} Richtung ${currentSection.transport.headsign} ein.`;
             break;
           case currentSection.intermediateStops.length - 1:
             currentSupportBoxText = `Gehe zum Ausgang und steige bei ${currentSection.arrival.place.name} aus.`;
@@ -220,7 +219,7 @@
         }
       }
     } else {
-      currentSupportBoxText = `Du musst von {currentSection.departure.place.name} nach {currentSection.arrival.place.name}`;
+      currentSupportBoxText = `Du musst von ${currentSection.departure.place.name} nach ${currentSection.arrival.place.name}`;
     }
   }
 
