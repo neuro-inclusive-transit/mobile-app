@@ -137,6 +137,7 @@
 
     // TODO: Check if next step is reachable
 
+
     calculateNewJourney = new Promise(async (resolve) => {
 
       if ($liveJourney == null) {
@@ -228,7 +229,7 @@
     <label text='Du hast aktuell keine Navigation aktiviert. In dem Menü "Planung" kannst du eine Route erstellen und die Navigation starten.' textWrap="true" verticalAlignment="middle"/>
     <button text="Route planen" verticalAlignment="bottom"/>
   </gridLayout>
-  
+
 
   {:else}
 
@@ -239,7 +240,7 @@
       </stackLayout>
     {:then _}
 
-    <gridLayout columns="*" rows="auto, auto, *, auto, auto" class="main-layout">
+    <gridLayout columns="*" rows={$multiModality.primary === 'auditory' ? 'auto, auto, *, auto, auto, auto' : 'auto, auto, *, auto, auto'} class="main-layout">
 
       {#if $liveJourney.isPaused}
 
@@ -250,7 +251,6 @@
       <gridLayout row={3} columns="*, auto, *">
          <Button text="Gesamtübersicht anzeigen"  icon="route" iconPosition="pre" type="secondary"  column={1} on:tap={openRouteOverview} class="m-b-m {$multiModality.primary === 'auditory' ? 'fs-l' : ''}" />
       </gridLayout>
-
 
       <gridLayout columns="*, *, *, *, *" rows="auto" row={4} class="m-b-m p-s bg-primary-light border-radius">
         <Button column={0} columnSpan={3} text="Pause vorbei" icon="check_circle_outline" iconPosition="pre" on:tap={togglePause} />
@@ -318,12 +318,26 @@
         <gridLayout row="3" columns="*, auto, *">
           <Button text="Gesamtübersicht anzeigen" icon="route" iconPosition="pre" type="secondary" column={1} on:tap={openRouteOverview} class="m-b-m {$multiModality.primary === 'auditory' ? 'fs-l' : ''}"/>
         </gridLayout>
-        <gridLayout columns="*, *, *, *, *" rows="auto" row={4} class="m-b-m p-s bg-primary-light border-radius">
-          <Button column={0} columnSpan={2} text="Pause" icon="motion_photos_paused" iconPosition="pre" on:tap={togglePause} />
-          <Button column={2} icon="contacts" on:tap={openContacts} class="m-l-s"/>
-          <Button column={3} icon="warning" class="m-l-s" />
-          <Button column={4} icon={$multiModality.primary === 'auditory' ? 'volume_up' : 'volume_off'} class="m-l-s" on:tap={toggleAudio} />
-        </gridLayout>
+
+        {#if $multiModality.primary === 'auditory'}
+
+          <gridLayout columns="*, *, *, *" rows="auto, auto" row={4} rowSpan={2} class="m-b-m p-s bg-primary-light border-radius">
+            <Button column={0} columnSpan={2} row={1} text="Pause" icon="motion_photos_paused" iconPosition="pre" on:tap={togglePause} />
+            <Button column={2} columnSpan={2} row ={1} text="Kontakte" icon="contacts" iconPosition="pre" on:tap={openContacts} class="m-l-s"/>
+            <Button column={0} columnSpan={2} row={2} text="Melden" icon="warning" iconPosition="pre" class="m-l-s" />
+            <Button column={2} columnSpan={2} row={2} text="Ton aus" icon={$multiModality.primary === 'auditory' ? 'volume_up' : 'volume_off'} iconPosition="pre" class="m-l-s" on:tap={toggleAudio} />
+          </gridLayout>
+
+
+        {:else}
+          <gridLayout columns="*, *, *, *, *" rows="auto" row={4} class="m-b-m p-s bg-primary-light border-radius">
+            <Button column={0} columnSpan={2} text="Pause" icon="motion_photos_paused" iconPosition="pre" on:tap={togglePause} />
+            <Button column={2} icon="contacts" on:tap={openContacts} class="m-l-s"/>
+            <Button column={3} icon="warning" class="m-l-s" />
+            <Button column={4} icon={$multiModality.primary === 'auditory' ? 'volume_up' : 'volume_off'} class="m-l-s" on:tap={toggleAudio} />
+          </gridLayout>
+
+        {/if}
 
       {/if}
 
@@ -331,5 +345,5 @@
     </gridLayout>
 
     {/await}
-  {/if}
+  {/if}s
 </page>
