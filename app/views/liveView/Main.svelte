@@ -444,14 +444,18 @@
               on:tap={simulateNextStep}
             />
 
-            <Map row={2} bind:currentLocation={currentLocation} startLocation={{
-              lat: currentSection.departure.place.location.lat,
-              lng: currentSection.departure.place.location.lng,
-            }} endLocation={{
-              lat: currentSection.arrival.place.location.lat,
-              lng: currentSection.arrival.place.location.lng,
-            }} />
-
+            <Map
+              row={2}
+              bind:currentLocation
+              startLocation={{
+                lat: currentSection.departure.place.location.lat,
+                lng: currentSection.departure.place.location.lng,
+              }}
+              endLocation={{
+                lat: currentSection.arrival.place.location.lat,
+                lng: currentSection.arrival.place.location.lng,
+              }}
+            />
           {/if}
 
           <gridLayout row="3" columns="*, auto, *">

@@ -1,46 +1,39 @@
 const urlParams = new URLSearchParams(window.location.search);
-const hereApiKey = urlParams.get('hereApiKey');
+const hereApiKey = urlParams.get("hereApiKey");
 
 const currentLocation = {
-  lat: urlParams.get('currentLocation').split(',').map(Number)[0],
-  lng: urlParams.get('currentLocation').split(',').map(Number)[1]
+  lat: urlParams.get("currentLocation").split(",").map(Number)[0],
+  lng: urlParams.get("currentLocation").split(",").map(Number)[1],
 };
 
-const startLocation = decodeURIComponent(urlParams.get('startLocation'));
-const endLocation = decodeURIComponent(urlParams.get('endLocation'));
+const startLocation = decodeURIComponent(urlParams.get("startLocation"));
+const endLocation = decodeURIComponent(urlParams.get("endLocation"));
 
 console.log(startLocation);
 console.log(endLocation);
 
 // Initialize the platform object:
 var platform = new H.service.Platform({
-  apikey: hereApiKey
+  apikey: hereApiKey,
 });
 
 // Retrieve the target element for the map:
-var targetElement = document.getElementById('mapContainer');
-
+var targetElement = document.getElementById("mapContainer");
 
 // Obtain the default map types from the platform object
 var mapLayers = platform.createDefaultLayers();
 
 // Instantiate (and display) a map object:
-var map = new H.Map(
-  document.getElementById('mapContainer'),
-  mapLayers.vector.normal.map,
-  {
-    zoom: 15,
-    center: currentLocation
-  }
-);
+var map = new H.Map(targetElement, mapLayers.vector.normal.map, {
+  zoom: 15,
+  center: currentLocation,
+});
 
 // Enable the event system on the map instance:
 var mapEvents = new H.mapevents.MapEvents(map);
 
-
-
 // Add event listener:
-map.addEventListener('tap', function (evt) {
+map.addEventListener("tap", function (evt) {
   // Log 'tap' and 'mouse' events:
   console.log(evt.type, evt.currentPointer.type);
 });
@@ -52,16 +45,15 @@ var behavior = new H.mapevents.Behavior(mapEvents);
 const ui = H.ui.UI.createDefault(map, mapLayers);
 
 var routingParameters = {
-  'routingMode': 'fast', //TODO: sync with mobile app
-  'transportMode': 'pedestrian',
+  routingMode: "fast", //TODO: sync with mobile app
+  transportMode: "pedestrian",
   // The start point of the route:
-  'origin': startLocation,
+  origin: startLocation,
   // The end point of the route:
-  'destination': endLocation,
+  destination: endLocation,
   // Include the route shape in the response
-  'return': 'polyline'
+  return: "polyline",
 };
-
 
 // Define a callback function to process the routing response:
 var onResult = function (result) {
@@ -75,7 +67,7 @@ var onResult = function (result) {
 
       // Create a polyline to display the route:
       let routeLine = new H.map.Polyline(linestring, {
-        style: { strokeColor: 'blue', lineWidth: 3 }
+        style: { strokeColor: "blue", lineWidth: 3 },
       });
 
       // Create a marker for the start point:
@@ -99,7 +91,6 @@ var router = platform.getRoutingService(null, 8);
 // Call calculateRoute() with the routing parameters,
 // the callback and an error callback function (called if a
 // communication error occurs):
-router.calculateRoute(routingParameters, onResult,
-  function (error) {
-    alert(error.message);
-  });
+router.calculateRoute(routingParameters, onResult, function (error) {
+  alert(error.message);
+});

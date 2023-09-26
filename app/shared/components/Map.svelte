@@ -28,9 +28,7 @@
 
     const keys = Object.keys(params) as (keyof typeof params)[];
 
-    mapSearchParams = keys
-      .map((key) => key + "=" + params[key])
-      .join("&");
+    mapSearchParams = keys.map((key) => key + "=" + params[key]).join("&");
 
     console.log(mapSearchParams);
   }
@@ -38,4 +36,4 @@
 
 <!-- <label text="{mapSearchParams.toString()}" /> -->
 
-<webView src={"~/html/map.html?" + mapSearchParams} row={$$props['row']} />
+<webView src={"~/html/map.html?" + mapSearchParams} row={$$props["row"]} />
