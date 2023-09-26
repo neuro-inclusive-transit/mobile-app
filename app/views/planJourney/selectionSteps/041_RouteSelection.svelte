@@ -1,37 +1,28 @@
-<script type="ts">
-  import { navigate, goBack, closeModal } from "svelte-native";
-  import { localize as L } from '@nativescript/localize'
-  import { Template } from 'svelte-native/components'
-  import NotificationFrequency from "./050_NotificationFrequency.svelte";
-  import { getRootLayout, EventData, ItemEventData, Page } from "@nativescript/core";
+<script type="ts" context="module">
+  export const id = "selectionStep_RouteSelection";
+</script>
 
-  import { planJourney } from "~/stores"
-  import { CompanionMode } from "~/types"
+<script type="ts">
+  import SelectionStep from "./SelectionStep.svelte";
+  import NotificationFrequency from "./050_NotificationFrequency.svelte";
+
+  import { planJourney } from "~/stores";
 
   import { routeApi, HereApiRoute } from "~/api";
+
   import Route from "~/shared/components/Route.svelte";
+  import { calcDurationBetween, printTime, getTime } from "~/shared/utils/time";
 
-  import { calcDurationBetween, printTime, getTime } from "~/shared/utils/time"
-
-  import { globals } from "~/shared/sizes";
-  import DepartureDestinationSwitcher from "~/shared/components/DepartureDestinationSwitcher.svelte";
-    import { onMount } from "svelte";
-    import Button from "~/shared/components/Button.svelte";
-
-  function select(route: HereApiRoute) {
-    console.log('select', route);
-
-    $planJourney.preferredRoute = route;
-
-    navigate({
-      page: NotificationFrequency as any, // Type not compatible
-      frame: 'planJourneySelection',
-    });
-  }
-
+  let wrapper: SelectionStep;
   let numOfAlternatives = 3;
   let crowdPercentage = 0.5;
 
+  function factoryOnSelect(route: HereApiRoute) {
+    return () => {
+      $planJourney.preferredRoute = route;
+      wrapper.navForwards();
+    };
+  }
 
   function calculateOptions() {
     if ($planJourney.departure && $planJourney.arrival) {
@@ -50,23 +41,9 @@
     }
   }
 
-  function onRouteSelectFactory(list: HereApiRoute[]) {
-    return (args: ItemEventData) => {
-      select(list[args.index]);
-    }
-  }
-
-  function onNavigateBack() {
-    goBack({
-      frame: 'planJourneySelection',
-    });
-  }
-  function closeBottomSheet() {
-    planJourney.reset();
-    closeModal(true);
-  }
-
-  function hereRouteSectionToGenericSection(sections: HereApiRoute['sections']) {
+  function hereRouteSectionToGenericSection(
+    sections: HereApiRoute["sections"],
+  ) {
     return sections.map((section) => ({
       type: section.transport.mode,
       begin: new Date(section.departure.time),
@@ -76,51 +53,69 @@
   }
 </script>
 
-<page actionBarHidden={true} class="bg-default" on:navigatingTo={calculateOptions}>
-  <gridLayout class="main-layout" columns="*" rows="auto, auto, auto, auto, *, auto, auto">
-    <button text={L('close')} on:tap="{closeBottomSheet}" row={0} col={0} class="link" />
-
-    <DepartureDestinationSwitcher row={1} col={0}
-      departure="{$planJourney.departure?.name}"
-      destination="{$planJourney.arrival?.name}"
-      on:switchValues />
-
-    <label text="Aufbruchszeit: {$planJourney.time.value}" row={2} col={0} />
-
-    <label text="Schnellste Routenoptionen" class="fs-l" row={3} col={0} />
+<SelectionStep
+  nextPage={NotificationFrequency}
+  on:navigatedTo={() => calculateOptions()}
+  bind:this={wrapper}
+  showForwards={false}
+  showTime={true}
+  {id}
+>
+  <stackLayout class="main-layout">
+    <label
+      text="Deine möglichen Routen"
+      textWrap={true}
+      class="fs-l fw-bold m-b-xl"
+    />
 
     {#await $planJourney.options}
-      <label row={4} col={0}>...waiting</label>
+      <activityIndicator busy={true} />
     {:then routes}
-      <listView items={routes} on:itemTap={onRouteSelectFactory(routes)} row={4} col={0}>
-        <Template let:item={route}>
-          <Route
-            route={hereRouteSectionToGenericSection(route.sections)}>
-            <label col={1} row={0} class="icon color-primary" slot="crowdPercentage" text={
-              (crowdPercentage > 0.3 ? "person" : "person_outline")
-              + (crowdPercentage > 0.6 ? "person" : "person_outline")
-              + (crowdPercentage > 0.9 ? "person" : "person_outline")
-            } />
-            <stackLayout col={0} row={0} slot="maininfo">
-              <label text="{printTime(calcDurationBetween(new Date(route.sections[0].departure.time), new Date(route.sections[route.sections.length-1].departure.time)))}" />
-              <label text="Aufbruch {getTime(new Date(route.sections[0].departure.time))} Uhr" />
-            </stackLayout>
-          </Route>
-        </Template>
-      </listView>
+      {#each routes as route}
+        <Route
+          on:tap={factoryOnSelect(route)}
+          class="m-b-m"
+          route={hereRouteSectionToGenericSection(route.sections)}
+        >
+          <label
+            col={1}
+            row={0}
+            class="icon color-primary"
+            slot="crowdPercentage"
+            text={(crowdPercentage > 0.3 ? "person" : "person_outline") +
+              (crowdPercentage > 0.6 ? "person" : "person_outline") +
+              (crowdPercentage > 0.9 ? "person" : "person_outline")}
+          />
+          <stackLayout col={0} row={0} slot="maininfo">
+            <label
+              text={printTime(
+                calcDurationBetween(
+                  new Date(route.sections[0].departure.time),
+                  new Date(
+                    route.sections[route.sections.length - 1].departure.time,
+                  ),
+                ),
+              )}
+            />
+            <label
+              text="Aufbruch {getTime(
+                new Date(route.sections[0].departure.time),
+              )} Uhr"
+            />
+          </stackLayout>
+        </Route>
+      {/each}
+
+      <button
+        text="Weitere Optionen"
+        class="link m-t-s"
+        on:tap={() => {
+          numOfAlternatives += 3;
+          calculateOptions();
+        }}
+      />
     {:catch error}
-      <label style="color: red" row={4} col={0}>{error}</label>
+      <label style="color: red">{error}</label>
     {/await}
-
-    <stackLayout row={5} col={0}>
-      <Button text="Mehr Routen" on:tap="{() => {numOfAlternatives += 3; calculateOptions()}}" />
-    </stackLayout>
-
-
-    <stackLayout row={6} col={0}>
-      <Button text="Zurück" icon="chevron_left" on:tap="{onNavigateBack}" iconPosition="pre" type="secondary" />
-     </stackLayout>
-
-
-  </gridLayout>
-</page>
+  </stackLayout>
+</SelectionStep>

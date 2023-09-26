@@ -1,8 +1,12 @@
-import { localStore } from './misc/localStore';
-import type { Place } from '~/stores';
-import { JourneyPlanMode, CompanionMode, PreferredTransportation, PreferredJourneyMode } from '~/types';
-import type { HereApiRoute } from '~/api/routes';
-
+import { localStore } from "./misc/localStore";
+import type { Place } from "~/stores";
+import {
+  JourneyPlanMode,
+  CompanionMode,
+  PreferredTransportation,
+  PreferredJourneyMode,
+} from "~/types";
+import type { HereApiRoute } from "~/api/routes";
 
 export const planJourney = localStore<JourneyPlan>({
   departure: null,
@@ -11,14 +15,15 @@ export const planJourney = localStore<JourneyPlan>({
     type: JourneyPlanMode.Departure,
     value: new Date(),
   },
-  options: new Promise((resolve, reject) => { resolve([]) }),
-  companionMode: CompanionMode.Rarely,
-  reminderBefore: 0,
-  preferredTransport: PreferredTransportation.Car,
-  preferredJourneyMode: PreferredJourneyMode.Fastest,
+  options: new Promise((resolve) => {
+    resolve([]);
+  }),
+  companionMode: null,
+  reminderBefore: null,
+  preferredTransport: null,
+  preferredJourneyMode: null,
   preferredRoute: null,
 });
-
 
 export type JourneyPlan = {
   departure: Place | null;
@@ -26,11 +31,11 @@ export type JourneyPlan = {
   time: {
     type: JourneyPlanMode;
     value: Date;
-  }
+  };
   options: Promise<HereApiRoute[]>;
-  companionMode: CompanionMode;
-  reminderBefore: number;
-  preferredTransport: PreferredTransportation;
-  preferredJourneyMode: PreferredJourneyMode;
+  companionMode: CompanionMode | null;
+  reminderBefore: number | null;
+  preferredTransport: PreferredTransportation | null;
+  preferredJourneyMode: PreferredJourneyMode | null;
   preferredRoute: HereApiRoute | null;
-}
+};

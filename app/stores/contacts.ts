@@ -1,4 +1,4 @@
-import { dbStore } from '~/stores/misc/dbStore';
+import { dbStore } from "~/stores/misc/dbStore";
 
 export interface Contact {
   lastName: string;
@@ -6,20 +6,20 @@ export interface Contact {
   phone: string;
 }
 
-export const contacts = dbStore<Contact>('contacts', [
+export const contacts = dbStore<Contact>("contacts", [
   {
-    lastName: 'Kaestner',
-    firstName: 'Sebastian',
-    phone: '0176 12345678',
+    lastName: "Kaestner",
+    firstName: "Sebastian",
+    phone: "0176 12345678",
   },
   {
-    lastName: 'Mustermann',
-    firstName: 'Max',
-    phone: '0176 87654321',
+    lastName: "Mustermann",
+    firstName: "Max",
+    phone: "0176 87654321",
   },
   {
-    lastName: 'Musterfrau',
-    firstName: 'Maria',
-    phone: '0176 12348765',
-  }
+    lastName: "Musterfrau",
+    firstName: "Maria",
+    phone: "0176 12348765",
+  },
 ]);

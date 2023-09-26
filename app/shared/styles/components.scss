@@ -1,4 +1,7 @@
 .link {
   color: var(--color-primary);
   text-decoration: underline;
+
+  padding: var(--s);
+  margin: calc(var(--s) * -1);
 }

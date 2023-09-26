@@ -8,19 +8,24 @@
 </script>
 
 <stackLayout class="wrapper {customClass}">
-  <gridLayout columns="*,auto" rows="auto" on:tap="{toggle}">
+  <gridLayout columns="*,auto" rows="auto" on:tap={toggle}>
     <slot name="header" />
-    <button text={open ? 'expand_less' : 'expand_more'} class="icon fs-m" row={0} col={1} on:tap="{toggle}" />
+    <button
+      text={open ? "expand_less" : "expand_more"}
+      class="icon fs-m"
+      row={0}
+      col={1}
+      on:tap={toggle}
+    />
   </gridLayout>
 
   {#if open}
-  <stackLayout class="content">
-    <slot name="content">
-      <label text="No content" />
-    </slot>
-  </stackLayout>
+    <stackLayout class="content">
+      <slot name="content">
+        <label text="No content" />
+      </slot>
+    </stackLayout>
   {/if}
-
 </stackLayout>
 
 <style>
@@ -31,7 +36,7 @@
   }
 
   .content {
-    margin-top: var(--xs)
+    margin-top: var(--xs);
   }
 
   button {
@@ -39,4 +44,3 @@
     margin: calc(var(--s) * -1);
   }
 </style>
-

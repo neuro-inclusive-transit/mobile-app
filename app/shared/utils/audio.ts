@@ -1,16 +1,16 @@
-import { TNSPlayer, AudioPlayerOptions } from 'nativescript-audio';
+import { TNSPlayer, AudioPlayerOptions } from "nativescript-audio";
 
 const player = new TNSPlayer();
 
 const soundFiles = {
-  passiveNotification: '~/media/notification_decorative-01.wav',
-  passiveWarn: '~/media/alert_high-intensity.wav',
-  hero: '~/media/hero_simple-celebration-03.wav',
+  passiveNotification: "~/media/notification_decorative-01.wav",
+  passiveWarn: "~/media/alert_high-intensity.wav",
+  hero: "~/media/hero_simple-celebration-03.wav",
 };
 
-let playerOptions: AudioPlayerOptions = {
-  audioFile: '',
+let genericPlayerOptions: Omit<AudioPlayerOptions, "audioFile"> = {
   loop: false,
+  audioMixing: true,
   errorCallback: function (errorObject: any) {
     console.log(JSON.stringify(errorObject));
   },
@@ -25,23 +25,26 @@ let playerOptions: AudioPlayerOptions = {
  * @returns Promise<void> Resolves when playing is done
  * @throws Error if sound file is not found
  */
-export function playSound(soundFile: keyof(typeof soundFiles)) {
-  playerOptions.audioFile = soundFiles[soundFile];
+export function playSound(soundFile: keyof typeof soundFiles) {
+  let playerOptions: AudioPlayerOptions = {
+    ...genericPlayerOptions,
+    audioFile: soundFiles[soundFile],
+  };
 
-  console.log('play', playerOptions.audioFile);
+  console.log("play", playerOptions.audioFile);
 
   if (player.isAudioPlaying()) {
     player.dispose();
   }
 
-  return new Promise<void>(async (resolve, reject) => {
+  return new Promise<void>((resolve) => {
     playerOptions.completeCallback = () => {
-      console.log('play complete');
+      console.log("play complete");
       resolve();
     };
 
     player.debug = true;
 
-    await player.playFromFile(playerOptions);
+    player.playFromFile(playerOptions);
   });
 }

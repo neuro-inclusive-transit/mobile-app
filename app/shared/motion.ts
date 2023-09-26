@@ -11,7 +11,7 @@
 
 import { CubicBezierAnimationCurve } from "@nativescript/core/ui/animation";
 
-export const durations: Record<'fast' | 'moderate' | 'slow', Array<number>> = {
+export const durations: Record<"fast" | "moderate" | "slow", Array<number>> = {
   fast: [
     70, // Micro-interactions such as button and toggle
     110, // Micro-interactions such as fade
@@ -26,7 +26,10 @@ export const durations: Record<'fast' | 'moderate' | 'slow', Array<number>> = {
   ],
 };
 
-export const easings: Record<'standard' | 'entrance' | 'exit', Record<'productive' | 'expressive', CubicBezierAnimationCurve>> = {
+export const easings: Record<
+  "standard" | "entrance" | "exit",
+  Record<"productive" | "expressive", CubicBezierAnimationCurve>
+> = {
   standard: {
     productive: new CubicBezierAnimationCurve(0.2, 0, 0.38, 0.9),
     expressive: new CubicBezierAnimationCurve(0.4, 0.14, 0.3, 1),

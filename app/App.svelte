@@ -5,14 +5,15 @@
 
   import { tabIndex } from "~/stores";
 </script>
+
 <rootLayout backgroundColor="black">
   <tabView androidTabsPosition="bottom" bind:selectedIndex={$tabIndex}>
-    <tabViewItem title="Reise planen">
+    <tabViewItem title="Planung">
       <frame id="tabPlanJourney">
         <PlanJourney />
       </frame>
     </tabViewItem>
-    <tabViewItem title="Live Ansicht">
+    <tabViewItem title="Begleitung">
       <frame>
         <LiveView />
       </frame>

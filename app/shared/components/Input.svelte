@@ -1,36 +1,47 @@
 <script type="ts">
-  interface $$Props extends Partial<svelteNative.JSX.IntrinsicElements['textField']> {
+  // eslint-disable-next-line no-unused-vars
+  interface $$Props
+    extends Partial<svelteNative.JSX.IntrinsicElements["textField"]> {
     pre?: string;
     elevated?: boolean;
   }
 
-  export let pre = '';
+  export let pre = "";
   export let elevated = false;
 
   $: gridProps = {
-    row: $$props['row'],
-    col: $$props['col'],
-    rowSpan: $$props['rowSpan'],
-    colSpan: $$props['colSpan'],
-    marginTop: $$props['marginTop'],
-    marginBottom: $$props['marginBottom'],
-    marginLeft: $$props['marginLeft'],
-    marginRight: $$props['marginRight'],
-    margin: $$props['margin'],
-    padding: $$props['padding'],
-    paddingTop: $$props['paddingTop'],
-    paddingBottom: $$props['paddingBottom'],
-    paddingLeft: $$props['paddingLeft'],
-    paddingRight: $$props['paddingRight'],
+    row: $$props["row"],
+    col: $$props["col"],
+    rowSpan: $$props["rowSpan"],
+    colSpan: $$props["colSpan"],
+    marginTop: $$props["marginTop"],
+    marginBottom: $$props["marginBottom"],
+    marginLeft: $$props["marginLeft"],
+    marginRight: $$props["marginRight"],
+    margin: $$props["margin"],
+    padding: $$props["padding"],
+    paddingTop: $$props["paddingTop"],
+    paddingBottom: $$props["paddingBottom"],
+    paddingLeft: $$props["paddingLeft"],
+    paddingRight: $$props["paddingRight"],
   };
 
+  let customClass = "";
+  export { customClass as class };
 </script>
 
-<gridLayout columns="auto,*" rows="auto" id="wrapper" class:elevated {...gridProps}>
-  <label text={pre} class="icon" row={0} col={0}/>
+<gridLayout
+  columns="auto,*"
+  rows="auto"
+  id="wrapper"
+  class:elevated
+  class={customClass}
+  {...gridProps}
+  on:tap
+>
+  <label text={pre} class="icon" row={0} col={0} />
   <textField {...$$restProps} row={0} col={1} margin={0} />
 </gridLayout>
-
 
 <style type="scss">
   #wrapper {
