@@ -12,6 +12,7 @@
   import RouteOverview from "./RouteOverview.svelte";
   import SupportBox from "~/shared/components/SupportBox.svelte";
   import Button from "~/shared/components/Button.svelte";
+  import TrainProgressComponent from "~/shared/components/TrainProgressComponent.svelte";
 
   $: currentLocation = $liveJourney === null ? null : ((section) => {
     if (section === false) return null;
@@ -228,7 +229,7 @@
     <label text='Du hast aktuell keine Navigation aktiviert. In dem Menü "Planung" kannst du eine Route erstellen und die Navigation starten.' textWrap="true" verticalAlignment="middle"/>
     <button text="Route planen" verticalAlignment="bottom"/>
   </gridLayout>
-  
+
 
   {:else}
 
@@ -303,7 +304,24 @@
             }
           })()} />
 
-          <label text="train stop {$liveJourney.currentIntermediateStop}" row={2}  />
+          <gridLayout row={2} columns="*" rows="*,auto,*">
+
+            <TrainProgressComponent row={2} transportIcon={transportTypeToIcon(currentSection.transport.mode)} transportName={currentSection.transport.name} stops={(() => {
+              const stops = [];
+
+              let currentId = $liveJourney.currentIntermediateStop;
+
+              for (let index = currentId; index < currentSection.intermediateStops.length; index++) {
+                let stop = currentSection.intermediateStops[index];
+                stops.push(stop.departure.place.name)
+              }
+
+              stops.push(currentSection.arrival.place.name);
+
+              return stops;
+            })()}/>
+
+          </gridLayout>
         {:else}
 
           <SupportBox row={0} text={currentSupportBoxText} type={$multiModality.primary === 'auditory' ? 'big' : 'small'} class="m-b-m" />
