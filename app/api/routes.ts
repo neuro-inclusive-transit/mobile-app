@@ -1,4 +1,4 @@
-import { Http } from '@nativescript/core';
+import { Http } from "@nativescript/core";
 
 type GetRouteOptions = {
   origin: string;
@@ -34,8 +34,8 @@ type TimeAndPlace = {
 };
 
 type RouteApiGetParams = {
-  origin: LatLng,
-  destination: LatLng,
+  origin: LatLng;
+  destination: LatLng;
   arrivalTime?: Date;
   departureTime?: Date;
   lang?: string;
@@ -48,7 +48,27 @@ type RouteApiGetParams = {
 };
 
 // @see https://developer.here.com/documentation/intermodal-routing/dev_guide/concepts/modes.html
-export type HereApiTransportMode = 'highSpeedTrain' | 'intercityTrain' | 'interRegionalTrain' | 'regionalTrain' | 'cityTrain' | 'bus' | 'ferry' | 'subway' | 'lightRail' | 'privateBus' | 'inclined' | 'aerial' | 'busRapid' | 'monorail' | 'flight' | 'walk' | 'car' | 'bicycle' | 'pedestrian' | string;
+export type HereApiTransportMode =
+  | "highSpeedTrain"
+  | "intercityTrain"
+  | "interRegionalTrain"
+  | "regionalTrain"
+  | "cityTrain"
+  | "bus"
+  | "ferry"
+  | "subway"
+  | "lightRail"
+  | "privateBus"
+  | "inclined"
+  | "aerial"
+  | "busRapid"
+  | "monorail"
+  | "flight"
+  | "walk"
+  | "car"
+  | "bicycle"
+  | "pedestrian"
+  | string;
 
 export type HereApiRoute = {
   id: string;
@@ -60,7 +80,7 @@ export type HereApiRoute = {
     summary?: {
       duration: number;
       length: number;
-    }
+    };
     actions?: Array<{
       action: string;
       duration: number;
@@ -86,11 +106,11 @@ export type HereApiRoute = {
       textColor?: string;
       headsign?: string;
       shortName?: string;
-    },
+    };
     intermediateStops?: Array<{
       departure: TimeAndPlace;
       duration?: number;
-    }>,
+    }>;
     agency?: {
       id: string;
       name: string;
@@ -102,7 +122,7 @@ export type HereApiRoute = {
     name: string;
     website: string;
   };
-}
+};
 
 export type RouteApiGetResponse = {
   routes: Array<HereApiRoute>;
@@ -112,10 +132,8 @@ export type RouteApiGetResponse = {
   }>;
 };
 
-
 export const routeApi = {
   get: async (params: RouteApiGetParams) => {
-
     const routeOptions: GetRouteOptions = {
       ...params,
       origin: `${params.origin.lat},${params.origin.lng}`,
@@ -124,32 +142,33 @@ export const routeApi = {
       departureTime: params.departureTime?.toISOString() ?? undefined,
     };
 
-    Object.keys(routeOptions).forEach(key => {
+    Object.keys(routeOptions).forEach((key) => {
       if (routeOptions[key as keyof typeof routeOptions] === undefined) {
         delete routeOptions[key as keyof typeof routeOptions];
       }
     });
 
     const response = await Http.request({
-      url: process.env.BACKEND_SERVICE_ROUTE_URL ?? '',
-      method: 'POST',
+      url: process.env.BACKEND_SERVICE_ROUTE_URL ?? "",
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'return': 'actions,intermediate',
-        'lang': 'de-de',
-        ...routeOptions
+        "Content-Type": "application/json",
+        return: "actions,intermediate",
+        lang: "de-de",
+        ...routeOptions,
       },
     });
 
-    console.log('response', response);
+    console.log("response", response);
 
     if (response.statusCode !== 200 || !response.content) {
-      throw new Error(response.content?.toString())
+      throw new Error(response.content?.toString());
     }
 
-    const responseJson = JSON.parse(response.content.toString()) as RouteApiGetResponse;
+    const responseJson = JSON.parse(
+      response.content.toString(),
+    ) as RouteApiGetResponse;
 
     return responseJson.routes;
-  }
-}
-
+  },
+};
