@@ -1,10 +1,9 @@
-import { CouchBase } from '@triniwiz/nativescript-couchbase';
+import { CouchBase } from "@triniwiz/nativescript-couchbase";
 import { writable } from "svelte/store";
 
-type CouchBaseDocument<T> = T & {id: string};
+type CouchBaseDocument<T> = T & { id: string };
 
 export function dbStore<O extends Object>(name: string, resetData?: O[]) {
-
   let database = new CouchBase(name);
 
   if (resetData) {
@@ -16,10 +15,12 @@ export function dbStore<O extends Object>(name: string, resetData?: O[]) {
 
   const savedDocuments = database.query({
     select: [],
-    where: []
+    where: [],
   });
 
-  const { subscribe, update: updateState } = writable(savedDocuments as CouchBaseDocument<O>[]);
+  const { subscribe, update: updateState } = writable(
+    savedDocuments as CouchBaseDocument<O>[],
+  );
 
   return {
     subscribe,
@@ -34,7 +35,7 @@ export function dbStore<O extends Object>(name: string, resetData?: O[]) {
       database.updateDocument(id, doc);
 
       const updatedDoc = database.getDocument(id) as CouchBaseDocument<O>;
-      updateState((docs) => docs.map((d) => d.id === id ? updatedDoc : d));
-    }
-  }
+      updateState((docs) => docs.map((d) => (d.id === id ? updatedDoc : d)));
+    },
+  };
 }

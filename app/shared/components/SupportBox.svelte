@@ -21,10 +21,25 @@
   export { cssClass as class };
 </script>
 
-<gridLayout columns="*,auto" {row} {column} {rowSpan} {columnSpan} class={cssClass} on:tap>
-  <label {text} class={type === "big" ? 'fs-xl' : 'fs-m'} textWrap="true"></label>
+<gridLayout
+  columns="*,auto"
+  {row}
+  {column}
+  {rowSpan}
+  {columnSpan}
+  class={cssClass}
+  on:tap
+>
+  <label {text} class={type === "big" ? "fs-xl" : "fs-m"} textWrap="true"
+  ></label>
   {#if tts}
-    <button column={1} verticalAlignment="bottom" text="volume_up" class="icon" on:tap={onButtonTap}></button>
+    <button
+      column={1}
+      verticalAlignment="bottom"
+      text="volume_up"
+      class="icon"
+      on:tap={onButtonTap}
+    ></button>
   {/if}
 </gridLayout>
 
@@ -34,7 +49,7 @@
     border-width: 1pt;
     border-color: var(--color-primary);
     border-radius: var(--border-radius);
-    padding: var(--m)
+    padding: var(--m);
   }
 
   button {
