@@ -10,6 +10,8 @@
 
   import Contacts from "./Contacts.svelte";
   import RouteOverview from "./RouteOverview.svelte";
+
+  import Map from "~/shared/components/Map.svelte";
   import SupportBox from "~/shared/components/SupportBox.svelte";
   import Button from "~/shared/components/Button.svelte";
   import TrainProgressComponent from "~/shared/components/TrainProgressComponent.svelte";
@@ -467,13 +469,17 @@
               on:tap={simulateNextStep}
             />
 
-            <label
-              text="Karte tbd. Ziel: {currentSection.arrival.place.name ??
-                currentSection.arrival.place.location.lat +
-                  '/' +
-                  currentSection.arrival.place.location.lng}"
-              textWrap={true}
+            <Map
               row={2}
+              bind:currentLocation
+              startLocation={{
+                lat: currentSection.departure.place.location.lat,
+                lng: currentSection.departure.place.location.lng,
+              }}
+              endLocation={{
+                lat: currentSection.arrival.place.location.lat,
+                lng: currentSection.arrival.place.location.lng,
+              }}
             />
           {/if}
 

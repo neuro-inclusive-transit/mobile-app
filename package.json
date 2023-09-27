@@ -20,6 +20,7 @@
     "svelte-native": "~1.0.0"
   },
   "devDependencies": {
+    "@nativescript/android": "8.5.1",
     "@nativescript/eslint-plugin": "^0.0.4",
     "@nativescript/ios": "8.5.1",
     "@nativescript/types": "~8.5.0",
