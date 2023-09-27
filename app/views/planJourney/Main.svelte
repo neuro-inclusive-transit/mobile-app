@@ -97,7 +97,6 @@
       />
     </gridLayout>
 
-
     <scrollView row={1}>
       <stackLayout class="main-layout">
         {#each Object.entries(journeysByDate) as [date, journeys]}
