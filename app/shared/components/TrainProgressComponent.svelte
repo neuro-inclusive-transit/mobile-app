@@ -1,15 +1,8 @@
 <script type="ts">
-  export let transportIcon = "train";
-  export let transportName = "RB25";
+  export let transportIcon = "";
+  export let transportName = "";
 
-  export let stops: string[] = [
-    "Honrath",
-    "ABC",
-    "DEF",
-    "GHI",
-    "Dieringhausen",
-    "Gummersbach",
-  ];
+  export let stops: string[] = [];
 
   // css class
   let customClass = "";
