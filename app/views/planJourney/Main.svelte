@@ -86,7 +86,7 @@
 <page class="bg-default">
   <actionBar title="Meine Reisen" />
 
-  <gridLayout rows="auto, *" columns="*">
+  <gridLayout rows="auto, *, *" columns="*">
     <gridLayout row={0} columns="*, auto" class="main-layout">
       <Button
         column={1}
