@@ -19,12 +19,14 @@
 
   function saveToJourneys() {
     subscribeTrains($planJourney);
-    if ($planJourney.departure === null
-      || $planJourney.arrival === null
-      || $planJourney.preferredRoute === null
-      || $planJourney.preferredRoute.sections.length === 0
-      || $planJourney.companionMode === null
-      || $planJourney.reminderBefore === null) {
+    if (
+      $planJourney.departure === null ||
+      $planJourney.arrival === null ||
+      $planJourney.preferredRoute === null ||
+      $planJourney.preferredRoute.sections.length === 0 ||
+      $planJourney.companionMode === null ||
+      $planJourney.reminderBefore === null
+    ) {
       return;
     }
 
@@ -42,12 +44,11 @@
     closeModal(true);
   }
 
-  function subscribeTrains(journey: JourneyPlan){
-
-    if(journey.preferredRoute != null){
-      journey.preferredRoute.sections.forEach(section => {
-        if(section.departure.place.type === "station"){
-          if (section.transport.name != undefined){
+  function subscribeTrains(journey: JourneyPlan) {
+    if (journey.preferredRoute != null) {
+      journey.preferredRoute.sections.forEach((section) => {
+        if (section.departure.place.type === "station") {
+          if (section.transport.name != undefined) {
             let train: string = section.transport.name;
             train = train.replace("S", "");
             train = train.replace("RB", "");

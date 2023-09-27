@@ -16,7 +16,6 @@
   import { createClient, startConnection } from "~/shared/utils/mqtt";
 
   import { Journey, journeys, liveJourney, tabIndex } from "~/stores";
-  import { connectionType } from "@nativescript/core/connectivity";
 
   createClient();
   startConnection();
