@@ -86,69 +86,41 @@
 <page class="bg-default">
   <actionBar title="Meine Reisen" />
 
-  <gridLayout rows="auto, *, *" columns="*">
+  <gridLayout rows="auto, *" columns="*">
     <gridLayout row={0} columns="*, auto" class="main-layout">
-      <Button
-        column={1}
-        text="Neue Reise planen"
-        icon="add"
-        iconPosition="post"
-        on:tap={addJourney}
-      />
+      <Button column={1} text="Neue Reise planen" icon="add" iconPosition="post" on:tap={addJourney} />
     </gridLayout>
 
     <scrollView row={1}>
-      <stackLayout class="main-layout">
+      <stackLayout  class="main-layout">
         {#each Object.entries(journeysByDate) as [date, journeys]}
-          <label class="m-t-m fs-l fw-bold" text={date}></label>
+          <label class="m-t-m fs-l fw-bold" text="{date}"></label>
 
           {#each journeys as journey}
-            <Route
-              on:tap={onRouteSelectFactory(journey)}
-              class="m-t-s m-b-s"
-              route={journey.sections.map((section) => ({
-                type: section.transport.mode,
-                begin: new Date(section.departure.time),
-                end: new Date(section.arrival.time),
-                transport_name: section.transport.name,
-              }))}
-            >
-              <stackLayout slot="maininfo">
-                <stackLayout orientation="horizontal">
-                  <label class="fw-bold" text={journey.departure.name} />
-                  <label
-                    class="icon"
-                    text="arrow_right"
-                    horizontalAlignment="center"
-                  />
-                  <label class="fw-bold" text={journey.arrival.name} />
-                </stackLayout>
-                <label
-                  text="Aufbruch: {new Date(journey.sections[0].departure.time)
-                    .getHours()
-                    .toString()
-                    .padStart(2, '0')}:{new Date(
-                    journey.sections[0].departure.time,
-                  )
-                    .getMinutes()
-                    .toString()
-                    .padStart(2, '0')} Uhr"
-                />
-                <label text={printReminder(journey.reminderBefore)} />
-                <label
-                  text="Dauer: {printTime(
-                    calcDurationBetween(
-                      new Date(journey.sections[0].departure.time),
-                      new Date(
-                        journey.sections[
-                          journey.sections.length - 1
-                        ].arrival.time,
-                      ),
-                    ),
-                  )}"
-                />
+          <Route
+            on:tap={onRouteSelectFactory(journey)}
+            class="m-t-s m-b-s"
+            route={journey.sections.map((section) => ({
+              type: section.transport.mode,
+              begin: new Date(section.departure.time),
+              end: new Date(section.arrival.time),
+              transport_name: section.transport.name
+            }))}>
+
+            <stackLayout slot="maininfo">
+              <stackLayout orientation="horizontal">
+                <label class="fw-bold" text="{journey.departure.name}"/>
+                <label class="icon" text="arrow_right" horizontalAlignment="center"/>
+                <label class="fw-bold" text="{journey.arrival.name}"/>
               </stackLayout>
-            </Route>
+              <label text="Aufbruch: {new Date(journey.sections[0].departure.time).getHours().toString().padStart(2, '0')}:{new Date(journey.sections[0].departure.time).getMinutes().toString().padStart(2, '0')} Uhr" />
+              <label text="{printReminder(journey.reminderBefore)}" />
+              <label text="Dauer: {printTime(calcDurationBetween(new Date(journey.sections[0].departure.time, ),new Date(
+                journey.sections[journey.sections.length - 1].arrival.time
+              )))}" />
+            </stackLayout>
+
+          </Route>
           {/each}
         {:else}
           <label>Keine geplanten Routen für die Zukunft.</label>
