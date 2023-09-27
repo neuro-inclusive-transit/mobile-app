@@ -14,6 +14,7 @@
   import Map from "~/shared/components/Map.svelte";
   import SupportBox from "~/shared/components/SupportBox.svelte";
   import Button from "~/shared/components/Button.svelte";
+  import TrainProgressComponent from "~/shared/components/TrainProgressComponent.svelte";
 
   $: currentLocation =
     $liveJourney === null
@@ -159,6 +160,8 @@
         return;
       }
 
+      console.log("calculate new journey");
+
       routeApi
         .get({
           origin: currentLocation ? currentLocation : { lat: 0, lng: 0 },
@@ -167,7 +170,7 @@
           alternatives: 1,
         })
         .then((nextOptions) => {
-          if ($liveJourney == null) {
+          if (!$liveJourney) {
             resolve(null);
             return;
           }
@@ -184,8 +187,6 @@
             ],
             currentSection: $liveJourney.currentSection + 2,
           };
-        })
-        .then(() => {
           resolve(null);
         });
     });
@@ -204,13 +205,14 @@
         currentSection.actions[$liveJourney.currentAction].instruction;
     } else if (currentSection.intermediateStops) {
       let id = $liveJourney.currentIntermediateStop;
+      let stop = currentSection.intermediateStops[id];
 
       if (currentSection.intermediateStops.length === 0) {
         currentSupportBoxText = `Steige bei ${currentSection.departure.place.name} in die ${currentSection.transport.name} Richtung ${currentSection.transport.headsign} ein und steige bei ${currentSection.arrival.place.name} wieder aus.`;
       } else {
         switch (id) {
           case 0:
-            currentSupportBoxText = `Steige bei ${currentSection.departure.place.name} in die ${currentSection.transport.name} Richtung ${currentSection.transport.headsign} ein.`;
+            currentSupportBoxText = `Steige bei ${stop.departure.place.name} in die ${currentSection.transport.name} Richtung ${currentSection.transport.headsign} ein.`;
             break;
           case currentSection.intermediateStops.length - 1:
             currentSupportBoxText = `Gehe zum Ausgang und steige bei ${currentSection.arrival.place.name} aus.`;
@@ -221,18 +223,18 @@
         }
       }
     } else {
-      currentSupportBoxText = `Du musst von ${currentSection.departure.place.name} nach ${currentSection.arrival.place.name}`;
+      currentSupportBoxText = `Du musst von {currentSection.departure.place.name} nach {currentSection.arrival.place.name}`;
     }
   }
 
   /* live:
-  $: currentSection = currentLive.sections.findIndex((section) => {
-    const now = new Date();
-    const begin = new Date(section.departure.time);
-    const end = new Date(section.arrival.time);
-    return begin <= now && now <= end;
-  });
-  */
+    $: currentSection = currentLive.sections.findIndex((section) => {
+      const now = new Date();
+      const begin = new Date(section.departure.time);
+      const end = new Date(section.arrival.time);
+      return begin <= now && now <= end;
+    });
+    */
   /* debug: */
   $: currentSection = $liveJourney?.sections[$liveJourney.currentSection];
 </script>
@@ -249,7 +251,7 @@
         horizontalAlignment="center"
       />
       <label
-        text="Du hast aktuell keine Navigation aktiviert. In dem Menü Planung kannst du eine Route erstellen und die Navigation starten."
+        text="Du hast aktuell keine Navigation aktiviert. In dem Menü 'Planung' kannst du eine Route erstellen und die Navigation starten."
         textWrap="true"
         verticalAlignment="middle"
       />
@@ -425,10 +427,33 @@
               })()}
             />
 
-            <label
-              text="train stop {$liveJourney.currentIntermediateStop}"
-              row={2}
-            />
+            <gridLayout row={2} columns="*" rows="*,auto,*">
+              <TrainProgressComponent
+                row={2}
+                transportIcon={transportTypeToIcon(
+                  currentSection.transport.mode,
+                )}
+                transportName={currentSection.transport.name}
+                stops={(() => {
+                  const stops = [];
+
+                  let currentId = $liveJourney.currentIntermediateStop;
+
+                  for (
+                    let index = currentId;
+                    index < currentSection.intermediateStops.length;
+                    index++
+                  ) {
+                    let stop = currentSection.intermediateStops[index];
+                    stops.push(stop.departure.place.name);
+                  }
+
+                  stops.push(currentSection.arrival.place.name);
+
+                  return stops;
+                })()}
+              />
+            </gridLayout>
           {:else}
             <SupportBox
               row={0}
