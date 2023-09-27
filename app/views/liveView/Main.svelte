@@ -160,28 +160,33 @@
 
       console.log("calculate new journey");
 
-      routeApi.get({
-        origin: currentLocation ? currentLocation : { lat: 0, lng: 0 },
-        destination: $liveJourney.arrival.location,
-        departureTime: new Date(),
-        alternatives: 1,
-      }).then((nextOptions) => {
-        if (!$liveJourney) {
-          resolve(null);
-          return;
-        }
+      routeApi
+        .get({
+          origin: currentLocation ? currentLocation : { lat: 0, lng: 0 },
+          destination: $liveJourney.arrival.location,
+          departureTime: new Date(),
+          alternatives: 1,
+        })
+        .then((nextOptions) => {
+          if (!$liveJourney) {
+            resolve(null);
+            return;
+          }
 
-        $liveJourney = {
-        ...$liveJourney,
-        sections: [
-          ...$liveJourney.sections.slice(0, $liveJourney.currentSection + 1),
-          false,
-          ...nextOptions[0].sections,
-        ],
-        currentSection: $liveJourney.currentSection + 2,
-      };
-      resolve(null);
-      })
+          $liveJourney = {
+            ...$liveJourney,
+            sections: [
+              ...$liveJourney.sections.slice(
+                0,
+                $liveJourney.currentSection + 1,
+              ),
+              false,
+              ...nextOptions[0].sections,
+            ],
+            currentSection: $liveJourney.currentSection + 2,
+          };
+          resolve(null);
+        });
     });
   }
 
