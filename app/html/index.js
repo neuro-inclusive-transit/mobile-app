@@ -29,9 +29,6 @@ var map = new H.Map(targetElement, mapLayers.vector.normal.map, {
   center: currentLocation,
 });
 
-// Enable the event system on the map instance:
-var mapEvents = new H.mapevents.MapEvents(map);
-
 // Add event listener:
 map.addEventListener("tap", function (evt) {
   // Log 'tap' and 'mouse' events:
