@@ -38,12 +38,6 @@ map.addEventListener("tap", function (evt) {
   console.log(evt.type, evt.currentPointer.type);
 });
 
-// Instantiate the default behavior, providing the mapEvents object:
-var behavior = new H.mapevents.Behavior(mapEvents);
-
-// Create the default UI:
-const ui = H.ui.UI.createDefault(map, mapLayers);
-
 var routingParameters = {
   routingMode: "fast", //TODO: sync with mobile app
   transportMode: "pedestrian",
