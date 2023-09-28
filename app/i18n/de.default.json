@@ -9,9 +9,9 @@
   },
   "preffered_journey_mode": {
     "_": "Bevorzugte Reiseart",
-    "fastest": "Schnellste",
-    "least-changes": "Wenigste Umstiege",
-    "least-walking": "Kürzeste Laufwege"
+    "fastest": "Schnelle Reise",
+    "least-changes": "Wenige Umstiege",
+    "least-walking": "Kurze Laufwege"
   },
   "companion_mode": {
     "_": "Begleitmodus",
