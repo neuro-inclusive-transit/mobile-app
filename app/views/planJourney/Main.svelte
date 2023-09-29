@@ -2,8 +2,8 @@
   import { showModal } from "svelte-native";
   import { confirm } from "@nativescript/core/ui/dialogs";
 
-  import Route from "~/shared/components/Route.svelte";
-  import { printReminder } from "~/shared/components/Route.svelte";
+  import RouteOverviewCard from "~/shared/components/RouteOverviewCard.svelte";
+  import { printReminder } from "~/shared/components/RouteOverviewCard.svelte";
   import Button from "~/shared/components/Button.svelte";
   import SelectionProcess from "./SelectionProcess.svelte";
 
@@ -108,7 +108,7 @@
           <label class="m-t-m fs-l fw-bold" text={date}></label>
 
           {#each journeys as journey}
-            <Route
+            <RouteOverviewCard
               on:tap={onRouteSelectFactory(journey)}
               class="m-t-s m-b-s"
               route={journey.sections.map((section) => ({
@@ -153,7 +153,7 @@
                   )}"
                 />
               </stackLayout>
-            </Route>
+            </RouteOverviewCard>
           {/each}
         {:else}
           <label>Keine geplanten Routen für die Zukunft.</label>
