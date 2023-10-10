@@ -7,22 +7,27 @@ import {
 
 const defaultConnOption: ConnectionOptions = {
   cleanSession: false,
-  useSSL: false,
-  userName: "",
-  password: "",
+  useSSL: true,
+  userName: process.env.BROKER_USERNAME || "",
+  password: process.env.BROKER_PASSWORD || "",
   mqttVersion: 3,
 };
 
 const mqtt_clientOptions: ClientOptions = {
-  host: "localhost", // TODO: ENV
-  port: 9001, // TODO: ENV
+
+  //hostUri: `mqtt://${process.env.BROKER_HOST || "localhost"}:${process.env.BROKER_PORT || "8884"}`
+
+  host: process.env.BROKER_HOST || "localhost",
+  port: parseInt(process.env.BROKER_PORT || "8884"),
+  path: "/mqtt",
 };
 
 export let client: MQTTClient;
 
 export function createClient() {
-  // if existiert schon dann rau
+  // if existiert schon dann raus
 
+  console.log(mqtt_clientOptions)
   client = new MQTTClient(mqtt_clientOptions);
 }
 
