@@ -24,7 +24,7 @@ export let client: MQTTClient;
 export function createClient() {
   // if existiert schon dann raus
 
-  console.log(mqtt_clientOptions)
+  console.log(mqtt_clientOptions);
   client = new MQTTClient(mqtt_clientOptions);
 }
 
