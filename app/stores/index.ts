@@ -5,3 +5,4 @@ export * from "./liveJourney";
 export * from "./contacts";
 export * from "./tabIndex";
 export * from "./multiModality";
+export * from "./geolocation";

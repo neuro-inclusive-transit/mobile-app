@@ -1,4 +1,5 @@
 <script type="ts">
+  import { onMount } from "svelte";
   import { showModal } from "svelte-native";
   import { tick } from "svelte";
   import { confirm } from "@nativescript/core/ui/dialogs";
@@ -14,16 +15,22 @@
   import Button from "~/shared/components/Button.svelte";
   import TrainProgressComponent from "~/shared/components/TrainProgressComponent.svelte";
 
-  $: currentLocation =
-    $liveJourney === null
-      ? null
-      : ((section) => {
-          if (section === false) return null;
-          return {
-            lat: section.departure.place.location.lat,
-            lng: section.departure.place.location.lng,
-          };
-        })($liveJourney.sections[$liveJourney.currentSection]);
+  import { currentLocation, startWatchLocation } from "~/stores";
+
+  onMount(() => {
+    startWatchLocation();
+  });
+
+  // $: currentLocation =
+  //   $liveJourney === null
+  //     ? null
+  //     : ((section) => {
+  //         if (section === false) return null;
+  //         return {
+  //           lat: section.departure.place.location.lat,
+  //           lng: section.departure.place.location.lng,
+  //         };
+  //       })($liveJourney.sections[$liveJourney.currentSection]);
 
   // resolved when route calculation is finished
   // TODO: use a store instead
@@ -162,7 +169,10 @@
 
       routeApi
         .get({
-          origin: currentLocation ? currentLocation : { lat: 0, lng: 0 },
+          origin: {
+            lat: $currentLocation.data.latitude,
+            lng: $currentLocation.data.longitude
+          },
           destination: $liveJourney.arrival.location,
           departureTime: new Date(),
           alternatives: 1,
