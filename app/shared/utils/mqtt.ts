@@ -14,9 +14,6 @@ const defaultConnOption: ConnectionOptions = {
 };
 
 const mqtt_clientOptions: ClientOptions = {
-
-  //hostUri: `mqtt://${process.env.BROKER_HOST || "localhost"}:${process.env.BROKER_PORT || "8884"}`
-
   host: process.env.BROKER_HOST || "localhost",
   port: parseInt(process.env.BROKER_PORT || "8884"),
   path: "/mqtt",
