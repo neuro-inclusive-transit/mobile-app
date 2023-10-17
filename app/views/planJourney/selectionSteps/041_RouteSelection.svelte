@@ -10,7 +10,7 @@
 
   import { routeApi, HereApiRoute } from "~/api";
 
-  import Route from "~/shared/components/Route.svelte";
+  import RouteOverviewCard from "~/shared/components/RouteOverviewCard.svelte";
   import { calcDurationBetween, printTime, getTime } from "~/shared/utils/time";
 
   let wrapper: SelectionStep;
@@ -72,7 +72,7 @@
       <activityIndicator busy={true} />
     {:then routes}
       {#each routes as route}
-        <Route
+        <RouteOverviewCard
           on:tap={factoryOnSelect(route)}
           class="m-b-m"
           route={hereRouteSectionToGenericSection(route.sections)}
@@ -103,7 +103,7 @@
               )} Uhr"
             />
           </stackLayout>
-        </Route>
+        </RouteOverviewCard>
       {/each}
 
       <button

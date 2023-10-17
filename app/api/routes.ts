@@ -23,6 +23,7 @@ type Place = {
   id?: string;
   name?: string;
   type: string;
+  evaNr?: string | null;
   location: LatLng;
 };
 
