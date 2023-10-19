@@ -1,5 +1,4 @@
 <script type="ts">
-  import { onMount } from "svelte";
   import { showModal } from "svelte-native";
   import { tick } from "svelte";
   import { confirm, action } from "@nativescript/core/ui/dialogs";
@@ -9,7 +8,6 @@
     multiModality,
     currentLocation,
     watchLocation,
-    TimeAndPlace,
   } from "~/stores";
   import { routeApi } from "~/api";
   import { speak } from "~/shared/utils/tts";
