@@ -24,10 +24,17 @@
   import Button from "~/shared/components/Button.svelte";
   import TrainProgressComponent from "~/shared/components/TrainProgressComponent.svelte";
 
-  onMount(() => {
+  let intervalId: number;
+  let isPaused = false;
+
+  function onNavigatedTo() {
     watchLocation.start();
 
-    let intervalId = setInterval(() => {
+    intervalId = setInterval(async () => {
+      if (isPaused) return;
+
+      await calculateNewJourney;
+
       if (
         $liveJourney?.isPaused ||
         $liveJourney?.isCompleted ||
@@ -52,6 +59,7 @@
             "Route von hier aus neu berechnen",
           ];
           const destructiveActionsIndexes = [1];
+          isPaused = true;
 
           action({
             title: "Bist du bereits an deinem Zwichenziel?",
@@ -65,18 +73,19 @@
             } else {
               calculateNewJourney = recalculateJourney();
             }
+            isPaused = false;
           });
         } else {
           skipToNextStep();
         }
       }
     }, 1000);
+  }
 
-    return () => {
-      watchLocation.stop();
-      clearInterval(intervalId);
-    };
-  });
+  function onNavigatingFrom() {
+    watchLocation.stop();
+    clearInterval(intervalId);
+  }
 
   $: currentSection = $liveJourney?.sections[$liveJourney.currentSection];
 
@@ -233,8 +242,6 @@
         return;
       }
 
-      console.log("calculate new journey");
-
       routeApi
         .get({
           origin: {
@@ -304,7 +311,11 @@
   }
 </script>
 
-<page class="bg-default">
+<page
+  class="bg-default"
+  on:navigatedTo={onNavigatedTo}
+  on:navigatingFrom={onNavigatingFrom}
+>
   <actionBar title="Begleitung" />
 
   {#if $liveJourney === null || currentSection === undefined || currentSection === false}
