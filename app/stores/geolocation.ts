@@ -37,7 +37,7 @@ if (!isEnableLocation) {
 
 let watchId: number;
 
-export const startWatchLocation = () => {
+const startWatchLocation = () => {
   watchId = geolocation.watchLocation(
     (location: geolocation.Location) => {
       currentLocation.update((current) => {
@@ -62,7 +62,7 @@ export const startWatchLocation = () => {
   );
 };
 
-export const stopWatchLocation = () => {
+const stopWatchLocation = () => {
   geolocation.clearWatch(watchId);
 
   currentLocation.update((current) => {
@@ -71,4 +71,9 @@ export const stopWatchLocation = () => {
       isActivated: false,
     };
   });
+};
+
+export const watchLocation = {
+  start: startWatchLocation,
+  stop: stopWatchLocation,
 };
