@@ -2,19 +2,21 @@
   import { onMount } from "svelte";
   import { showModal } from "svelte-native";
   import { tick } from "svelte";
-  import { confirm } from "@nativescript/core/ui/dialogs";
+  import { confirm, action } from "@nativescript/core/ui/dialogs";
   import {
     tabIndex,
     liveJourney,
     multiModality,
     currentLocation,
     watchLocation,
+    TimeAndPlace,
   } from "~/stores";
   import { routeApi } from "~/api";
   import { speak } from "~/shared/utils/tts";
   import { playSound } from "~/shared/utils/index";
   import { transportTypeToIcon } from "~/shared/utilites";
   import { getNextStep } from "~/shared/utils/liveSections";
+  import { distance } from "~/shared/utils/location";
 
   import Contacts from "./Contacts.svelte";
   import RouteOverview from "./RouteOverview.svelte";
@@ -25,14 +27,65 @@
   onMount(() => {
     watchLocation.start();
 
+    let intervalId = setInterval(() => {
+      if (
+        $liveJourney?.isPaused ||
+        $liveJourney?.isCompleted ||
+        nextReachableLocation === null
+      ) {
+        return;
+      }
+
+      const { lat: nextLat, lng: nextLng } = nextReachableLocation;
+      const { latitude: currentLat, longitude: currentLng } =
+        $currentLocation.data;
+
+      if (nextReachableLocation.timestamp.getTime() - Date.now() <= 0) {
+        if (
+          distance(
+            { latitude: nextLat, longitude: nextLng },
+            { latitude: currentLat, longitude: currentLng },
+          ) > 50
+        ) {
+          const actions = [
+            "Alles ist in Ordnung",
+            "Route von hier aus neu berechnen",
+          ];
+          const destructiveActionsIndexes = [1];
+
+          action({
+            title: "Bist du bereits an deinem Zwichenziel?",
+            message:
+              "Nach unserer Berechnung bist du noch nicht an deinem Zwischenziel angekommen. Wenn nicht erreichst du womöglich nicht deinen Anschluss. Wie möchtest du fortfahren?",
+            actions,
+            destructiveActionsIndexes,
+          }).then((result) => {
+            if (result === actions[0]) {
+              skipToNextStep();
+            } else {
+              calculateNewJourney = recalculateJourney();
+            }
+          });
+        } else {
+          skipToNextStep();
+        }
+      }
+    }, 1000);
+
     return () => {
       watchLocation.stop();
+      clearInterval(intervalId);
     };
   });
 
   $: currentSection = $liveJourney?.sections[$liveJourney.currentSection];
 
-  let nextReachableLocation: null | { lat: number; lng: number } = null;
+  let nextReachableLocation: null | {
+    lat: number;
+    lng: number;
+    timestamp: Date;
+  } = null;
+
   $: if ($liveJourney?.isPaused === false) {
     const {
       currentSection: currentSectionId,
@@ -52,19 +105,22 @@
 
     if (nextStep !== null) {
       const nextSection = sections[nextStep.sectionId];
-      const currentSection = sections[currentSectionId];
+      const intermediateStops = (nextSection || undefined)?.intermediateStops;
+      const timeAndPlace = intermediateStops
+        ? intermediateStops[nextStep.intermediateStopId].departure
+        : (currentSection || undefined)?.arrival;
 
-      if (nextSection && nextSection?.intermediateStops) {
-        nextReachableLocation =
-          nextSection.intermediateStops[nextStep.intermediateStopId].departure
-            .place.location;
-      } else if (currentSection) {
-        nextReachableLocation = currentSection.arrival.place.location;
+      if (timeAndPlace) {
+        nextReachableLocation = {
+          lat: timeAndPlace.place.location.lat,
+          lng: timeAndPlace.place.location.lng,
+          timestamp: new Date(timeAndPlace.time),
+        };
       }
     }
   }
 
-  async function simulateNextStep() {
+  async function skipToNextStep() {
     if ($liveJourney === null) return;
 
     try {
@@ -167,7 +223,11 @@
 
     $liveJourney.isPaused = false;
 
-    calculateNewJourney = new Promise((resolve) => {
+    calculateNewJourney = recalculateJourney();
+  }
+
+  function recalculateJourney() {
+    return new Promise((resolve) => {
       if ($liveJourney == null) {
         resolve(null);
         return;
@@ -285,7 +345,11 @@
       >
         {#if $liveJourney.isPaused}
           <SupportBox
-            text={currentSupportBoxText + " " + nextReachableLocation?.lat + " " + nextReachableLocation?.lng}
+            text={currentSupportBoxText +
+              " " +
+              nextReachableLocation?.lat +
+              " " +
+              nextReachableLocation?.lng}
             row={0}
             type={$multiModality.primary === "auditory" ? "big" : "small"}
             class="m-b-m"
@@ -345,7 +409,11 @@
         {:else if $liveJourney.isCompleted}
           <SupportBox
             row={0}
-            text={currentSupportBoxText + " " + nextReachableLocation?.lat + " " + nextReachableLocation?.lng}
+            text={currentSupportBoxText +
+              " " +
+              nextReachableLocation?.lat +
+              " " +
+              nextReachableLocation?.lng}
             type={$multiModality.primary === "auditory" ? "big" : "small"}
             class="m-b-m"
           />
@@ -353,7 +421,7 @@
           <label
             text="place"
             class="icon text-center fs-4xl"
-            on:tap={simulateNextStep}
+            on:tap={skipToNextStep}
             row={1}
             rowSpan={2}
           />
@@ -378,7 +446,11 @@
           {#if currentSection.actions && currentSection.actions.length > 0}
             <SupportBox
               row={0}
-              text={currentSupportBoxText + " " + nextReachableLocation?.lat + " " + nextReachableLocation?.lng}
+              text={currentSupportBoxText +
+                " " +
+                nextReachableLocation?.lat +
+                " " +
+                nextReachableLocation?.lng}
               type={$multiModality.primary === "auditory" ? "big" : "small"}
               class="m-b-m"
             />
@@ -394,7 +466,7 @@
               class="icon text-center {$multiModality.primary === 'auditory'
                 ? 'fs-4xl'
                 : 'fs-3xl'}"
-              on:tap={simulateNextStep}
+              on:tap={skipToNextStep}
               row={1}
             />
 
@@ -410,14 +482,18 @@
           {:else if currentSection.intermediateStops}
             <SupportBox
               row={0}
-              text={currentSupportBoxText + " " + nextReachableLocation?.lat + " " + nextReachableLocation?.lng}
+              text={currentSupportBoxText +
+                " " +
+                nextReachableLocation?.lat +
+                " " +
+                nextReachableLocation?.lng}
               type={$multiModality.primary === "auditory" ? "big" : "small"}
               class="m-b-m"
             />
 
             <label
               class="icon text-center fs-3xl"
-              on:tap={simulateNextStep}
+              on:tap={skipToNextStep}
               row={1}
               text={(() => {
                 let id = $liveJourney.currentIntermediateStop;
@@ -471,7 +547,11 @@
           {:else}
             <SupportBox
               row={0}
-              text={currentSupportBoxText + " " + nextReachableLocation?.lat + " " + nextReachableLocation?.lng}
+              text={currentSupportBoxText +
+                " " +
+                nextReachableLocation?.lat +
+                " " +
+                nextReachableLocation?.lng}
               type={$multiModality.primary === "auditory" ? "big" : "small"}
               class="m-b-m"
             />
@@ -480,7 +560,7 @@
               text={transportTypeToIcon(currentSection.transport.mode)}
               class="icon text-center fs-3xl"
               row={1}
-              on:tap={simulateNextStep}
+              on:tap={skipToNextStep}
             />
 
             <label
