@@ -60,7 +60,7 @@
           isPaused = true;
 
           action({
-            title: "Bist du bereits an deinem Zwichenziel?",
+            title: "Bist du bereits an deinem Zwischenziel?",
             message:
               "Nach unserer Berechnung bist du noch nicht an deinem Zwischenziel angekommen. Wenn nicht erreichst du womöglich nicht deinen Anschluss. Wie möchtest du fortfahren?",
             actions,
