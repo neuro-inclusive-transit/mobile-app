@@ -34,8 +34,11 @@
       await calculateNewJourney;
 
       if (
+        $liveJourney === null ||
         $liveJourney?.isPaused ||
         $liveJourney?.isCompleted ||
+        currentSection === undefined ||
+        currentSection === false ||
         nextReachableLocation === null
       ) {
         return;
@@ -45,12 +48,19 @@
       const { latitude: currentLat, longitude: currentLng } =
         $currentLocation.data;
 
+      const actionLength = currentSection?.actions?.length ?? -1;
+      const isCurrentlyIteratingActions =
+        actionLength > 0 &&
+        $liveJourney.currentAction !== actionLength - 1;
+
       if (nextReachableLocation.timestamp.getTime() - Date.now() <= 0) {
         if (
+          // TODO: check if iterating actions
+          !isCurrentlyIteratingActions &&
           distance(
             { latitude: nextLat, longitude: nextLng },
             { latitude: currentLat, longitude: currentLng },
-          ) > 50
+          ) > 20
         ) {
           const actions = [
             "Alles ist in Ordnung",
@@ -110,19 +120,50 @@
       sections,
     );
 
-    if (nextStep !== null) {
+    if (nextStep) {
       const nextSection = sections[nextStep.sectionId];
+      const currentSection = sections[currentSectionId];
+      const actions = (nextSection || undefined)?.actions;
       const intermediateStops = (nextSection || undefined)?.intermediateStops;
-      const timeAndPlace = intermediateStops
-        ? intermediateStops[nextStep.intermediateStopId].departure
-        : (currentSection || undefined)?.arrival;
 
-      if (timeAndPlace) {
-        nextReachableLocation = {
-          lat: timeAndPlace.place.location.lat,
-          lng: timeAndPlace.place.location.lng,
-          timestamp: new Date(timeAndPlace.time),
-        };
+      if (currentSection) {
+        const { arrival, departure } = currentSection;
+
+        if (
+          currentSectionId === nextStep.sectionId &&
+          intermediateStops &&
+          intermediateStops.length > 0
+        ) {
+          // if we have intermediate stops in the same section
+          const { departure } = intermediateStops[nextStep.intermediateStopId];
+          nextReachableLocation = {
+            lat: departure.place.location.lat,
+            lng: departure.place.location.lng,
+            timestamp: new Date(departure.time),
+          };
+        } else if (
+          currentSectionId === nextStep.sectionId &&
+          actions &&
+          actions.length > 0
+        ) {
+          // if we have actions in the same section
+          let accDuration = 0;
+          for (let i = 0; i <= nextStep.actionId; i++) {
+            accDuration += actions[i].duration;
+          }
+          nextReachableLocation = {
+            lat: arrival.place.location.lat,
+            lng: arrival.place.location.lng,
+            timestamp: new Date(departure.time + accDuration),
+          };
+        } else {
+          // if we have no actions and no intermediate stops or are already at the next section use the arrival time
+          nextReachableLocation = {
+            lat: arrival.place.location.lat,
+            lng: arrival.place.location.lng,
+            timestamp: new Date(arrival.time),
+          };
+        }
       }
     }
   }

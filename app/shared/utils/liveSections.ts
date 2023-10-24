@@ -59,6 +59,6 @@ export function getNextStep(
   return {
     sectionId: nextSectionId,
     actionId: 0,
-    intermediateStopId: 0,
+    intermediateStopId: -1,
   };
 }
