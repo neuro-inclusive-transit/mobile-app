@@ -30,8 +30,7 @@
 
     intervalId = setInterval(async () => {
       if (isPaused) return;
-
-      await calculateNewJourney;
+      if (isCalculating) return;
 
       if (
         $liveJourney === null ||
@@ -251,6 +250,8 @@
     resolve(null);
   });
 
+  let isCalculating = false;
+
   async function togglePause() {
     if ($liveJourney === null) return;
 
@@ -280,6 +281,8 @@
         resolve(null);
         return;
       }
+
+      isCalculating = true;
 
       routeApi
         .get({
@@ -311,6 +314,8 @@
           };
           resolve(null);
         });
+    }).finally(() => {
+      isCalculating = false;
     });
   }
 
